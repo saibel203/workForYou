@@ -1,0 +1,70 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Реєстрація";
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/home_pages.css">
+}
+
+<section class="section register form-section">
+    <div class="container text-center">
+        <h2 class="section-title mb-5">Реєстрація</h2>
+        <form method="post" asp-controller="Auth" asp-action="Register" asp-antiforgery="true" autocomplete="off">
+            <div asp-validation-summary="All"></div>
+            <div class="contact-form__input">
+                <input asp-for="Username" placeholder="Username" class="contact-form__input-item">
+            </div>
+            <div class="contact-form__input">
+                <input asp-for="Email" placeholder="Email" class="contact-form__input-item">
+            </div>
+            <div class="contact-form__input">
+                <input asp-for="Password" placeholder="Password" class="contact-form__input-item">
+            </div>
+            <div class="contact-form__input">
+                <input asp-for="ConfirmPassword" placeholder="Confirm password" class="contact-form__input-item">
+            </div>
+            
+            <div class="contact-form__categories">
+                <label asp-for="SelectedRole" class="category candidate-category" for="candidate-category">
+                    <input asp-for="SelectedRole" type="radio" id="candidate-category" value="candidate">
+                    <div class="category-content">
+                        <img loading="lazy"
+                             src="~/img/homePage/candidate.png" alt="Candidate image">
+                        <div class="category-content__details">
+                            <span>Кандидат</span>
+                            <p>Для пошуку роботи</p>
+                        </div>
+                    </div>
+                </label>
+            
+                <label asp-for="SelectedRole" class="category employer-category" for="employer-category">
+                    <input asp-for="SelectedRole" type="radio" id="employer-category" value="employer">
+                    <div class="category-content">
+                        <img loading="lazy"
+                             src="~/img/homePage/employer.png" alt="Employer image">
+                        <div class="category-content__details">
+                            <span>Роботодавець</span>
+                            <p>Для пошуку кандидатів на роботу</p>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="contact-form__btn">
+                <button class="button button-primary text-center">
+                    <i class="fa-solid fa-share"></i>
+                    Зареєструватись
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script src="~/libs/js/jquery.slim.min.js" crossorigin="anonymous"></script>
+    <script src="~/libs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+}

@@ -1,0 +1,23 @@
+{
+  "name": "workforyou.webui",
+  "private": true,
+  "scripts": {
+    "prebuild:css": "rm -rf wwwroot/css",
+    "build:css": "sass --style compressed --no-source-map Views/Resources/Styles:wwwroot/css",
+    "postbuild:css": "postcss wwwroot/css/home.css --replace",
+    "prewatch": "rm -rf wwwroot/css",
+    "watch": "sass --watch Views/Resources/Styles:wwwroot/css"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "cssnano": "^5.1.14",
+    "cssnano-preset-advanced": "^5.3.9",
+    "postcss-cli": "^10.1.0",
+    "sass": "^1.57.1"
+  },
+  "version": "1.0.0",
+  "main": "postcss.config.js",
+  "author": "",
+  "license": "MIT",
+  "description": ""
+}

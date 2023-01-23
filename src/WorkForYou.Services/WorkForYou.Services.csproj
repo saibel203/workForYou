@@ -1,9 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>151c934d-82d8-4d53-a98f-5f0827cc1ddc</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WorkForYou.Core\WorkForYou.Core.csproj" />
+    <ProjectReference Include="..\WorkForYou.Data\WorkForYou.Data.csproj" />
+    <ProjectReference Include="..\WorkForYou.Infrastructure\WorkForYou.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="SendGrid" Version="9.28.1" />
+  </ItemGroup>
 
 </Project>

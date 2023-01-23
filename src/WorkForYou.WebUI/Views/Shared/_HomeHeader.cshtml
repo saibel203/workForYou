@@ -1,0 +1,18 @@
+﻿<nav class="navbar" data-spy="affix" data-offset-top="20">
+    <div class="container">
+        <a class="navbar__logo" asp-controller="Home" asp-action="Index">WorkForYou</a>
+        <ul class="navbar__navigation">
+            <li class="navbar__navigation-item">
+                <a asp-controller="Auth" asp-action="Login">Авторизація</a>
+            </li>
+            <li class="navbar__navigation-item">
+                <a asp-controller="Auth" asp-action="Register">Реєстрація</a>
+            </li>
+        </ul>
+        <a class="hamburger hamburger-elastic" id="hamburger-menu">
+            <div class="hamburger-box">
+                <div class="hamburger-inner"></div>
+            </div>
+        </a>
+    </div>
+</nav>
