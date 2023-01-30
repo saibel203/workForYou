@@ -1,0 +1,48 @@
+@import '_colors';
+
+.navbar {
+  background-color: rgb(232, 232, 232);
+
+  &__logo {
+    color: $primary-color;
+    
+    &:hover {
+      color: $primary-color;
+    }
+  }
+
+  .navbar__navigation-item a {
+    color: $text-affix-color
+  }
+
+  .hamburger-inner {
+    &,
+    &::before,
+    &::after {
+      background-color: $text-affix-color !important;
+    }
+  }
+}
+
+.validation-summary-errors {
+  ul {
+    list-style: none;
+    margin-bottom: 30px;
+    border: 1px solid #dedede;
+    background-color: #fff;
+    color: red;
+    padding: 10px 0;
+  }
+}
+
+.login, 
+.register, 
+.forger-password, 
+.reset-password, 
+.reset-password-result, 
+.forget-password-result, 
+.confirm-email,
+.confirm-email-result {
+  margin-top: 100px;
+  min-height: calc(100vh - 100px - 80px);
+}

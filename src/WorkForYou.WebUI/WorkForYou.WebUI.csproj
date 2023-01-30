@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>1800c4be-4ad3-4ca7-b232-ffd164b7ac0e</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Folder Include="wwwroot\css" />
+        <Folder Include="wwwroot\img" />
+        <Folder Include="wwwroot\libs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\WorkForYou.Infrastructure\WorkForYou.Infrastructure.csproj" />
+        <ProjectReference Include="..\WorkForYou.Services\WorkForYou.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.9.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <TypeScriptCompile Include="Views\Resources\Scripts\home.ts" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Views\Resources\Scripts\libs\typed.js">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+    <Target Name="Install NPM modules" BeforeTargets="Build" Inputs="package-lock.json" Outputs="node_modules/.install-stamp">
+        <Exec Command="npm ci" Condition="'$(OS)' != 'Windows_NT'" />
+        <Exec Command="npm install" Condition="'$(OS)' == 'Windows_NT'" />
+        <Touch Files="node_modules/.install-stamp" AlwaysCreate="true" />
+    </Target>
+
+    <Target Name="Compile SCSS" BeforeTargets="CopyFilesToPublishDirectory">
+        <Exec Command="npm run build:css" />
+        <Copy SourceFiles="$(ProjectDir)wwwroot/css/home.css" DestinationFolder="$(PublishDir)wwwroot/css" />
+    </Target>
+
+</Project>

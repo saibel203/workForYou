@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Підтвердження email";
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/home_pages.css">
+}
+
+<section class="section confirm-email-result form-section">
+    @if (ViewData.ModelState.ErrorCount != 0)
+    {
+        <div asp-validation-summary="All"></div>
+    }
+    else
+    {
+        <h1>Ваш email успішно підтвердженно</h1>
+    }
+</section>
+
+@section Scripts
+{
+    <script src="~/libs/js/jquery.slim.min.js" crossorigin="anonymous"></script>
+    <script src="~/libs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+}

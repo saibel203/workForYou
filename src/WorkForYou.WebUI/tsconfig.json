@@ -1,0 +1,18 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "module": "commonjs",
+    "target": "es6",
+    "sourceMap": true,
+    "outDir": "wwwroot/js"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "Views/Resources/Scripts/**/*"
+  ]
+}

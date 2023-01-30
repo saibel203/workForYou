@@ -1,0 +1,38 @@
+.navbar {
+  background-color: rgb(232, 232, 232);
+}
+.navbar__logo {
+  color: #695aa6;
+}
+.navbar__logo:hover {
+  color: #695aa6;
+}
+.navbar .navbar__navigation-item a {
+  color: #6c757d;
+}
+.navbar .hamburger-inner, .navbar .hamburger-inner::before, .navbar .hamburger-inner::after {
+  background-color: #6c757d !important;
+}
+
+.validation-summary-errors ul {
+  list-style: none;
+  margin-bottom: 30px;
+  border: 1px solid #dedede;
+  background-color: #fff;
+  color: red;
+  padding: 10px 0;
+}
+
+.login,
+.register,
+.forger-password,
+.reset-password,
+.reset-password-result,
+.forget-password-result,
+.confirm-email,
+.confirm-email-result {
+  margin-top: 100px;
+  min-height: calc(100vh - 100px - 80px);
+}
+
+/*# sourceMappingURL=home_pages.css.map */
