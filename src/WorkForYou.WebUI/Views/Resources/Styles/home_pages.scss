@@ -11,8 +11,31 @@
     }
   }
 
-  .navbar__navigation-item a {
-    color: $text-affix-color
+  &__navigation-item a {
+    color: $text-affix-color;
+  }
+  &__navigation-item button {
+    color: $text-affix-color !important;
+  }
+  
+  &.affix {
+    .navbar__navigation-item a {
+      color: $text-affix-color;
+      transition: color .2s ease;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+
+    .navbar__navigation-item button {
+      color: $text-affix-color;
+      transition: color .2s ease;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
   }
 
   .hamburger-inner {
@@ -30,7 +53,7 @@
     margin-bottom: 30px;
     border: 1px solid #dedede;
     background-color: #fff;
-    color: red;
+    color: var(--text-valication-color);
     padding: 10px 0;
   }
 }
@@ -45,4 +68,17 @@
 .confirm-email-result {
   margin-top: 100px;
   min-height: calc(100vh - 100px - 80px);
+}
+
+.contact-form__input {
+  position: relative;
+  i {
+    font-size: 1.2em;
+    color: #7f7f85;
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    transform: translateY(-50%);
+    cursor: pointer
+  }
 }

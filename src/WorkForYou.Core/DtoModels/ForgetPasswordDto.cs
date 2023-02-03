@@ -1,6 +1,6 @@
-﻿namespace WorkForYou.Data.DtoModels;
+﻿namespace WorkForYou.Core.DtoModels;
 
-public class ForgetPasswordDto
+public class RemindPasswordDto
 {
     public string Email { get; set; } = string.Empty;
 }

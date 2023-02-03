@@ -1,7 +1,11 @@
-﻿@model LoginViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LoginViewModel
+
+@inject IViewLocalizer ViewLocalization
 
 @{
-    ViewData["Title"] = "Авторизація";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 @section Styles
@@ -11,26 +15,27 @@
 
 <section class="section form-section login">
     <div class="container text-center">
-        <h2 class="section-title mb-5">Авторизація</h2>
-        <form method="post" asp-controller="Auth" asp-action="Login" asp-antiforgery="true" autocomplete="off"
-              class="contact-form" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+        <h2 class="section-title mb-5">@ViewLocalization["Title"]</h2>
+        <form method="post" asp-controller="Auth" asp-action="Login" asp-antiforgery="true" 
+              asp-route-returnUrl="@ViewData["ReturnUrl"]" autocomplete="off" class="contact-form">
             <div asp-validation-summary="All"></div>
             <div class="contact-form__input">
                 <input asp-for="Email" placeholder="Email" class="contact-form__input-item">
             </div>
             <div class="contact-form__input">
                 <input asp-for="Password" placeholder="Password" class="contact-form__input-item">
+                <span><i class="fa-solid fa-eye"></i></span>
             </div>
             <div class="contact-form__footer">
-                <div><input asp-for="RememberMe"><span>Запам'ятати</span></div>
+                <div><input asp-for="RememberMe"><label asp-for="RememberMe">@ViewLocalization["RememberPerson"]</label></div>
                 <div>
-                    <a asp-controller="Auth" asp-action="ForgetPassword">Забули пароль?</a>
+                    <a asp-controller="Auth" asp-action="RemindPassword">@ViewLocalization["ForgetPassword"]</a>
                 </div>
             </div>
             <div class="contact-form__btn">
                 <button class="button button-primary text-center">
                     <i class="fa-solid fa-right-to-bracket"></i>
-                    Авторизуватись
+                    @ViewLocalization["Title"]
                 </button>
             </div>
         </form>
@@ -41,4 +46,5 @@
 {
     <script src="~/libs/js/jquery.slim.min.js" crossorigin="anonymous"></script>
     <script src="~/libs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/home-password.js"></script>
 }

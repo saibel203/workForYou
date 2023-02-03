@@ -12,7 +12,7 @@ public class MailService : IMailService
 {
     private readonly SendGridOptions _sendGridOptions;
     private readonly ILogger<MailService> _logger;
-        
+
     public MailService(IOptions<SendGridOptions> sendGridOptions, ILogger<MailService> logger)
     {
         _sendGridOptions = sendGridOptions.Value;
@@ -23,9 +23,9 @@ public class MailService : IMailService
     {
         try
         {
-            var filePath = @$"{Environment.CurrentDirectory}\wwwroot\files\email-template.html";
+            var filePath = Environment.CurrentDirectory + _sendGridOptions.EmailTemplatePath;
             StringBuilder htmlText = new();
-            
+
             var htmlFile = await File.ReadAllTextAsync(filePath);
             htmlText.Append(htmlFile);
 
@@ -39,12 +39,13 @@ public class MailService : IMailService
                 htmlText.Replace("#Link#", link);
                 htmlText.Replace("#LinkText#", linkText);
             }
-            
+
             var apiKey = _sendGridOptions.ApiKey;
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(_sendGridOptions.AdminEmail, _sendGridOptions.AdminUsername);
             var to = new EmailAddress(toEmail);
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, htmlText.ToString(), htmlText.ToString());
+            var msg = MailHelper.CreateSingleEmail(from, to, subject,
+                htmlText.ToString(), htmlText.ToString());
             await client.SendEmailAsync(msg);
         }
         catch (Exception e)
@@ -54,21 +55,21 @@ public class MailService : IMailService
         }
     }
 
-    public async Task SendToAdminEmailAsync(string fromEmail, string subject, string content)
-    {
-        try
-        {
-            var apiKey = _sendGridOptions.ApiKey;
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(_sendGridOptions.AdminEmail, _sendGridOptions.AdminUsername);
-            var to = new EmailAddress(_sendGridOptions.AdminEmail);
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, content, content);
-            await client.SendEmailAsync(msg);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error send mail");
-            throw;
-        }
-    }
+    public async Task SendToAdminEmailAsync(string subject, string content)
+     {
+         try
+         {
+             var apiKey = _sendGridOptions.ApiKey;
+             var client = new SendGridClient(apiKey);
+             var from = new EmailAddress(_sendGridOptions.AdminEmail, _sendGridOptions.AdminUsername);
+             var to = new EmailAddress(_sendGridOptions.AdminEmail);
+             var msg = MailHelper.CreateSingleEmail(from, to, subject, content, content);
+             await client.SendEmailAsync(msg);
+         }
+         catch (Exception e)
+         {
+             _logger.LogError(e, "Error send mail");
+             throw;
+         }
+     }
 }

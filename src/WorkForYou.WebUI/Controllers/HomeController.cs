@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using WorkForYou.Core.IServices;
 using WorkForYou.WebUI.Attributes;
 using WorkForYou.WebUI.ViewModels;
@@ -27,9 +28,20 @@ public class HomeController : Controller
         if (!ModelState.IsValid)
             return View(contactUsViewModel);
 
-        await _mailService.SendToAdminEmailAsync(contactUsViewModel.Email, "WorkForYou зворотній зв'язок " + contactUsViewModel.Subject,
+        await _mailService.SendToAdminEmailAsync("WorkForYou зворотній зв'язок " + contactUsViewModel.Subject,
             contactUsViewModel.Message);
 
         return View();
+    }
+
+    [HttpPost]
+    public IActionResult SetCulture(string culture, string returnUrl)
+    {
+        Response.Cookies.Append(
+            CookieRequestCultureProvider.DefaultCookieName,
+            CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+            new CookieOptions {Expires = DateTimeOffset.UtcNow.AddDays(30)}
+        );
+        return LocalRedirect(returnUrl);
     }
 }

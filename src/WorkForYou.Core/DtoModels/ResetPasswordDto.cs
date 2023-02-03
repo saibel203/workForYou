@@ -1,4 +1,4 @@
-﻿namespace WorkForYou.Data.DtoModels;
+﻿namespace WorkForYou.Core.DtoModels;
 
 public class ResetPasswordDto
 {

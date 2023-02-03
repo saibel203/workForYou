@@ -1,0 +1,41 @@
+$form-primary-color: #695aa6;
+$form-primary-color--faded: rgba($form-primary-color, .25);
+$checkbox-bg-color: #EBEBEB;
+$checkbox-bd-color: #BFBFBF;
+$checkbox-checked-bd-color: darken($form-primary-color, 5%);
+
+:root {
+  --body-bg-color: #e5ecef;
+  --theme-bg-color: #f2f2f3;
+  --body-font: "Open Sans", sans-serif;
+  --body-color: #2f2f33;
+  --active-color: #695aa6;
+  --active-light-color: #e1ebfb;
+  --header-bg-color: #fff;
+  --search-border-color: #efefef;
+  --border-color: #d8d8d8;
+  --alert-bg-color: #e8f2ff;
+  --subtitle-color: #83838e;
+  --inactive-color: #f0f0f0;
+  --placeholder-color: #9b9ba5;
+  --time-button: #fc5757;
+  --level-button: #5052d5;
+  --button-color: #fff;
+  --active-checked-color: #695aa628;
+  --text-valication-color: #ff1c00ad;
+}
+
+.dark-mode {
+  --body-bg-color: #1d1d1d;
+  --theme-bg-color: #13131a;
+  --header-bg-color: #1c1c24;
+  --alert-bg-color: #292932;
+  --body-color: #fff;
+  --active-color: #45405a;
+  --inactive-color: #292932;
+  --time-button: #fff;
+  --level-button: #fff;
+  --active-light-color: #45405a;
+  --border-color: #26262f;
+  --search-border-color: #26262f;
+}

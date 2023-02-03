@@ -11,6 +11,7 @@ Project for job search and job candidates. The possibility of registering a cand
 
 ## TodoList
 - [ ] responsive for design
+- [x] email list design
 - [x] a page for unauthorized users only and a page for authorized users only
 - [x] candidate or employer registration + authorization
 - [ ] delete, preview account

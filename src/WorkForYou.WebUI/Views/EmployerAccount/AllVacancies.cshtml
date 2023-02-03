@@ -1,0 +1,38 @@
+﻿@model VacanciesViewModel
+
+@{
+    ViewData["Title"] = "Ваш список вакансій";
+}
+
+<div class="all-vacancies-wrapper">
+    <div class="all-employer-vacancies">
+        <div class="all-employer-vacancies__header">
+            <h1>Мої вакансії (@Model.VacancyCount)</h1>
+            @await Html.PartialAsync("_SearchBar")
+        </div>
+
+        <div class="all-employer-vacancies__buttons">
+            <a asp-controller="Vacancy" asp-action="CreateVacancy" class="search-buttons detail-button">Створити вакансію</a>
+        </div>
+
+        @foreach (var vacancy in Model.Vacancies)
+        {
+            <div class="all-employer-vacancies__vacancy">
+                <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId">
+                    <h2>
+                        @vacancy.VacancyTitle
+                    </h2>
+                </a>
+                <div class="all-employer-vacancies__vacancy-main">
+                    <a asp-controller="Vacancy" asp-action="EditVacancy" asp-route-id="@vacancy.VacancyId">Редагувати</a>
+                    <span>·</span>
+                    <a href="">Кандидати</a>
+                    <span>·</span>
+                    <a asp-controller="Vacancy" asp-action="RemoveVacancy" asp-route-id="@vacancy.VacancyId">Видалити</a>
+                </div>
+            </div>
+        }
+    </div>
+
+    @await Html.PartialAsync("_Pagination")
+</div>

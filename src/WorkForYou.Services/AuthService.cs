@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using WorkForYou.Core.IOptions;
 using WorkForYou.Core.IServices;
-using WorkForYou.Data.DtoModels;
-using WorkForYou.Data.Models.IdentityInheritance;
-using WorkForYou.Infrastructure.DatabaseContext;
-using WorkForYou.Shared.Responses.Services;
+using WorkForYou.Core.Models.IdentityInheritance;
+using WorkForYou.Core.DtoModels;
+using WorkForYou.Data.DatabaseContext;
+using WorkForYou.Core.Responses.Services;
 
 namespace WorkForYou.Services;
 
@@ -169,7 +169,7 @@ public class AuthService : IAuthService
         };
     }
 
-    public async Task<UserAuthResponse> ForgetPasswordAsync(ForgetPasswordDto? forgetPasswordDto)
+    public async Task<UserAuthResponse> RemindPasswordAsync(RemindPasswordDto? forgetPasswordDto)
     {
         if (forgetPasswordDto is null)
             return new()

@@ -34,7 +34,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <TypeScriptCompile Include="Views\Resources\Scripts\home-password.ts" />
         <TypeScriptCompile Include="Views\Resources\Scripts\home.ts" />
+        <TypeScriptCompile Include="Views\Resources\Scripts\main.ts" />
     </ItemGroup>
 
     <ItemGroup>
@@ -42,6 +44,291 @@
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Models\LoginViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LoginViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_HomeHeader.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_HomeHeader.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_HomeHeader.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_HomeHeader.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Home\Index.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Index.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Home\Index.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Index.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\Login.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Login.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\Login.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Login.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\Register.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Register.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\Register.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Register.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\RemindPassword.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RemindPassword.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\RemindPassword.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RemindPassword.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\ResetPassword.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ResetPassword.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\ResetPassword.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ResetPassword.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\ResetPasswordResult.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ResetPasswordResult.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\ResetPasswordResult.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ResetPasswordResult.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\ConfirmEmail.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ConfirmEmail.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\ConfirmEmail.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ConfirmEmail.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\RemindPasswordResult.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RemindPasswordResult.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\RemindPasswordResult.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RemindPasswordResult.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\ConfirmEmailResult.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ConfirmEmailResult.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Auth\ConfirmEmailResult.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ConfirmEmailResult.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\LoginViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LoginViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\LoginViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LoginViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\RegisterViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RegisterViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\RegisterViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RegisterViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\RemindPasswordViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RemindPasswordViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\RemindPasswordViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RemindPasswordViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\ResetPasswordViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ResetPasswordViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\ResetPasswordViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ResetPasswordViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_MainHeader.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_MainHeader.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_MainHeader.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_MainHeader.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\Models\LoginViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LoginViewModel.en-US.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_HomeHeader.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_HomeHeader.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_HomeHeader.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_HomeHeader.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Home\Index.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Index.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Home\Index.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Index.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\Login.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Login.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\Login.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Login.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\Register.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Register.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\Register.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Register.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\RemindPassword.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RemindPassword.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\RemindPassword.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RemindPassword.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\ResetPassword.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ResetPassword.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\ResetPassword.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ResetPassword.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\ResetPasswordResult.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ResetPasswordResult.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\ResetPasswordResult.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ResetPasswordResult.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\ConfirmEmail.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ConfirmEmail.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\ConfirmEmail.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ConfirmEmail.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\RemindPasswordResult.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RemindPasswordResult.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\RemindPasswordResult.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RemindPasswordResult.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\ConfirmEmailResult.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ConfirmEmailResult.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Auth\ConfirmEmailResult.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ConfirmEmailResult.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\LoginViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LoginViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\LoginViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LoginViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\RegisterViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RegisterViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\RegisterViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RegisterViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\RemindPasswordViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RemindPasswordViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\RemindPasswordViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RemindPasswordViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\ResetPasswordViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ResetPasswordViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\ResetPasswordViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ResetPasswordViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_MainHeader.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_MainHeader.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_MainHeader.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_MainHeader.uk.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <Target Name="Install NPM modules" BeforeTargets="Build" Inputs="package-lock.json" Outputs="node_modules/.install-stamp">

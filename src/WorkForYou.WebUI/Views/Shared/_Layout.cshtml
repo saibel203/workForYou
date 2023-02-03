@@ -2,9 +2,24 @@
 <html>
 <head>
     <link rel="icon" type="image/x-icon" href="~/img/favicon.ico">
+    <link rel="stylesheet" href="~/css/main.css">
+    @await RenderSectionAsync("Styles", required: false)
     <title>@ViewData["Title"]</title>
 </head>
 <body>
-    @RenderBody()
+    @await Html.PartialAsync("_MainHeader")
+
+    <div class="wrapper">
+        <main class="main">
+            <breadcrumb></breadcrumb>
+            @RenderBody()
+        </main>
+    </div>
+    
+    <script src="https://kit.fontawesome.com/0172dea2c0.js" crossorigin="anonymous"></script>
+    <script src="~/libs/js/jquery.slim.min.js"></script>
+    <script src="~/libs/js/bootstrap-affix.min.js"></script>
+    <script src="~/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

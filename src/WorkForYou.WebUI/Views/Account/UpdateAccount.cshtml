@@ -1,0 +1,67 @@
+﻿@model UserUpdateViewModel
+
+@{
+    ViewData["Title"] = "Обновити акаунт";
+}
+
+<div class="create-form">
+    <h1>Обновити акаунт</h1>
+    @if (User.IsInRole("candidate") && Model.UpdateCandidate is not null)
+    {
+        <form method="post" asp-controller="Account" asp-action="UpdateAccount" asp-antiforgery="true">
+            <div asp-validation-summary="All"></div>
+            <div class="create-form__item">
+                <label asp-for="@Model.UpdateCandidate.CompanyPosition"></label>
+                <textarea asp-for="@Model.UpdateCandidate.CompanyPosition"></textarea>
+                <span asp-validation-for="@Model.UpdateCandidate.CompanyPosition"></span>
+            </div>
+            <div class="create-form__item">
+                <label asp-for="@Model.UpdateCandidate.ExpectedSalary"></label>
+                <textarea asp-for="@Model.UpdateCandidate.ExpectedSalary"></textarea>
+                <span asp-validation-for="@Model.UpdateCandidate.ExpectedSalary"></span>
+            </div>
+            <div class="create-form__item">
+                <label asp-for="@Model.UpdateCandidate.HourlyRate"></label>
+                <textarea asp-for="@Model.UpdateCandidate.HourlyRate"></textarea>
+                <span asp-validation-for="@Model.UpdateCandidate.HourlyRate"></span>
+            </div>
+            <div class="create-form__item">
+                <label asp-for="@Model.UpdateCandidate.ExpectedSalary"></label>
+                <textarea asp-for="@Model.UpdateCandidate.ExpectedSalary"></textarea>
+                <span asp-validation-for="@Model.UpdateCandidate.ExpectedSalary"></span>
+            </div>
+            <div class="create-form__item after-long-description-validation">
+                <label asp-for="@Model.UpdateCandidate.WorkCategoryId"></label>
+                <select asp-for="@Model.UpdateCandidate.WorkCategoryId">
+                    @foreach (var vacancyDomain in Model.VacancyDomains!)
+                    {
+                        <option value="@vacancyDomain.VacancyDomainId">@vacancyDomain.VacancyDomainName</option>
+                    }
+                </select>
+                <span asp-validation-for="@Model.UpdateCandidate.WorkCategoryId"></span>
+            </div>
+            <div class="create-form__item">
+                <fieldset>
+                    <legel>Рівень англійської</legel>
+                    <ul class="create-form__item-radio">
+                        @foreach (var candidateRegion in Model.CandidateRegions!)
+                        {
+                            <li>
+                                <input name="CandidateRegionId" id="@("CandidateRegion" + candidateRegion.CandidateRegionId)"
+                                       value="@candidateRegion.CandidateRegionId" type="radio" checked>
+                                <label for="@("CandidateRegion" + candidateRegion.CandidateRegionId)">@candidateRegion.CandidateRegionName</label>
+                            </li>
+                        }
+                    </ul>
+                    <span asp-validation-for="@Model.UpdateCandidate.EnglishLevelId"></span>
+                </fieldset>
+            </div>
+            <div class="vacancies-cards__card-buttons">
+                <input type="submit" class="search-buttons card-buttons" value="Обновити">
+            </div>
+        </form>
+    }
+    else if (User.IsInRole("employer"))
+    {
+    }
+</div>

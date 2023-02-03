@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WorkForYou.Core.IServices;
-using WorkForYou.Data.DtoModels;
+using WorkForYou.Core.DtoModels;
 using WorkForYou.WebUI.Attributes;
 using WorkForYou.WebUI.ViewModels;
 
@@ -24,7 +24,7 @@ public class AuthController : Controller
     {
         return View();
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
@@ -41,7 +41,7 @@ public class AuthController : Controller
             if (registerResult.Errors is not null)
                 foreach (var error in registerResult.Errors)
                     ModelState.AddModelError(error.Code, error.Description);
-            else 
+            else
                 ModelState.AddModelError("", registerResult.Message);
 
             return View(registerViewModel);
@@ -56,16 +56,16 @@ public class AuthController : Controller
         ViewData["ReturnUrl"] = returnUrl;
         return View();
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel, string? returnUrl)
     {
         returnUrl ??= Url.Content("~/");
-        
+
         if (!ModelState.IsValid)
             return View(loginViewModel);
-        
+
         var loginModelDto = _mapper.Map<UserLoginDto>(loginViewModel);
 
         var loginResult = await _authService.LoginAsync(loginModelDto);
@@ -75,7 +75,7 @@ public class AuthController : Controller
             ModelState.AddModelError("", loginResult.Message);
             return View(loginViewModel);
         }
-        
+
         return RedirectToLocal(returnUrl);
     }
 
@@ -107,36 +107,36 @@ public class AuthController : Controller
         return View();
     }
 
-    public IActionResult ForgetPasswordResult()
+    public IActionResult RemindPasswordResult()
     {
         return View();
     }
 
     [HttpGet]
-    public IActionResult ForgetPassword()
+    public IActionResult RemindPassword()
     {
         return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel forgetPasswordViewModel)
+    public async Task<IActionResult> RemindPassword(RemindPasswordViewModel forgetPasswordViewModel)
     {
         if (string.IsNullOrWhiteSpace(forgetPasswordViewModel.Email))
             return View(forgetPasswordViewModel);
 
-        var forgetPasswordDto = _mapper.Map<ForgetPasswordDto>(forgetPasswordViewModel);
+        var forgetPasswordDto = _mapper.Map<RemindPasswordDto>(forgetPasswordViewModel);
 
-        var forgetPasswordResult = await _authService.ForgetPasswordAsync(forgetPasswordDto);
+        var forgetPasswordResult = await _authService.RemindPasswordAsync(forgetPasswordDto);
 
         if (!forgetPasswordResult.IsSuccessfully)
         {
             ModelState.AddModelError("", forgetPasswordResult.Message);
-            
+
             return View(forgetPasswordViewModel);
         }
 
-        return RedirectToAction("ForgetPasswordResult");
+        return RedirectToAction("RemindPasswordResult");
     }
 
     [HttpGet]
@@ -150,7 +150,7 @@ public class AuthController : Controller
     {
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(token))
             return RedirectToAction("Index", "Home");
-        
+
         return View();
     }
 
@@ -172,7 +172,7 @@ public class AuthController : Controller
                     ModelState.AddModelError(error.Code, error.Description);
             else
                 ModelState.AddModelError("", resetPasswordResult.Message);
-            
+
             return View(resetPasswordViewModel);
         }
 

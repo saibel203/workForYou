@@ -1,7 +1,10 @@
-﻿@model RegisterViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model RegisterViewModel
+
+@inject IViewLocalizer ViewLocalization
 
 @{
-    ViewData["Title"] = "Реєстрація";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 @section Styles
@@ -11,7 +14,7 @@
 
 <section class="section register form-section">
     <div class="container text-center">
-        <h2 class="section-title mb-5">Реєстрація</h2>
+        <h2 class="section-title mb-5">@ViewLocalization["Title"]</h2>
         <form method="post" asp-controller="Auth" asp-action="Register" asp-antiforgery="true" autocomplete="off">
             <div asp-validation-summary="All"></div>
             <div class="contact-form__input">
@@ -22,6 +25,7 @@
             </div>
             <div class="contact-form__input">
                 <input asp-for="Password" placeholder="Password" class="contact-form__input-item">
+                <span><i class="fa-solid fa-eye"></i></span>
             </div>
             <div class="contact-form__input">
                 <input asp-for="ConfirmPassword" placeholder="Confirm password" class="contact-form__input-item">
@@ -34,8 +38,8 @@
                         <img loading="lazy"
                              src="~/img/homePage/candidate.png" alt="Candidate image">
                         <div class="category-content__details">
-                            <span>Кандидат</span>
-                            <p>Для пошуку роботи</p>
+                            <span>@ViewLocalization["CategoryCandidate"]</span>
+                            <p>@ViewLocalization["CandidateDescription"]</p>
                         </div>
                     </div>
                 </label>
@@ -46,8 +50,8 @@
                         <img loading="lazy"
                              src="~/img/homePage/employer.png" alt="Employer image">
                         <div class="category-content__details">
-                            <span>Роботодавець</span>
-                            <p>Для пошуку кандидатів на роботу</p>
+                            <span>@ViewLocalization["CategoryEmployer"]</span>
+                            <p>@ViewLocalization["EmployerDescription"]</p>
                         </div>
                     </div>
                 </label>
@@ -56,7 +60,7 @@
             <div class="contact-form__btn">
                 <button class="button button-primary text-center">
                     <i class="fa-solid fa-share"></i>
-                    Зареєструватись
+                    @ViewLocalization["Title"]
                 </button>
             </div>
         </form>
@@ -67,4 +71,5 @@
 {
     <script src="~/libs/js/jquery.slim.min.js" crossorigin="anonymous"></script>
     <script src="~/libs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/home-password.js"></script>
 }

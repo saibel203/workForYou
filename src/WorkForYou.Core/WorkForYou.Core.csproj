@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="IRepositories" />
+    <ProjectReference Include="..\WorkForYou.Shared\WorkForYou.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WorkForYou.Shared\WorkForYou.Shared.csproj" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.2" />
   </ItemGroup>
 
 </Project>

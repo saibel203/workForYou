@@ -1,0 +1,45 @@
+﻿@model WorkForYou.Core.Models.IdentityInheritance.ApplicationUser;
+
+@{
+    ViewData["Title"] = "Профайл";
+}
+
+<div class="card-details">
+    @if (Model.CandidateUser is not null)
+    {
+        <div class="card-details__main">
+            @if (Model.CandidateUser.CompanyPosition is not null)
+            {
+                <div class="card-details__header">
+                    <h1>@Model.CandidateUser.CompanyPosition</h1>
+                </div>
+            }
+            @if (Model.CandidateUser.ExperienceWorkDescription is not null)
+            {
+                <div class="card-details__body">
+                    <h3>Досвід роботи</h3>
+                    <p>@Model.CandidateUser.ExperienceWorkDescription</p>
+                </div>
+            }
+            <div class="card-details__tags"></div>
+            @if (Model.CandidateUser.CommunicationLanguage is not null)
+            {
+                <div class="card-details__language">
+                    <h3>Мова спілкування</h3>
+                    <p>@Model.CandidateUser.CommunicationLanguage.CommunicationLanguageName</p>
+                </div>
+            }
+        </div>
+        <div class="card-details__info">
+            @if (Model.CandidateUser.ExpectedSalary != 0)
+            {
+                <h2>@Model.CandidateUser.ExpectedSalary$ / month</h2>
+            }
+            
+        </div>
+    }
+    @if (Model.EmployerUser is not null)
+    {
+        
+    }
+</div>

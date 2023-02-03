@@ -1,0 +1,40 @@
+﻿@model VacanciesViewModel
+
+@if (Model.VacancyCount != 0)
+{
+    <div class="vacancies-pagination">
+        <ul class="pagination">
+            <li>
+                <a asp-controller="@Model.CurrentController" asp-action="AllVacancies"
+                   asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-searchString="@Model.SearchString" class="prev">
+                    Prev
+                </a>
+            </li>
+
+            @foreach (var i in Model.Pages)
+            {
+                var activeClass = i == Model.PageNumber ? "active" : "";
+
+                if (i == -1)
+                {
+                    <span class="three-dot">...</span>
+                }
+                else
+                {
+                    <li class="pagination-item @activeClass">
+                        <a asp-controller="@Model.CurrentController" asp-action="AllVacancies" asp-route-pageNumber='@i'
+                           asp-route-searchString="@Model.SearchString">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+            <li>
+                <a asp-controller="@Model.CurrentController" asp-action="AllVacancies"
+                   asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-searchString="@Model.SearchString" class="next">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
+}

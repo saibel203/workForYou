@@ -1,0 +1,158 @@
+﻿@model ActionVacancyViewModel
+
+@{
+    ViewData["Title"] = "Нова вакансія";
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/libs/Trumbowyg-main/dist/ui/trumbowyg.min.css">
+}
+
+<div class="create-form">
+    <h1>Нова вакансія</h1>
+    <form asp-controller="Vacancy" asp-action="CreateVacancy" asp-antiforgery="true" autocomplete="off">
+        <div asp-validation-summary="All"></div>
+        <div class="create-form__item">
+            <label asp-for="VacancyTitle"></label>
+            <input asp-for="VacancyTitle" placeholder="C#-лід">
+            <span asp-validation-for="VacancyTitle"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="ShortDescription"></label>
+            <textarea asp-for="ShortDescription"></textarea>
+            <span asp-validation-for="ShortDescription"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="LongDescription"></label>
+        </div>
+        <textarea id="descriptionEditor" asp-for="LongDescription"></textarea>
+        <span asp-validation-for="LongDescription"></span>
+        <div class="create-form__item after-long-description-validation">
+            <label asp-for="VacancyDomainId"></label>
+            <select asp-for="VacancyDomainId">
+                @foreach (var vacancyDomain in Model.VacancyDomains!)
+                {
+                    <option value="@vacancyDomain.VacancyDomainId">@vacancyDomain.VacancyDomainName</option>
+                }
+            </select>
+            <span asp-validation-for="VacancyDomainId"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="WorkCategoryId"></label>
+            <select asp-for="WorkCategoryId">
+                @foreach (var workCategory in Model.WorkCategories!)
+                {
+                    <option value="@workCategory.WorkCategoryId">@workCategory.CategoryName</option>
+                }
+            </select>
+            <span asp-validation-for="WorkCategoryId"></span>
+        </div>
+        <div class="create-form__item">
+            <fieldset>
+                <legel>Країна або регіон кандидата</legel>
+                <ul class="create-form__item-radio">
+                    @foreach (var candidateRegion in Model.CandidateRegions!)
+                    {
+                        <li>
+                            <input name="CandidateRegionId" id="@("CandidateRegion" + candidateRegion.CandidateRegionId)"
+                                   value="@candidateRegion.CandidateRegionId" type="radio" checked>
+                            <label for="@("CandidateRegion" + candidateRegion.CandidateRegionId)">@candidateRegion.CandidateRegionName</label>
+                        </li>
+                    }
+                </ul>
+                <span asp-validation-for="CandidateRegionId"></span>
+            </fieldset>
+        </div>
+        <div class="create-form__item">
+            <fieldset>
+                <legel>Релокейт</legel>
+                <ul class="create-form__item-radio">
+                    @foreach (var relocate in Model.Relocates!)
+                    {
+                        <li>
+                            <input name="RelocateId" id="@("Relocate" + relocate.RelocateId)"
+                                   value="@relocate.RelocateId" type="radio" checked>
+                            <label for="@("Relocate" + relocate.RelocateId)">@relocate.RelocateName</label>
+                        </li>
+                    }
+                </ul>
+                <span asp-validation-for="RelocateId"></span>
+            </fieldset>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="EnglishLevelId"></label>
+            <select asp-for="EnglishLevelId">
+                @foreach (var englishLevel in Model.EnglishLevels!)
+                {
+                    <option value="@englishLevel.EnglishLevelId">@englishLevel.NameLevel</option>
+                }
+            </select>
+            <span asp-validation-for="EnglishLevelId"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="TypesOfCompanyId"></label>
+            <select asp-for="TypesOfCompanyId">
+                @foreach (var companyType in Model.TypesOfCompanies!)
+                {
+                    <option value="@companyType.TypesOfCompanyId">@companyType.TypeOfCompanyName</option>
+                }
+            </select>
+            <span asp-validation-for="TypesOfCompanyId"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="HowToWorkId"></label>
+            <select asp-for="HowToWorkId">
+                @foreach (var howToWork in Model.HowToWorks!)
+                {
+                    <option value="@howToWork.HowToWorkId">@howToWork.HowToWorkName</option>
+                }
+            </select>
+            <span asp-validation-for="HowToWorkId"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="ExperienceWork"></label>
+            <input asp-for="ExperienceWork">
+            <span asp-validation-for="ExperienceWork"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="FromSalary"></label>
+            <input asp-for="FromSalary">
+            <span asp-validation-for="FromSalary"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="ToSalary"></label>
+            <input asp-for="ToSalary">
+            <span asp-validation-for="ToSalary"></span> 
+        </div>
+        <div class="vacancies-cards__card-buttons">
+            <input type="submit" class="search-buttons card-buttons" value="Створити">
+        </div>
+        @* <div class="create-form__item"> *@
+        @*     <fieldset> *@
+        @*         <legend>Country</legend> *@
+        @*         <ul class="create-form__item-checkbox"> *@
+        @*             <li> *@
+        @*                 <input id="checkbox-1" type="checkbox"> *@
+        @*                 <label for="checkbox-1">Radio input</label> *@
+        @*             </li> *@
+        @*             <li> *@
+        @*                 <input id="checkbox-2" type="checkbox"> *@
+        @*                 <label for="checkbox-2">Radio input</label> *@
+        @*             </li> *@
+        @*             <li> *@
+        @*                 <input id="checkbox-3" type="checkbox"> *@
+        @*                 <label for="checkbox-3">Radio input</label> *@
+        @*             </li> *@
+        @*         </ul> *@
+        @*     </fieldset> *@
+        @* </div> *@
+    </form>
+</div>
+
+@section Scripts
+{  
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="~/libs/Trumbowyg-main/dist/trumbowyg.min.js"></script>
+    <script src="~/js/text-editor.js"></script>
+}

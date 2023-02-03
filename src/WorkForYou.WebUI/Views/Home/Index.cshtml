@@ -1,21 +1,24 @@
-﻿@model ContactUsViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model ContactUsViewModel
+
+@inject IViewLocalizer ViewLocalization
 
 @{
-    ViewData["Title"] = "Головна сторінка";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 <header class="header" style="background-image: url('img/homePage/header.jpg')">
     <div class="header__overlay"></div>
     <div class="header__content container text-center">
         <h1 class="header__content-title">
-            <span>Сайт для пошуку <span>роботи</span> в Україні</span>
+            <span>@ViewLocalization["TitleStart"] <span>@ViewLocalization["TitleMiddle"]</span> @ViewLocalization["TitleEnd"]</span>
         </h1>
 
         <a asp-controller="Auth" asp-action="Register">
-            <button class="button button-primary text-center">Шукати</button>
+            <button class="button button-primary text-center">@ViewLocalization["ButtonToRegister"]</button>
         </a>
 
-        <h2 class="mt-3">для <span class="auto-type"></span></h2>
+        <h2 class="mt-3">@ViewLocalization["ForCategories"] <span class="auto-type"></span></h2>
     </div>
 </header>
 
@@ -27,16 +30,9 @@
                      class="about-image" alt="about-us image">
             </div>
             <div class="about__content">
-                <h2 class="section-title mb-3">Про сайт</h2>
-                <p>
-                    Користувач заповнює профайл, вказуючи свою посаду,
-                    очікувану зарплату, рівень англійської, описує досвід,
-                    обирає категорію.
-                </p>
-                <p>
-                    Компанія пропонує різні вакансії, на які користувач може
-                    відреагувати, i можливо, з вами зв'яжуться.
-                </p>
+                <h2 class="section-title mb-3">@ViewLocalization["About"]</h2>
+                <p>@ViewLocalization["AboutSectionOne"]</p>
+                <p>@ViewLocalization["AboutSectionTwo"]</p>
             </div>
         </div>
     </div>
@@ -44,7 +40,7 @@
 
 <section class="section form-section">
     <div class="container text-center">
-        <h2 class="section-title mb-5">Зв'язатися з нами</h2>
+        <h2 class="section-title mb-5">@ViewLocalization["Contact"]</h2>
         <form method="post" asp-controller="Home" asp-action="Index" asp-antiforgery="true" autocomplete="off"
               class="contact-form">
             <div asp-validation-summary="All"></div>
@@ -60,7 +56,7 @@
             <div class="contact-form__btn">
                 <button class="button button-primary text-center">
                     <i class="fa-regular fa-paper-plane"></i>
-                    Відправити
+                    @ViewLocalization["FormSend"]
                 </button>
             </div>
         </form>

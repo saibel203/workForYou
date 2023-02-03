@@ -4,6 +4,8 @@ namespace WorkForYou.WebUI.ViewModels;
 
 public class ChangePasswordViewModel
 {
+    public string Username { get; set; } = string.Empty;
+    
     [Required(ErrorMessage = "Email поле є обов'язковим")]
     public string Email { get; set; } = string.Empty;
     
