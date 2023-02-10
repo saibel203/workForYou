@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using WorkForYou.Core.Models.IdentityInheritance;
-using WorkForYou.Core.DtoModels;
+using WorkForYou.Core.DTOModels.UserDTOs;
+using WorkForYou.Core.DTOModels.VacancyDTOs;
 using WorkForYou.Core.Models;
-using WorkForYou.WebUI.ViewModels;
+using WorkForYou.WebUI.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Mapping;
 
@@ -18,10 +19,19 @@ public class AutomapperProfile : Profile
         CreateMap<ChangePasswordViewModel, ChangePasswordDto>();
         CreateMap<ChangePasswordViewModel, UsernameDto>();
         
-        CreateMap<ActionVacancyDto, ActionVacancyViewModel>().ReverseMap();
+        CreateMap<ActionVacancyViewModel, ActionVacancyDto>().ReverseMap();
         CreateMap<ActionVacancyDto, Vacancy>().ReverseMap();
         CreateMap<Vacancy, ActionVacancyViewModel>().ReverseMap();
-        CreateMap<CreateVacancyViewModel, ActionVacancyDto>();
-        CreateMap<UpdateVacancyViewModel, ActionVacancyDto>();
+
+        CreateMap<ApplicationUser, RefreshGeneralProfileInfoViewModel>();
+        CreateMap<RefreshGeneralProfileInfoViewModel, RefreshGeneralUserDto>();
+
+        CreateMap<CandidateUser, RefreshCandidateInfoViewModel>();
+        CreateMap<RefreshCandidateDto, CandidateUser>();
+        CreateMap<RefreshCandidateInfoViewModel, RefreshCandidateDto>();
+
+        CreateMap<RefreshEmployerDto, EmployerUser>();
+        CreateMap<RefreshEmployerInfoViewModel, RefreshEmployerDto>();
+        CreateMap<EmployerUser, RefreshEmployerInfoViewModel>();
     }
 }

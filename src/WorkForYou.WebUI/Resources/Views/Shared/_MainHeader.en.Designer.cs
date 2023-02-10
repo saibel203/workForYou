@@ -60,6 +60,15 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Candidates.
+        /// </summary>
+        internal static string HeaderAllCandidates {
+            get {
+                return ResourceManager.GetString("HeaderAllCandidates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ChangePassword.
         /// </summary>
         internal static string HeaderChangePassword {

@@ -1,4 +1,5 @@
-﻿@model ActionVacancyViewModel
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WorkForYou.WebUI.ViewModels.Forms.ActionVacancyViewModel
 
 @{
     ViewData["Title"] = "Редагування вакансії";
@@ -29,6 +30,25 @@
         </div>
         <textarea id="descriptionEditor" asp-for="LongDescription"></textarea>
         <span asp-validation-for="LongDescription"></span>
+        <div class="create-form__item keywords">
+            <label asp-for="KeyWords"></label>
+            <input type="hidden" asp-for="KeyWords" class="keywords-input-item">
+            <ul class="create-form__item-keywords">
+                @{ 
+                    var keyWords = Model.KeyWords.Split(", ", StringSplitOptions.RemoveEmptyEntries);
+                }
+                
+                @foreach (var keyword in keyWords)
+                {
+                    <li class="tag">
+                        @keyword
+                        <i class="fa-solid fa-xmark"></i>
+                    </li>
+                }
+                <input placeholder="Ключові слова">
+            </ul>
+            <span asp-validation-for="KeyWords"></span>
+        </div>
         <div class="create-form__item after-long-description-validation">
             <label asp-for="VacancyDomainId"></label>
             <select asp-for="VacancyDomainId">
@@ -133,8 +153,9 @@
 </div>
 
 @section Scripts
-{  
+{
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="~/libs/Trumbowyg-main/dist/trumbowyg.min.js"></script>
     <script src="~/js/text-editor.js"></script>
+    <script src="~/js/tags.js"></script>
 }

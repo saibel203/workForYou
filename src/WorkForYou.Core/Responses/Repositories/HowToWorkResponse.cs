@@ -4,5 +4,5 @@ namespace WorkForYou.Core.Responses.Repositories;
 
 public class HowToWorkResponse : BaseResponse
 {
-    public IEnumerable<HowToWork> HowToWorks { get; set; } = new List<HowToWork>();
+    public IReadOnlyList<HowToWork> HowToWorks { get; set; } = new List<HowToWork>();
 }

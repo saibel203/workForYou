@@ -10,6 +10,7 @@ public interface IUnitOfWork : IDisposable
     public IEnglishLevelRepository EnglishLevelRepository { get; }
     public ICandidateRegionRepository CandidateRegionRepository { get; }
     public IRelocateRepository RelocateRepository { get; }
-    public ITypeOfCompanyRepository TypeOfCompanyRepository { get; set; }
+    public ITypeOfCompanyRepository TypeOfCompanyRepository { get; }
+    public ICommunicationLanguageRepository CommunicationLanguageRepository { get; }
     Task SaveAsync();
 }

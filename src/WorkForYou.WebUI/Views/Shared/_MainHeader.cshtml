@@ -20,7 +20,7 @@
     </div>
     <nav class="header__menu">
         <a asp-controller="Main" asp-action="Index" is-active-header-route class="">@ViewLocalization["HeaderMain"]</a>
-        
+
         @if (User.IsInRole("candidate"))
         {
             <a asp-controller="CandidateAccount" asp-action="AllVacancies" is-active-header-route class="">@ViewLocalization["HeaderVacancies"]</a>
@@ -28,6 +28,7 @@
         @if (User.IsInRole("employer"))
         {
             <a asp-controller="EmployerAccount" asp-action="AllVacancies" is-active-header-route class="">@ViewLocalization["HeaderMyVacancies"]</a>
+            <a asp-controller="EmployerAccount" asp-action="AllCandidates" is-active-header-route class="">@ViewLocalization["HeaderAllCandidates"]</a>
         }
     </nav>
     <div class="header__settings">
@@ -38,28 +39,35 @@
             </svg>
         </div>
         <span class="header__settings-button">
-            <img class="header__settings-profile"
-                 src="https://img.freepik.com/free-icon/user_318-875902.jpg" alt="User image">
+            @* <img class="header__settings-profile" src="~/img/userImages/default-user-image.png" alt="Default user image"> *@
             <div class="header__settings-name">
-                @User.Identity?.Name
+                Hello, @User.Identity?.Name
 
                 <div class="profile-dropdown">
-                    <a asp-controller="Account" asp-action="Profile"><i class="fa-solid fa-id-card"></i> @ViewLocalization["HeaderProfile"]</a>
+                    <a asp-controller="Account" asp-action="Profile" asp-route-username="@User.Identity?.Name">
+                        <i class="fa-solid fa-id-card"></i> @ViewLocalization["HeaderProfile"]
+                    </a>
                     <form method="post" asp-controller="Main" asp-action="SetCulture" asp-route-returnUrl="@returnUrl">
                         @if (CultureInfo.CurrentCulture.Equals(new CultureInfo("en")))
                         {
                             <input name="culture" type="hidden" value="uk">
-                            <button type="submit"><i class="fa-solid fa-earth-americas"></i> Змінити на Українську</button>
+                            <button class="check-language" type="submit"><i class="fa-solid fa-earth-americas"></i> Змінити на Українську</button>
                         }
                         else
                         {
                             <input name="culture" type="hidden" value="en">
-                            <button type="submit"><i class="fa-solid fa-earth-americas"></i> Switch to English</button>
+                            <button class="check-language" type="submit"><i class="fa-solid fa-earth-americas"></i> Switch to English</button>
                         }
                     </form>
-                    <a asp-controller="CandidateAccount" asp-action="FavouriteList"><i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]</a>
-                    <a asp-controller="Account" asp-action="ChangePassword"><i class="fa-solid fa-key"></i> @ViewLocalization["HeaderChangePassword"]</a>
-                    <a asp-controller="Account" asp-action="Logout"><i class="fa-solid fa-right-from-bracket"></i> @ViewLocalization["HeaderLogout"]</a>
+                    <a asp-controller="CandidateAccount" asp-action="FavouriteList">
+                        <i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]
+                    </a>
+                    <a asp-controller="Account" asp-action="ChangePassword">
+                        <i class="fa-solid fa-key"></i> @ViewLocalization["HeaderChangePassword"]
+                    </a>
+                    <a asp-controller="Account" asp-action="Logout">
+                        <i class="fa-solid fa-right-from-bracket"></i> @ViewLocalization["HeaderLogout"]
+                    </a>
                 </div>
             </div>
         </span>

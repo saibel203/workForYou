@@ -42,7 +42,7 @@ public static class ConfigureServices
         });
 
         services.AddScoped<SeedDbContext>();
-        services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

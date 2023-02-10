@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WorkForYou.Core.DtoModels;
+using WorkForYou.Core.AdditionalModels;
+using WorkForYou.Core.DTOModels.UserDTOs;
+using WorkForYou.Core.DTOModels.VacancyDTOs;
 using WorkForYou.Core.IRepositories;
 using WorkForYou.Core.Models;
-using WorkForYou.Core.Models.IdentityInheritance;
 using WorkForYou.Data.DatabaseContext;
 using WorkForYou.Core.Responses.Repositories;
 
@@ -14,22 +14,27 @@ namespace WorkForYou.Data.Repositories;
 
 public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IMapper _mapper;
+    
     public VacancyRepository(WorkForYouDbContext context, ILogger logger, IHttpContextAccessor httpContextAccessor,
-        UserManager<ApplicationUser> userManager, IMapper mapper)
-        : base(context, logger, httpContextAccessor, userManager, mapper)
+        IMapper mapper)
+        : base(context, logger)
     {
+        _httpContextAccessor = httpContextAccessor;
+        _mapper = mapper;
     }
 
-    public async Task<VacancyResponse> GetAllVacanciesAsync(int pageNumber, string? searchString)
+    public async Task<VacancyResponse> GetAllVacanciesAsync(QueryParameters queryParameters)
     {
         try
         {
             const int pageSize = 6;
-            int skipAmount = pageSize * (pageNumber - 1);
+            int skipAmount = pageSize * (queryParameters.PageNumber - 1);
 
-            IEnumerable<Vacancy> vacancies;
+            IReadOnlyList<Vacancy> vacancies;
 
-            if (!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(queryParameters.SearchString))
                 vacancies = await DbSet
                     .Include(x => x.EnglishLevel)
                     .Include(x => x.TypeOfCompany)
@@ -38,7 +43,9 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     .Include(x => x.HowToWork)
                     .Include(x => x.WorkCategory)
                     .Include(x => x.VacancyDomain)
-                    .Where(x => EF.Functions.Like(x.VacancyTitle, $"%{searchString}%"))
+                    .Include(x => x.EmployerUser)
+                    .Include(x => x.EmployerUser!.ApplicationUser)
+                    .Where(x => EF.Functions.Like(x.VacancyTitle, $"%{queryParameters.SearchString}%"))
                     .ToListAsync();
             else
                 vacancies = await DbSet
@@ -49,7 +56,43 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     .Include(x => x.HowToWork)
                     .Include(x => x.WorkCategory)
                     .Include(x => x.VacancyDomain)
+                    .Include(x => x.EmployerUser)
+                    .Include(x => x.EmployerUser!.ApplicationUser)
                     .ToListAsync();
+
+            switch (queryParameters.SortBy)
+            {
+                case "publication-date":
+                    vacancies = vacancies.OrderBy(x => x.CreatedDate).ToList();
+                    break;
+                case "from-salary":
+                    vacancies = vacancies.OrderByDescending(x => x.ToSalary).ToList();
+                    break;
+                case "to-salary":
+                    vacancies = vacancies.OrderBy(x => x.FromSalary).ToList();
+                    break;
+                case "from-experience":
+                    vacancies = vacancies.OrderByDescending(x => x.ExperienceWork).ToList();
+                    break;
+                case "to-experience":
+                    vacancies = vacancies.OrderBy(x => x.ExperienceWork).ToList();
+                    break;
+                case "from-view-count":
+                    vacancies = vacancies.OrderByDescending(x => x.ViewCount).ToList();
+                    break;
+                case "to-view-count":
+                    vacancies = vacancies.OrderBy(x => x.ViewCount).ToList();
+                    break;
+                // case "from-reviews-count":
+                //     vacancies = vacancies.OrderBy(x => x.FromSalary).ToList();
+                //     break;
+                // case "to-reviews-count":
+                //     vacancies = vacancies.OrderByDescending(x => x.FromSalary).ToList();
+                //     break;
+                default:
+                    vacancies = vacancies.OrderByDescending(x => x.CreatedDate).ToList();
+                    break;
+            }
 
             int vacanciesCount = vacancies.Count();
             int pageCount = (int) Math.Ceiling((double) vacanciesCount / pageSize);
@@ -59,13 +102,13 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                 Message = "Vacancies successfully received",
                 IsSuccessfully = true,
                 VacancyList = vacancies
-                    .Reverse()
                     .Skip(skipAmount)
                     .Take(pageSize),
                 PageCount = pageCount,
                 VacancyCount = vacanciesCount,
-                SearchString = searchString,
-                Pages = PageNumbers(pageNumber, pageCount)
+                SearchString = queryParameters.SearchString,
+                Pages = PageNumbers(queryParameters.PageNumber, pageCount),
+                SortBy = queryParameters.SortBy
             };
         }
         catch (Exception ex)
@@ -80,8 +123,7 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
         }
     }
 
-    public async Task<VacancyResponse> GetAllEmployerVacanciesAsync(UsernameDto? usernameDto, int pageNumber,
-        string? searchString)
+    public async Task<VacancyResponse> GetAllEmployerVacanciesAsync(UsernameDto? usernameDto, QueryParameters queryParameters)
     {
         try
         {
@@ -93,7 +135,7 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                 };
 
             const int pageSize = 6;
-            int skipAmount = pageSize * (pageNumber - 1);
+            int skipAmount = pageSize * (queryParameters.PageNumber - 1);
 
             var user = await Context.Users
                 .Include(x => x.EmployerUser)
@@ -106,18 +148,9 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     IsSuccessfully = false
                 };
 
-            var userRole = await UserManager.IsInRoleAsync(user, "employer");
-
-            if (!userRole)
-                return new()
-                {
-                    Message = "The user is not an employer",
-                    IsSuccessfully = false
-                };
-
             IEnumerable<Vacancy> employerVacancies;
 
-            if (!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(queryParameters.SearchString))
                 employerVacancies = await DbSet
                     .Include(x => x.EnglishLevel)
                     .Include(x => x.TypeOfCompany)
@@ -127,7 +160,7 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     .Include(x => x.WorkCategory)
                     .Include(x => x.VacancyDomain)
                     .Where(x => x.EmployerUser!.EmployerUserId == user.EmployerUser!.EmployerUserId)
-                    .Where(x => EF.Functions.Like(x.VacancyTitle, $"%{searchString}%"))
+                    .Where(x => EF.Functions.Like(x.VacancyTitle, $"%{queryParameters.SearchString}%"))
                     .ToListAsync();
             else
                 employerVacancies = await DbSet
@@ -140,6 +173,40 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     .Include(x => x.VacancyDomain)
                     .Where(x => x.EmployerUser!.EmployerUserId == user.EmployerUser!.EmployerUserId)
                     .ToListAsync();
+            
+            switch (queryParameters.SortBy)
+            {
+                case "publication-date":
+                    employerVacancies = employerVacancies.OrderByDescending(x => x.CreatedDate).ToList();
+                    break;
+                case "from-salary":
+                    employerVacancies = employerVacancies.OrderBy(x => x.ToSalary).ToList();
+                    break;
+                case "to-salary":
+                    employerVacancies = employerVacancies.OrderByDescending(x => x.FromSalary).ToList();
+                    break;
+                case "from-experience":
+                    employerVacancies = employerVacancies.OrderBy(x => x.ExperienceWork).ToList();
+                    break;
+                case "to-experience":
+                    employerVacancies = employerVacancies.OrderByDescending(x => x.ExperienceWork).ToList();
+                    break;
+                case "from-view-count":
+                    employerVacancies = employerVacancies.OrderBy(x => x.ViewCount).ToList();
+                    break;
+                case "to-view-count":
+                    employerVacancies = employerVacancies.OrderByDescending(x => x.ViewCount).ToList();
+                    break;
+                // case "from-reviews-count":
+                //     vacancies = vacancies.OrderBy(x => x.FromSalary).ToList();
+                //     break;
+                // case "to-reviews-count":
+                //     vacancies = vacancies.OrderByDescending(x => x.FromSalary).ToList();
+                //     break;
+                default:
+                    employerVacancies = employerVacancies.OrderBy(x => x.CreatedDate).ToList();
+                    break;
+            }
 
             int vacanciesCount = employerVacancies.Count();
             int pageCount = (int) Math.Ceiling((double) vacanciesCount / pageSize);
@@ -154,8 +221,9 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     .Take(pageSize),
                 PageCount = pageCount,
                 VacancyCount = vacanciesCount,
-                SearchString = searchString,
-                Pages = PageNumbers(pageNumber, pageCount)
+                SearchString = queryParameters.SearchString,
+                Pages = PageNumbers(queryParameters.PageNumber, pageCount),
+                SortBy = queryParameters.SortBy
             };
         }
         catch (Exception ex)
@@ -193,10 +261,10 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     IsSuccessfully = false
                 };
 
-            if (!HttpContextAccessor.HttpContext.Session.Keys.Contains($"IsShowVacancy{vacancyId}") 
-                && HttpContextAccessor.HttpContext.User.IsInRole("candidate"))
+            if (!_httpContextAccessor.HttpContext.Session.Keys.Contains($"IsShowVacancy{vacancyId}") 
+                && _httpContextAccessor.HttpContext.User.IsInRole("candidate"))
             {
-                HttpContextAccessor.HttpContext.Session.SetString($"IsShowVacancy{vacancyId}", "1");
+                _httpContextAccessor.HttpContext.Session.SetString($"IsShowVacancy{vacancyId}", "1");
                 vacancy.ViewCount++;
                 await Context.SaveChangesAsync();
             }
@@ -230,8 +298,8 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     IsSuccessfully = false
                 };
 
-            var createVacancyModel = Mapper.Map<Vacancy>(actionVacancyDto);
-
+            var createVacancyModel = _mapper.Map<Vacancy>(actionVacancyDto);
+            
             await DbSet.AddAsync(createVacancyModel);
             await Context.SaveChangesAsync();
 
@@ -297,7 +365,7 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     IsSuccessfully = false
                 };
 
-            var vacancy = Mapper.Map<Vacancy>(actionVacancyDto);
+            var vacancy = _mapper.Map<Vacancy>(actionVacancyDto);
             DbSet.Update(vacancy);
             await Context.SaveChangesAsync();
 

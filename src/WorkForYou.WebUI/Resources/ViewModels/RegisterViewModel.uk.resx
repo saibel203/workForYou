@@ -21,9 +21,6 @@
     <data name="Username поле є обов'язвовим" xml:space="preserve">
         <value>Username поле є обов'язвовим</value>
     </data>
-    <data name="Довжина Username має бути від 6 до 15 символів" xml:space="preserve">
-        <value>Довжина Username має бути від 6 до 15 символів</value>
-    </data>
     <data name="Email поле є обов'язвовим" xml:space="preserve">
         <value>Email поле є обов'язвовим</value>
     </data>
@@ -44,5 +41,8 @@
     </data>
     <data name="SelectedRole поле є обов'язвовим" xml:space="preserve">
         <value>SelectedRole поле є обов'язвовим</value>
+    </data>
+    <data name="Довжина Username має бути від 6 до 20 символів" xml:space="preserve">
+        <value>Довжина Username має бути від 6 до 20 символів</value>
     </data>
 </root>

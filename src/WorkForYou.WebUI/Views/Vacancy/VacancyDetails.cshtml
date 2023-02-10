@@ -1,4 +1,4 @@
-﻿@using WorkForYou.WebUI.Controllers
+﻿@using WorkForYou.WebUI.Helpers
 
 @{
     ViewData["Title"] = "Деталі вакансії";
@@ -35,15 +35,24 @@
                 <span>Вакансія опублікована @Model.CreatedDate.ToString("d MMMM yyyy")</span>
             </div>
             <div>
-                <i class="fa-regular fa-eye"></i><span>@Model.ViewCount 
-                    перегляд@(BaseController.GetLastStringLetters(Model.ViewCount))</span>
-                <i class="fa-solid fa-user-group" style="padding-left: 5px;"></i><span>5 
-                    відгук@(BaseController.GetLastStringLetters(5))</span>
+                <i class="fa-regular fa-eye"></i>
+                <span>
+                    @Model.ViewCount
+                    перегляд@(ViewHelpers.GetLastStringLetters(Model.ViewCount))
+                </span>
+                <i class="fa-solid fa-user-group" style="padding-left: 5px;"></i>
+                <span>
+                    5
+                    відгук@(ViewHelpers.GetLastStringLetters(5))
+                </span>
             </div>
         </div>
-        <div class="card-details__buttons">
-            <button class="search-buttons card-buttons">Відгукнутися</button>
-        </div>
+        @if (User.IsInRole("candidate"))
+        {
+            <div class="card-details__buttons">
+                <button class="search-buttons card-buttons">Відгукнутися</button>
+            </div>
+        }
     </div>
     <div class="card-details__info">
         @if (Model.WorkCategory is not null)
@@ -62,8 +71,10 @@
             }
             else
             {
-                <p><i class="fa-solid fa-graduation-cap"></i> Досвід: @Model.ExperienceWork 
-                    @BaseController.GetLastStringLetters(Model.ExperienceWork, true)</p>
+                <p>
+                    <i class="fa-solid fa-graduation-cap"></i> Досвід: @Model.ExperienceWork
+                    @ViewHelpers.GetLastStringLetters(Model.ExperienceWork, true)
+                </p>
             }
         }
         @if (Model.VacancyDomain is not null)
@@ -78,22 +89,25 @@
         }
         @if (Model.CandidateRegion is not null)
         {
-            @if (Model.CandidateRegion.CandidateRegionName == "Весь світ")
-            {
-                <p><i class="fa-solid fa-earth-americas"></i> Кандидат з усього світу</p>
-            }
-            else if (Model.CandidateRegion.CandidateRegionName == "Україна + Європа")
-            {
-                <p><i class="fa-solid fa-earth-americas"></i> Лише кандидати з України та Європи</p>
-            }
-            else if (Model.CandidateRegion.CandidateRegionName == "Лише Європа")
-            {
-                <p><i class="fa-solid fa-earth-americas"></i> Лише кандидати з Європи</p>
-            }
-            else if (Model.CandidateRegion.CandidateRegionName == "Лише Україна")
-            {
-                <p><i class="fa-solid fa-earth-americas"></i> Лише кандидати з України</p>
-            }
+            <p>
+                <i class="fa-solid fa-earth-americas"></i>
+                @if (Model.CandidateRegion.CandidateRegionName == "Весь світ")
+                {
+                    <span>Кандидат з усього світу</span>
+                }
+                else if (Model.CandidateRegion.CandidateRegionName == "Україна + Європа")
+                {
+                    <span>Лише кандидати з України та Європи</span>
+                }
+                else if (Model.CandidateRegion.CandidateRegionName == "Лише Європа")
+                {
+                    <span>Лише кандидати з Європи</span>
+                }
+                else if (Model.CandidateRegion.CandidateRegionName == "Лише Україна")
+                {
+                    <span>Лише кандидати з України</span>
+                }
+            </p>
         }
     </div>
 </div>

@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using AspNetCoreHero.ToastNotification;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using WorkForYou.Core.IOptions;
@@ -11,6 +12,8 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddWebUiServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
+        
         services.AddAutoMapper(typeof(Program));
 
         services.Configure<SendGridOptions>(configuration.GetSection("SendGridOptions"));
@@ -24,6 +27,8 @@ public static class ConfigureServices
             enabled: sp.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
             logger: sp.GetRequiredService<ILogger<NpmWatchHosted>>()));
 
+        services.AddTransient<IFileService, FileService>();
+        services.AddTransient<INotificationService, NotificationService>();
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IMailService, MailService>();
 
@@ -42,6 +47,13 @@ public static class ConfigureServices
             options.SetDefaultCulture(defaultCulture);
             options.SupportedCultures = supportedCultures;
             options.SupportedUICultures = supportedCultures;
+        });
+        
+        services.AddNotyf(options =>
+        {
+            options.DurationInSeconds = 10;
+            options.IsDismissable = true;
+            options.Position = NotyfPosition.TopRight;
         });
 
         services.AddControllersWithViews()

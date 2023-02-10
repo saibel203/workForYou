@@ -1,4 +1,4 @@
-﻿using WorkForYou.Core.DtoModels;
+﻿using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.Core.Responses.Services;
 
 namespace WorkForYou.Core.IServices;
@@ -11,5 +11,6 @@ public interface IAuthService
     Task<UserAuthResponse> RemindPasswordAsync(RemindPasswordDto? forgetPasswordDto);
     Task<UserAuthResponse> ResetPasswordAsync(ResetPasswordDto? resetPasswordDto);
     Task<UserAuthResponse> ChangePasswordAsync(ChangePasswordDto? changePasswordDto);
+    Task<UserAuthResponse> IsUserCandidate(UsernameDto? usernameDto);
     Task LogoutAsync();
 }

@@ -1,11 +1,7 @@
 ﻿using System.Linq.Expressions;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WorkForYou.Core.IRepositories;
-using WorkForYou.Core.Models.IdentityInheritance;
 using WorkForYou.Data.DatabaseContext;
 
 namespace WorkForYou.Data.Repositories;
@@ -14,18 +10,12 @@ public class GenericRepository<T>: IGenericRepository<T> where T: class
 {
     protected WorkForYouDbContext Context;
     protected readonly ILogger Logger;
-    protected readonly IHttpContextAccessor HttpContextAccessor;
-    protected readonly UserManager<ApplicationUser> UserManager;
-    protected readonly IMapper Mapper;
     internal DbSet<T> DbSet;
 
-    public GenericRepository(WorkForYouDbContext context, ILogger logger, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IMapper mapper)
+    public GenericRepository(WorkForYouDbContext context, ILogger logger)
     {
         Context = context;
         Logger = logger;
-        HttpContextAccessor = httpContextAccessor;
-        UserManager = userManager;
-        Mapper = mapper;
         DbSet = Context.Set<T>();
     }
 

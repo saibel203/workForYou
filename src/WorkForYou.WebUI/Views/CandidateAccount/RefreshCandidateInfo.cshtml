@@ -1,0 +1,123 @@
+﻿@model WorkForYou.WebUI.ViewModels.Forms.RefreshCandidateInfoViewModel
+
+@{
+    ViewData["Title"] = "Змінити детальну інформацію";
+}
+
+<div class="create-form">
+    <div class="create-form__header">
+        <h1>Змінити детальну інформацію</h1>
+        <a asp-controller="Account" asp-action="RefreshGeneralProfileInfo"
+           class="search-buttons detail-button">
+            Загальна інформація
+        </a>
+        <a asp-controller="CandidateAccount" asp-action="RefreshCandidateInfo"
+           class="search-buttons detail-button">
+            Детальна інформація
+        </a>
+    </div>
+    <form method="post" asp-controller="CandidateAccount" asp-action="RefreshCandidateInfo" asp-antiforgery="true">
+        <div asp-validation-summary="All"></div>
+        <div class="create-form__item">
+            <label asp-for="CompanyPosition"></label>
+            <input asp-for="CompanyPosition" placeholder="C# developer">
+            <span asp-validation-for="CompanyPosition"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="ExpectedSalary"></label>
+            <input asp-for="ExpectedSalary">
+            <span asp-validation-for="ExpectedSalary"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="HourlyRate"></label>
+            <input asp-for="HourlyRate">
+            <span asp-validation-for="HourlyRate"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="ExperienceWorkTime"></label>
+            <input asp-for="ExperienceWorkTime">
+            <span asp-validation-for="ExperienceWorkTime"></span>
+        </div>
+        <div class="create-form__item keywords">
+            <label asp-for="KeyWords"></label>
+            <input type="hidden" asp-for="KeyWords" class="keywords-input-item">
+            <ul class="create-form__item-keywords">
+                @if (Model.KeyWords is not null)
+                {
+                    var keyWords = Model.KeyWords.Split(", ", StringSplitOptions.RemoveEmptyEntries);
+
+                    @foreach (var keyword in keyWords)
+                    {
+                        <li class="tag">
+                            @keyword
+                            <i class="fa-solid fa-xmark"></i>
+                        </li>
+                    }
+                }
+                <input placeholder="Ключові слова">
+            </ul>
+            <span asp-validation-for="KeyWords"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="ExperienceWorkDescription"></label>
+            <textarea asp-for="ExperienceWorkDescription"></textarea>
+            <span asp-validation-for="ExperienceWorkDescription"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="Country"></label>
+            <input asp-for="Country">
+            <span asp-validation-for="Country"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="City"></label>
+            <input asp-for="City">
+            <span asp-validation-for="City"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="WorkCategoryId"></label>
+            <select asp-for="WorkCategoryId">
+                @foreach (var workCategory in Model.WorkCategories!)
+                {
+                    <option value="@workCategory.WorkCategoryId">@workCategory.CategoryName</option>
+                }
+            </select>
+            <span asp-validation-for="WorkCategoryId"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="EnglishLevelId"></label>
+            <select asp-for="EnglishLevelId">
+                @foreach (var englishLevel in Model.EnglishLevels!)
+                {
+                    <option value="@englishLevel.EnglishLevelId">@englishLevel.NameLevel</option>
+                }
+            </select>
+            <span asp-validation-for="EnglishLevelId"></span>
+        </div>
+        <div class="create-form__item">
+            <label asp-for="CommunicationLanguageId"></label>
+            <select asp-for="CommunicationLanguageId">
+                @foreach (var communicationLanguage in Model.CommunicationLanguages!)
+                {
+                    <option value="@communicationLanguage.CommunicationLanguageId">
+                        @communicationLanguage.CommunicationLanguageName
+                    </option>
+                }
+            </select>
+            <span asp-validation-for="CommunicationLanguageId"></span>
+        </div>
+        <div class="vacancies-cards__card-buttons">
+            <input type="submit" class="search-buttons card-buttons" value="Редагувати">
+        </div>
+    </form>
+
+    <form method="post" asp-controller="Account" asp-action="ProfileUploadImage" asp-antiforgery="true"
+          enctype="multipart/form-data">
+        <input type="file" name="UserFile">
+        <input type="submit">
+    </form>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/tags.js"></script>
+}

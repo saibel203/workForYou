@@ -39,4 +39,7 @@
     <data name="HeaderSaved" xml:space="preserve">
         <value>Saved</value>
     </data>
+    <data name="HeaderAllCandidates" xml:space="preserve">
+        <value>Candidates</value>
+    </data>
 </root>

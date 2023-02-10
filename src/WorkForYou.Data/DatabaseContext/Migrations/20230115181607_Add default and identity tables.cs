@@ -283,12 +283,15 @@ namespace WorkForYou.Data.DatabaseContext.Migrations
                     ExperienceWorkDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KeyWords = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmploymentOptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EnglishLevelId = table.Column<int>(type: "int", nullable: true),
                     WorkCategoryId = table.Column<int>(type: "int", nullable: true),
-                    CommunicationLanguageId = table.Column<int>(type: "int", nullable: false),
+                    CommunicationLanguageId = table.Column<int>(type: "int", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false)
+                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false),
+                    IsProfileComplete = table.Column<bool>(type: "bit", nullable: false),
+                    ViewCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -352,6 +355,7 @@ namespace WorkForYou.Data.DatabaseContext.Migrations
                     VacancyTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LongDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    KeyWords = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExperienceWork = table.Column<int>(type: "int", nullable: false),
                     FromSalary = table.Column<int>(type: "int", nullable: false),
                     ToSalary = table.Column<int>(type: "int", nullable: false),

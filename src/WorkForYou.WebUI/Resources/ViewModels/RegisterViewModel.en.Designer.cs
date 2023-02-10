@@ -105,11 +105,11 @@ namespace WorkForYou.WebUI.Resources.ViewModels {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username must be between 6 and 15 characters long.
+        ///   Looks up a localized string similar to Username must be between 6 and 20 characters long.
         /// </summary>
-        internal static string Довжина_Username_має_бути_від_6_до_15_символів {
+        internal static string Довжина_Username_має_бути_від_6_до_20_символів {
             get {
-                return ResourceManager.GetString("Довжина Username має бути від 6 до 15 символів", resourceCulture);
+                return ResourceManager.GetString("Довжина Username має бути від 6 до 20 символів", resourceCulture);
             }
         }
         

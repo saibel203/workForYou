@@ -23,7 +23,7 @@ public class MailService : IMailService
     {
         try
         {
-            var filePath = Environment.CurrentDirectory + _sendGridOptions.EmailTemplatePath;
+            var filePath = Path.Combine(Environment.CurrentDirectory + _sendGridOptions.EmailTemplatePath);
             StringBuilder htmlText = new();
 
             var htmlFile = await File.ReadAllTextAsync(filePath);

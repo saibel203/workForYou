@@ -24,8 +24,8 @@
     <data name="Email поле є обов'язвовим" xml:space="preserve">
         <value>Email field is required</value>
     </data>
-    <data name="Довжина Username має бути від 6 до 15 символів" xml:space="preserve">
-        <value>Username must be between 6 and 15 characters long</value>
+    <data name="Довжина Username має бути від 6 до 20 символів" xml:space="preserve">
+        <value>Username must be between 6 and 20 characters long</value>
     </data>
     <data name="Password поле є обов'язвовим" xml:space="preserve">
         <value>Password field is required</value>

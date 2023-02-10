@@ -1,22 +1,25 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WorkForYou.Core.IServices;
-using WorkForYou.Core.DtoModels;
+using WorkForYou.Core.DTOModels.UserDTOs;
+using WorkForYou.Core.ValueObjects;
 using WorkForYou.WebUI.Attributes;
-using WorkForYou.WebUI.ViewModels;
+using WorkForYou.WebUI.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Controllers;
 
 [Unauthorized]
 public class AuthController : Controller
 {
+    private readonly INotificationService _notificationService;
     private readonly IAuthService _authService;
     private readonly IMapper _mapper;
 
-    public AuthController(IMapper mapper, IAuthService authService)
+    public AuthController(IMapper mapper, IAuthService authService, INotificationService notificationService)
     {
         _mapper = mapper;
         _authService = authService;
+        _notificationService = notificationService;
     }
 
     [HttpGet]
@@ -30,7 +33,10 @@ public class AuthController : Controller
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
         if (!ModelState.IsValid)
+        {
+            _notificationService.CustomErrorMessage("Помилка при спробі зареєструватися");
             return View(registerViewModel);
+        }
 
         var registerModelDto = _mapper.Map<UserRegisterDto>(registerViewModel);
 
@@ -46,6 +52,8 @@ public class AuthController : Controller
 
             return View(registerViewModel);
         }
+
+        _notificationService.CustomSuccessMessage("Ви успішно зареєструвались");
 
         return RedirectToAction("ConfirmEmail");
     }
@@ -64,7 +72,10 @@ public class AuthController : Controller
         returnUrl ??= Url.Content("~/");
 
         if (!ModelState.IsValid)
+        {
+            _notificationService.CustomErrorMessage("Помилка при спробі авторизуватися");
             return View(loginViewModel);
+        }
 
         var loginModelDto = _mapper.Map<UserLoginDto>(loginViewModel);
 
@@ -73,8 +84,11 @@ public class AuthController : Controller
         if (!loginResult.IsSuccessfully)
         {
             ModelState.AddModelError("", loginResult.Message);
+            _notificationService.CustomErrorMessage("Помилка при спробі авторизуватися");
             return View(loginViewModel);
         }
+
+        _notificationService.CustomSuccessMessage("Ви успішно авторизувалися");
 
         return RedirectToLocal(returnUrl);
     }
@@ -83,7 +97,10 @@ public class AuthController : Controller
     public async Task<IActionResult> ConfirmEmailResult(string userId, string token)
     {
         if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
+        {
+            _notificationService.CustomErrorMessage(NotificationMessages.UserNotFoundError);
             return RedirectToAction("Index", "Home");
+        }
 
         var result = await _authService.ConfirmEmailAsync(userId, token);
 
@@ -94,6 +111,8 @@ public class AuthController : Controller
                     ModelState.AddModelError(error.Code, error.Description);
             else
                 ModelState.AddModelError("", result.Message);
+
+            _notificationService.CustomErrorMessage("Помилка при спробі підтвердити Email");
 
             return View();
         }
@@ -123,7 +142,10 @@ public class AuthController : Controller
     public async Task<IActionResult> RemindPassword(RemindPasswordViewModel forgetPasswordViewModel)
     {
         if (string.IsNullOrWhiteSpace(forgetPasswordViewModel.Email))
+        {
+            _notificationService.CustomErrorMessage(NotificationMessages.UserNotFoundError);
             return View(forgetPasswordViewModel);
+        }
 
         var forgetPasswordDto = _mapper.Map<RemindPasswordDto>(forgetPasswordViewModel);
 
@@ -132,9 +154,11 @@ public class AuthController : Controller
         if (!forgetPasswordResult.IsSuccessfully)
         {
             ModelState.AddModelError("", forgetPasswordResult.Message);
-
+            _notificationService.CustomErrorMessage("Виникла помилка");
             return View(forgetPasswordViewModel);
         }
+
+        _notificationService.CustomSuccessMessage("Операція пройшла успішно");
 
         return RedirectToAction("RemindPasswordResult");
     }
@@ -149,7 +173,10 @@ public class AuthController : Controller
     public IActionResult ResetPassword(string email, string token)
     {
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(token))
+        {
+            _notificationService.CustomErrorMessage(NotificationMessages.UserNotFoundError);
             return RedirectToAction("Index", "Home");
+        }
 
         return View();
     }
@@ -159,7 +186,10 @@ public class AuthController : Controller
     public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
     {
         if (!ModelState.IsValid)
+        {
+            _notificationService.CustomErrorMessage("Помилка при спробі відновити пароль");
             return View(resetPasswordViewModel);
+        }
 
         var resetPasswordDto = _mapper.Map<ResetPasswordDto>(resetPasswordViewModel);
 
@@ -173,8 +203,11 @@ public class AuthController : Controller
             else
                 ModelState.AddModelError("", resetPasswordResult.Message);
 
+            _notificationService.CustomErrorMessage("Помилка при спробі відновити пароль");
             return View(resetPasswordViewModel);
         }
+        
+        _notificationService.CustomSuccessMessage("Пароль успішно змінено");
 
         return RedirectToAction("ResetPasswordResult");
     }

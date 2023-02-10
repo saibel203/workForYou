@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using WorkForYou.Core.IOptions;
 using WorkForYou.Core.IServices;
 using WorkForYou.Core.Models.IdentityInheritance;
-using WorkForYou.Core.DtoModels;
+using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.Data.DatabaseContext;
 using WorkForYou.Core.Responses.Services;
 
@@ -303,4 +303,42 @@ public class AuthService : IAuthService
     }
 
     public async Task LogoutAsync() { await _signInManager.SignOutAsync(); }
+
+    public async Task<UserAuthResponse> IsUserCandidate(UsernameDto? usernameDto)
+    {
+        if (usernameDto is null)
+            return new()
+            {
+                Message = "Error getting data",
+                IsSuccessfully = false
+            };
+
+        var userDataResult = await _userManager.FindByNameAsync(usernameDto.Username);
+
+        if (userDataResult is null)
+            return new()
+            {
+                Message = "The user with the given Username was not found",
+                IsSuccessfully = false
+            };
+
+        const string candidateRole = "candidate";
+
+        var isUserCandidate = await _userManager.IsInRoleAsync(userDataResult, candidateRole);
+
+        if (isUserCandidate)
+            return new()
+            {
+                Message = "The user is a candidate",
+                IsSuccessfully = true,
+                IsUserCandidate = true
+            };
+
+        return new()
+        {
+            Message = "The user is an employer",
+            IsSuccessfully = true,
+            IsUserCandidate = false
+        };
+    }
 }

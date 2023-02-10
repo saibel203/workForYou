@@ -4,5 +4,5 @@ namespace WorkForYou.Core.Responses.Repositories;
 
 public class CandidateRegionResponse : BaseResponse
 {
-    public IEnumerable<CandidateRegion> CandidateRegions { get; set; } = new List<CandidateRegion>();
+    public IReadOnlyList<CandidateRegion> CandidateRegions { get; set; } = new List<CandidateRegion>();
 }

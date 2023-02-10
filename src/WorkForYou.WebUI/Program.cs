@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.Extensions.Options;
 using WorkForYou.Core;
 using WorkForYou.Data;
@@ -22,6 +23,7 @@ if (app.Environment.IsDevelopment())
     await init.SeedDataAsync();
 }
 
+app.UseNotyf();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

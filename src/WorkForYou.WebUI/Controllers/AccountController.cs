@@ -3,29 +3,37 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkForYou.Core.IRepositories;
 using WorkForYou.Core.IServices;
-using WorkForYou.Core.DtoModels;
-using WorkForYou.WebUI.ViewModels;
+using WorkForYou.Core.DTOModels.UserDTOs;
+using WorkForYou.Core.ValueObjects;
+using WorkForYou.WebUI.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Controllers;
 
 [Authorize]
 public class AccountController : Controller
 {
+    private readonly INotificationService _notificationService;
     private readonly IAuthService _authService;
-    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public AccountController(IAuthService authService, IMapper mapper, IUnitOfWork unitOfWork)
+    public AccountController(IAuthService authService, IMapper mapper, IUnitOfWork unitOfWork,
+        INotificationService notificationService)
     {
         _authService = authService;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _notificationService = notificationService;
     }
 
     [HttpGet]
     public async Task<IActionResult> ChangePassword()
     {
         var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+
+        if (!currentUser.IsSuccessfully)
+            _notificationService.CustomErrorMessage(NotificationMessages.UserNotFoundError);
+
         ViewData["CurrentEmail"] = currentUser.User.Email;
         return View();
     }
@@ -39,7 +47,10 @@ public class AccountController : Controller
         ViewData["CurrentEmail"] = currentUser.User.Email;
 
         if (!ModelState.IsValid)
+        {
+            _notificationService.CustomErrorMessage("Помилка при спробі змінити пароль");
             return View(changePasswordViewModel);
+        }
 
         var changePasswordDto = _mapper.Map<ChangePasswordDto>(changePasswordViewModel);
 
@@ -53,8 +64,12 @@ public class AccountController : Controller
             else
                 ModelState.AddModelError("", changePasswordResult.Message);
 
+            _notificationService.CustomErrorMessage("Помилка при спробі змінити пароль");
+
             return View(changePasswordViewModel);
         }
+
+        _notificationService.CustomSuccessMessage("Пароль успішно змінено");
 
         return RedirectToAction("Index", "Home");
     }
@@ -64,44 +79,67 @@ public class AccountController : Controller
     {
         HttpContext.Session.Clear();
         await _authService.LogoutAsync();
+        _notificationService.CustomSuccessMessage("Ви успішно вийшли");
         return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
-    public async Task<IActionResult> Profile()
+    public async Task<IActionResult> Profile(string username)
     {
-        var user = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+        var user = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = username});
 
         if (!user.IsSuccessfully)
-            return RedirectToAction("Logout");
+        {
+            _notificationService.CustomErrorMessage(NotificationMessages.UserNotFoundError);
+            return RedirectToAction("Index", "Main");
+        }
 
         return View(user.User);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> UpdateAccount(int id)
+    [HttpPost]
+    public async Task<IActionResult> ProfileUploadImage(IFormFile userFile)
     {
-        var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+        var imageResult = await _unitOfWork.UserRepository.UploadUserImageAsync(userFile,
+            new UsernameDto {Username = User.Identity?.Name!});
 
-        var vacancyDomains = await _unitOfWork.VacancyDomainRepository.GetAllVacancyDomainsAsync();
-        var workCategories = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
-        var candidateRegions = await _unitOfWork.CandidateRegionRepository.GetAllCandidateRegionsAsync();
-        var relocates = await _unitOfWork.RelocateRepository.GetAllRelocatesAsync();
-        var englishLevels = await _unitOfWork.EnglishLevelRepository.GetAllEnglishLevelsAsync();
-        var typesOfCompany = await _unitOfWork.TypeOfCompanyRepository.GetAllTypesOfCompanyAsync();
-        var howToWorks = await _unitOfWork.HowToWorkRepository.GetAllHowToWorkAsync();
+        if (!imageResult.IsSuccessfully)
+            _notificationService.CustomErrorMessage("Помилка при завантажені картинки");
+        
+        _notificationService.CustomSuccessMessage("Картинка успішно змінена");
+        return RedirectToAction("Profile", new {username = User.Identity?.Name!});
+    }
 
-        var userUpdateViewModel = new UserUpdateViewModel
+    [HttpGet]
+    public async Task<IActionResult> RefreshGeneralProfileInfo()
+    {
+        var username = User.Identity?.Name!;
+        var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new UsernameDto {Username = username});
+
+        if (!userData.IsSuccessfully)
+            return RedirectToAction("RefreshGeneralProfileInfo");
+
+        var user = _mapper.Map<RefreshGeneralProfileInfoViewModel>(userData.User);
+
+        return View(user);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RefreshGeneralProfileInfo(RefreshGeneralProfileInfoViewModel refreshGeneralProfileInfoViewModel)
+    {
+        if (!ModelState.IsValid)
+            return View(refreshGeneralProfileInfoViewModel);
+
+        var refreshGeneralDto = _mapper.Map<RefreshGeneralUserDto>(refreshGeneralProfileInfoViewModel);
+        var refreshGeneralInfoResult = await _unitOfWork.UserRepository
+            .RefreshGeneralInfoAsync(refreshGeneralDto);
+
+        if (!refreshGeneralInfoResult.IsSuccessfully)
         {
-            VacancyDomains = vacancyDomains.VacancyDomains,
-            WorkCategories = workCategories.WorkCategories,
-            CandidateRegions = candidateRegions.CandidateRegions,
-            Relocates = relocates.Relocates,
-            EnglishLevels = englishLevels.EnglishLevels,
-            TypesOfCompanies = typesOfCompany.TypesOfCompanies,
-            HowToWorks = howToWorks.HowToWorks
-        };
+            ModelState.AddModelError("", refreshGeneralInfoResult.Message);
+            return View(refreshGeneralProfileInfoViewModel);
+        }
 
-        return View(userUpdateViewModel);
+        return RedirectToAction("Profile", new {username = User.Identity?.Name!});
     }
 }

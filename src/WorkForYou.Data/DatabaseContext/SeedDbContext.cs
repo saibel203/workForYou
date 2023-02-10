@@ -281,7 +281,10 @@ public class SeedDbContext
             LevelEnglish = englishLevelsDefault[2],
             CategoryWork = workCategoriesDefault[0],
             ApplicationUser = defaultUsers[1],
-            CommunicationLanguage = communicationLanguagesData[0]
+            CommunicationLanguage = communicationLanguagesData[0],
+            IsProfileComplete = true,
+            KeyWords =
+                "C#, .NET, ASP.NET core, ASP.NET core MVC, ASP.NET core WEB API, EntityFrameworkCore, ADO.NET, Patterns, LINQ, MsSQL, T-SQL, HTML, CSS, JS, Angular, Typescript, Data Structures and Algorithms"
         };
         var employerUser = new EmployerUser
         {
@@ -312,12 +315,12 @@ public class SeedDbContext
         }
 
         // Seed default vacancies
-        var vacanciesDefault = new Vacancy[]
+        var vacanciesDefault = new List<Vacancy>()
         {
             new()
             {
                 VacancyTitle = "Trainee C# Developer",
-                ShortDescription = "DCT team looking for Trainee C# Developer!",
+                ShortDescription = "DCT team looking for Trainee C# Developer! DCT team looking for Trainee C# Developer! DCT team looking for Trainee C# Developer!",
                 LongDescription =
                     "<p>Requirements:- good knowledge of C#;</p><p></p><ul><li>good knowledge of C#;</li><li>good understanding of OOP;</li><li>understanding of SQL basics;</li><li>desire and ability to learn, target oriented</li></ul><br><p></p><p>Would be a plus:<br></p><p></p><ul><li>knowledge of design patterns, SOLID;<br></li><li>knowledge of WPF, UWP;<br></li><li>being a quick learner and have desire to improve technical skills;<br></li><li>1+ years of software development experience;<br></li></ul><p></p>",
                 VacancyDomain = vacancyDomainDefault[3],
@@ -330,7 +333,8 @@ public class SeedDbContext
                 EmployerUser = employerUser,
                 FromSalary = 1200,
                 ToSalary = 2000,
-                ExperienceWork = 3
+                ExperienceWork = 3,
+                KeyWords = "C#, ASP.NET core, ASP.NET core MVC, ASP.NET core WEB API"
             },
             new()
             {
@@ -349,7 +353,8 @@ public class SeedDbContext
                 EmployerUser = employerUser,
                 FromSalary = 200,
                 ToSalary = 500,
-                ExperienceWork = 2
+                ExperienceWork = 2,
+                KeyWords = "Marketing, Specialist"
             }
         };
 
@@ -360,15 +365,15 @@ public class SeedDbContext
         }
 
         // Seed FavouriteList data
-        var favouriteListDefault = new FavouriteVacancy[]
-        {
-            new() {CandidateUser = candidateUser, Vacancy = vacanciesDefault[0]}
-        };
-
-        if (await _context.FavouriteVacancies.CountAsync() == 0)
-        {
-            await _context.FavouriteVacancies.AddRangeAsync(favouriteListDefault);
-            await _context.SaveChangesAsync();
-        }
+        // var favouriteListDefault = new FavouriteVacancy[]
+        // {
+        //     new() {CandidateUser = candidateUser, Vacancy = vacanciesDefault[0]}
+        // };
+        //
+        // if (await _context.FavouriteVacancies.CountAsync() == 0)
+        // {
+        //     await _context.FavouriteVacancies.AddRangeAsync(favouriteListDefault);
+        //     await _context.SaveChangesAsync();
+        // }
     }
 }

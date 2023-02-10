@@ -10,7 +10,7 @@
 Project for job search and job candidates. The possibility of registering a candidate or employer account. The employer represents the company, provides detailed information about it and contact details. The candidate has the opportunity to respond to the vacancy created by the employer, who in turn can invite the candidate to the position. Basically, the general functionality is similar to djinni.co.
 
 ## TodoList
-- [ ] responsive for design
+- [x] responsive for design
 - [x] email list design
 - [x] a page for unauthorized users only and a page for authorized users only
 - [x] candidate or employer registration + authorization
@@ -20,11 +20,11 @@ Project for job search and job candidates. The possibility of registering a cand
 - [x] password change
 - [ ] authentication with google, linkedin, etc
 - [ ] profile change for candidate or employer
-- [ ] CRUD operations for vacancies for the employer
-- [ ] for a candidate - a list of vacancies; for an employee - a list of workers
+- [x] CRUD operations for vacancies for the employer
+- [x] for a candidate - a list of vacancies; for an employee - a list of workers
 - [ ] make filters for searching vacancies and candidates: country, work experience, employment, company type, salary from..., English level, technical / non-technical tags, simple search
 - [ ] possibility to save vacancies or candidates (saved list)
-- [ ] mini-rating of vacancies: views, number of reviews, number of saves, etc
+- [x] mini-rating of vacancies: views, number of reviews, number of saves, etc
 - [ ] the possibility to subscribe to the company: when new vacancies appear - a letter to the mail or a message; or make them hidden
 - [ ] list of recommendations for the candidate
 - [ ] the ability to communicate via chat or write to the mail

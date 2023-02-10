@@ -1,0 +1,22 @@
+﻿@model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
+
+<div class="vacancies__searched-bar-sort">
+    <span class="vacancies__searched-bar-sort-text">Sort by:</span>
+    <form method="get" asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction">
+        <input type="hidden" name="PageNumber" value="@Model.QueryParameters.PageNumber">
+        <input type="hidden" name="SearchString" value="@Model.QueryParameters.SearchString">
+        <input type="hidden" name="Username" value="@Model.Username">
+        <select class="vacancies__searched-bar-sort-select" name="SortBy" asp-for="@Model.QueryParameters.SortBy">
+            <option value="start-publication-date">+ За датою публікації</option>
+            <option value="publication-date">- За датою публікації</option>
+            <option value="from-salary">+ За зарплатою</option>
+            <option value="to-salary">- За зарплатою</option>
+            <option value="from-experience">+ За досвідом роботи</option>
+            <option value="to-experience">- За досвідом роботи</option>
+            @* <option value="from-view-count">+ За кількістю відгуків</option> *@
+            @* <option value="to-view-count">- За кількістю відгуків</option> *@
+            <option value="from-reviews-count">+ За кількістю переглядів</option>
+            <option value="to-reviews-count">- За кількістю переглядів</option>
+        </select>
+    </form>
+</div>

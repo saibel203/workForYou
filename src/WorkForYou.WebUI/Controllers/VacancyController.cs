@@ -1,22 +1,29 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkForYou.Core.DtoModels;
+using WorkForYou.Core.AdditionalModels;
+using WorkForYou.Core.DTOModels.UserDTOs;
+using WorkForYou.Core.DTOModels.VacancyDTOs;
 using WorkForYou.Core.IRepositories;
+using WorkForYou.Core.IServices;
 using WorkForYou.Core.Models;
+using WorkForYou.Core.ValueObjects;
 using WorkForYou.WebUI.ViewModels;
+using WorkForYou.WebUI.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Controllers;
 
 public class VacancyController : BaseController
 {
+    private readonly INotificationService _notificationService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public VacancyController(IUnitOfWork unitOfWork, IMapper mapper)
+    public VacancyController(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _notificationService = notificationService;
     }
 
     [HttpGet]
@@ -37,13 +44,21 @@ public class VacancyController : BaseController
         actionVacancyViewModel.EmployerUser = currentUser.User.EmployerUser;
 
         if (!ModelState.IsValid)
+        {
+            _notificationService.CustomErrorMessage("Помилка при спробі створити вакансію");
             return View(actionVacancyViewModel);
+        }
 
         var createVacancyDto = _mapper.Map<ActionVacancyDto>(actionVacancyViewModel);
         var createVacancyResult = await _unitOfWork.VacancyRepository.CreateVacancyAsync(createVacancyDto);
 
         if (!createVacancyResult.IsSuccessfully)
+        {
+            _notificationService.CustomErrorMessage("Помилка при спробі створити вакансію");
             return View(actionVacancyViewModel);
+        }
+
+        _notificationService.CustomSuccessMessage("Вакансія успішно створена");
 
         return RedirectToAction("AllVacancies", "EmployerAccount");
     }
@@ -55,17 +70,28 @@ public class VacancyController : BaseController
         var vacancyData = await _unitOfWork.VacancyRepository.GetVacancyByIdAsync(id);
 
         if (!vacancyData.IsSuccessfully || vacancyData.Vacancy is null)
+        {
+            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotFoundError);
             return RedirectToAction("AllVacancies", "EmployerAccount");
+        }
 
         var isOwnerResult = IsUserOwner(vacancyData.Vacancy);
 
         if (!isOwnerResult)
+        {
+            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotOwnerError);
             return RedirectToAction("AllVacancies", "EmployerAccount");
+        }
 
         var removeVacancyResult = await _unitOfWork.VacancyRepository.RemoveVacancyAsync(id);
 
         if (!removeVacancyResult.IsSuccessfully)
-            return RedirectToAction("Index", "Main");
+        {
+            _notificationService.CustomErrorMessage("Помилка при спробі видалення вакансії");
+            return RedirectToAction("VacancyDetails", id);
+        }
+
+        _notificationService.CustomSuccessMessage("Вакансія успішно видалена");
 
         return RedirectToAction("AllVacancies", "EmployerAccount");
     }
@@ -77,7 +103,10 @@ public class VacancyController : BaseController
         var vacancy = await _unitOfWork.VacancyRepository.GetVacancyByIdAsync(id);
 
         if (!vacancy.IsSuccessfully)
+        {
+            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotFoundError);
             return RedirectToAction("Index", "Main");
+        }
 
         return View(vacancy.Vacancy);
     }
@@ -89,12 +118,18 @@ public class VacancyController : BaseController
         var vacancyData = await _unitOfWork.VacancyRepository.GetVacancyByIdAsync(id);
 
         if (!vacancyData.IsSuccessfully || vacancyData.Vacancy is null)
+        {
+            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotFoundError);
             return RedirectToAction("AllVacancies", "EmployerAccount");
+        }
 
         var isOwnerResult = IsUserOwner(vacancyData.Vacancy);
 
         if (!isOwnerResult)
+        {
+            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotOwnerError);
             return RedirectToAction("AllVacancies", "EmployerAccount");
+        }
 
         var vacancyResult = _mapper.Map<ActionVacancyViewModel>(vacancyData.Vacancy);
         vacancyResult = await InitActionVacancyViewModel(vacancyResult);
@@ -113,15 +148,71 @@ public class VacancyController : BaseController
         actionVacancyViewModel.EmployerUser = currentUser.User.EmployerUser;
 
         if (!ModelState.IsValid)
+        {
+            _notificationService.CustomErrorMessage("Помилка при спробі редагувати вакансію");
             return View(actionVacancyViewModel);
+        }
 
         var updateVacancyDto = _mapper.Map<ActionVacancyDto>(actionVacancyViewModel);
         var updateVacancyResult = await _unitOfWork.VacancyRepository.UpdateVacancyAsync(updateVacancyDto);
 
         if (!updateVacancyResult.IsSuccessfully)
+        {
+            _notificationService.CustomErrorMessage("Помилка при спробі редагувати вакансію");
             return View(actionVacancyViewModel);
+        }
+
+        _notificationService.CustomSuccessMessage("Вакансію успішно обновлено");
 
         return RedirectToAction("AllVacancies", "EmployerAccount");
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> AllEmployerVacancies(string username, QueryParameters queryParameters)
+    {
+        var vacancies =
+            await _unitOfWork.VacancyRepository.GetAllEmployerVacanciesAsync(new UsernameDto {Username = username},
+                queryParameters);
+
+        var vacanciesViewModel = new VacanciesViewModel
+        {
+            QueryParameters = queryParameters,
+            CurrentController = ControllerContext.RouteData.Values["controller"]?.ToString(),
+            CurrentAction = ControllerContext.RouteData.Values["action"]?.ToString(),
+            PageCount = vacancies.PageCount,
+            VacancyCount = vacancies.VacancyCount,
+            Vacancies = vacancies.VacancyList,
+            Pages = vacancies.Pages,
+            Username = username
+        };
+
+        if (queryParameters.PageNumber < 1)
+        {
+            if (queryParameters.PageNumber == 0 && !string.IsNullOrEmpty(queryParameters.SearchString))
+            {
+                _notificationService.CustomErrorMessage("Кандидатів за запитом не знайдено");
+                return View(vacanciesViewModel);
+            }
+            
+            queryParameters.PageNumber = 1;
+            return RedirectToAction("AllEmployerVacancies", new
+            {
+                queryParameters.PageNumber, queryParameters.SearchString,
+                queryParameters.SortBy, username
+            });   
+        }
+
+        if (queryParameters.PageNumber > vacancies.PageCount)
+        {
+            queryParameters.PageNumber = vacancies.PageCount;
+            return RedirectToAction("AllEmployerVacancies", new
+            {
+                queryParameters.PageNumber, queryParameters.SearchString,
+                queryParameters.SortBy, username
+            });   
+        }
+        return View(vacanciesViewModel);
     }
 
     private bool IsUserOwner(Vacancy vacancy)
