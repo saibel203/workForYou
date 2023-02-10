@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Підтвердження email";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer ViewLocalization
+
+@{
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 @section Styles
@@ -14,7 +17,7 @@
     }
     else
     {
-        <h1>Ваш email успішно підтвердженно</h1>
+        <h1>@ViewLocalization["Message"]</h1>
     }
 </section>
 

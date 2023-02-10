@@ -1,28 +1,18 @@
-using WorkForYou.Core.IOptions;
-using WorkForYou.Core.IServices;
-using WorkForYou.Infrastructure;
-using WorkForYou.Infrastructure.DatabaseContext;
-using WorkForYou.Services;
+using AspNetCoreHero.ToastNotification.Extensions;
+using Microsoft.Extensions.Options;
+using WorkForYou.Core;
+using WorkForYou.Data;
+using WorkForYou.Data.DatabaseContext;
 using WorkForYou.WebUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructureService(builder.Configuration);
-builder.Services.AddAutoMapper(typeof(Program));
-
-builder.Services.Configure<SendGridOptions>(builder.Configuration.GetSection("SendGridOptions"));
-builder.Services.Configure<WebUiOptions>(builder.Configuration.GetSection("WebUIOptions"));
-
-builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddTransient<IMailService, MailService>();
-
-builder.Services.AddHostedService(sp => new NpmWatchHosted(
-    enabled: sp.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
-    logger: sp.GetRequiredService<ILogger<NpmWatchHosted>>()));
-
-builder.Services.AddControllersWithViews();
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddWebUiServices(builder.Configuration);
 
 var app = builder.Build();
+var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
 
 if (app.Environment.IsDevelopment())
 {
@@ -33,9 +23,14 @@ if (app.Environment.IsDevelopment())
     await init.SeedDataAsync();
 }
 
+app.UseNotyf();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseRequestLocalization(localizationOptions);
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

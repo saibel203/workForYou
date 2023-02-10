@@ -1,0 +1,311 @@
+﻿@using WorkForYou.WebUI.Helpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WorkForYou.Core.Models.IdentityInheritance.ApplicationUser;
+
+@{
+    ViewData["Title"] = "Профайл";
+}
+
+<div class="card-details">
+@if (Model.CandidateUser is not null)
+{
+    <div class="card-details__main">
+        @if (Model.CandidateUser.CompanyPosition is not null)
+        {
+            <div class="card-details__header">
+                <h1>
+                    @Model.CandidateUser.CompanyPosition
+                    @if (Model.FirstName is not null && Model.LastName is not null)
+                    {
+                        @: (@Model.LastName @Model.FirstName)
+                    }
+                </h1>
+            </div>
+        }
+        @if (Model.CandidateUser.ExperienceWorkDescription is not null)
+        {
+            <div class="card-details__body">
+                <h3>Досвід роботи</h3>
+                @if (string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <div class="card-details__body-profile-image">
+                        <img src="~/img/userImages/default-user-image.png" alt="Default user image">
+                    </div>
+                }
+                else
+                {
+                    <div class="card-details__body-profile-image">
+                        <img src="@Model.ImagePath" alt="User image">
+                    </div>
+                }
+                <p>@Model.CandidateUser.ExperienceWorkDescription</p>
+            </div>
+        }
+        @if (Model.CandidateUser.KeyWords is not null)
+        {
+            var keyWords = Model.CandidateUser.KeyWords.Split(", ", StringSplitOptions.RemoveEmptyEntries);
+
+            <div class="card-details__tags profile-tags">
+                <h3>Ключові слова / Навички</h3>
+                @foreach (var tag in keyWords)
+                {
+                    <button class="search-buttons detail-button">@tag</button>
+                }
+            </div>
+        }
+        @if (Model.CandidateUser.CommunicationLanguage is not null)
+        {
+            <div class="card-details__language">
+                <h3>Мова спілкування</h3>
+                <p>@Model.CandidateUser.CommunicationLanguage.CommunicationLanguageName</p>
+            </div>
+        }
+
+        <div class="card-details__buttons">
+            <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">Редагувати</a>
+            <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">Видалити</a>
+        </div>
+    </div>
+    <div class="card-details__info">
+        @if (Model.CandidateUser.ExpectedSalary != 0)
+        {
+            <h2>
+                @Model.CandidateUser.ExpectedSalary$ / місяць
+                @if (Model.CandidateUser.HourlyRate != 0)
+                {
+                    @: (@Model.CandidateUser.HourlyRate$ / годину)
+                }
+            </h2>
+        }
+        @if (Model.CandidateUser.CategoryWork is not null)
+        {
+            <p>
+                <i class="fa-solid fa-sliders"></i>
+                @Model.CandidateUser.CategoryWork.CategoryName
+            </p>
+        }
+        <p>
+            <i class="fa-regular fa-eye"></i> @Model.CandidateUser.ViewCount
+            перегляд@(ViewHelpers.GetLastStringLetters(Model.CandidateUser.ViewCount))
+        </p>
+        @if (Model.CandidateUser.Country is not null)
+        {
+            <p>
+                <i class="fa-solid fa-earth-americas"></i>
+                @Model.CandidateUser.Country
+                @if (Model.CandidateUser.City is not null)
+                {
+                    @Model.CandidateUser.City
+                }
+            </p>
+        }
+        @if (Model.CandidateUser.ExperienceWorkTime == 0)
+        {
+            <p>
+                <i class="fa-solid fa-graduation-cap"></i>
+                Без досвіду
+            </p>
+        }
+        else
+        {
+            <p>
+                <i class="fa-solid fa-graduation-cap"></i>
+                @Model.CandidateUser.ExperienceWorkTime
+                @ViewHelpers.GetLastStringLetters(Model.CandidateUser.ExperienceWorkTime, true)
+                досвіду
+            </p>
+        }
+        @if (Model.CandidateUser.LevelEnglish is not null)
+        {
+            <p>
+                <i class="fa-solid fa-book"></i>
+                @Model.CandidateUser.LevelEnglish.NameLevel
+            </p>
+        }
+        <p>
+            <i class="fa-regular fa-clock"></i>
+            На сайті з @Model.CandidateUser.CreatedDate.ToString("dd MMMM yyyy") року
+        </p>
+        @if (!Model.CandidateUser.IsProfileComplete)
+        {
+            <p class="close">
+                <i class="fa-regular fa-rectangle-xmark"></i>
+                Профіль не заповнений
+            </p>
+        }
+        else
+        {
+            <p class="ok">
+                <i class="fa-regular fa-square-check"></i>
+                Профіль заповнений
+            </p>
+        }
+        <ul class="footer__social-links mb-0">
+            @if (Model.TelegramLink is not null)
+            {
+                <li>
+                    <a href="@Model.TelegramLink" target="_blank">
+                        <i class="fa-brands fa-telegram"></i>
+                    </a>
+                </li>
+            }
+            @if (Model.SkypeLink is not null)
+            {
+                <li>
+                    <a href="@Model.SkypeLink" target="_blank">
+                        <i class="fa-brands fa-skype"></i>
+                    </a>
+                </li>
+            }
+            @if (Model.LinkedInLink is not null)
+            {
+                <li>
+                    <a href="@Model.LinkedInLink"
+                       target="_blank">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                </li>
+            }
+            @if (Model.GithubLink is not null)
+            {
+                <li>
+                    <a href="@Model.GithubLink" target="_blank">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+@if (Model.EmployerUser is not null)
+{
+    <div class="card-details__main">
+        <div class="card-details__header employer-header">
+            <h1>
+                @if (Model.EmployerUser.ApplicationUser is not null
+                     && Model.EmployerUser.ApplicationUser.FirstName is not null
+                     && Model.EmployerUser.ApplicationUser.LastName is not null)
+                {
+                    @Model.EmployerUser.ApplicationUser.LastName
+                    @: 
+                    @Model.EmployerUser.ApplicationUser.FirstName
+                }
+            </h1><br>
+            <h2>
+                @if (Model.EmployerUser.CompanyPosition is not null)
+                {
+                    @Model.EmployerUser.CompanyPosition
+                }
+                @if (Model.EmployerUser.CompanyName is not null)
+                {
+                    @:в компанії 
+                    <a asp-controller="Vacancy" asp-action="AllEmployerVacancies" asp-route-username="@Model.UserName">
+                        @Model.EmployerUser.CompanyName
+                    </a>
+                }
+            </h2>
+        </div>
+        @if (Model.EmployerUser.AboutCompany is not null)
+        {
+            <div class="card-details__body">
+                <h3>Про компанію</h3>
+                @if (string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <div class="card-details__body-profile-image">
+                        <img src="~/img/userImages/default-user-image.png" alt="Default user image">
+                    </div>
+                }
+                else
+                {
+                    <div class="card-details__body-profile-image">
+                        <img src="@Model.ImagePath" alt="User image">
+                    </div>
+                }
+                <p>@Model.EmployerUser.AboutCompany</p>
+            </div>
+        }
+        @* @if (Model.EmployerUser.Vacancies is not null) *@
+        @* { *@
+        @*     <div class="card-details__vacancies"> *@
+        @*         <h3>Вакансії</h3> *@
+        @*         <ul> *@
+        @*             @foreach (var vacancy in Model.EmployerUser.Vacancies.Take(6)) *@
+        @*             { *@
+        @*                 <li> *@
+        @*                     <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId"> *@
+        @*                         @vacancy.VacancyTitle *@
+        @*                     </a> *@
+        @*                 </li> *@
+        @*             } *@
+        @*         </ul> *@
+        @*         @if (Model.EmployerUser.Vacancies.Count > 6) *@
+        @*         { *@
+        @*             <div> *@
+        @*                 <a href="" class="search-buttons card-buttons">Всі вакансії</a> *@
+        @*             </div> *@
+        @*         } *@
+        @*     </div> *@
+        @* } *@
+        @if (Model.EmployerUser.CompanySiteLink is not null)
+        {
+            <div class="card-details__language">
+                <h3>Сайт компанії</h3>
+                <p>
+                    <a href="@Model.EmployerUser.CompanySiteLink" target="_blank">@Model.EmployerUser.CompanySiteLink</a>
+                </p>
+            </div>
+        }
+        @if (Model.EmployerUser.DoyCompanyLink is not null)
+        {
+            <div class="card-details__language">
+                <h3>DOY посилання</h3>
+                <p>
+                    <a href="@Model.EmployerUser.DoyCompanyLink" target="_blank">@Model.EmployerUser.DoyCompanyLink</a>
+                </p>
+            </div>
+        }
+
+        <div class="card-details__buttons">
+            <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">Редагувати</a>
+            <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">Видалити</a>
+        </div>
+    </div>
+    <div class="card-details__info">
+        <ul class="footer__social-links mb-0">
+            @if (Model.TelegramLink is not null)
+            {
+                <li>
+                    <a href="@Model.TelegramLink" target="_blank">
+                        <i class="fa-brands fa-telegram"></i>
+                    </a>
+                </li>
+            }
+            @if (Model.SkypeLink is not null)
+            {
+                <li>
+                    <a href="@Model.SkypeLink" target="_blank">
+                        <i class="fa-brands fa-skype"></i>
+                    </a>
+                </li>
+            }
+            @if (Model.LinkedInLink is not null)
+            {
+                <li>
+                    <a href="@Model.LinkedInLink"
+                       target="_blank">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                </li>
+            }
+            @if (Model.GithubLink is not null)
+            {
+                <li>
+                    <a href="@Model.GithubLink" target="_blank">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+</div>

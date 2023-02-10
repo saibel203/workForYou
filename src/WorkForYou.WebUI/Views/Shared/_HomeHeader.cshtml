@@ -1,12 +1,36 @@
-﻿<nav class="navbar" data-spy="affix" data-offset-top="20">
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Globalization
+@inject IViewLocalizer ViewLocalization
+
+@{
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path)
+        ? "~/"
+        : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
+}
+
+<nav class="navbar" data-spy="affix" data-offset-top="20">
     <div class="container">
         <a class="navbar__logo" asp-controller="Home" asp-action="Index">WorkForYou</a>
         <ul class="navbar__navigation">
             <li class="navbar__navigation-item">
-                <a asp-controller="Auth" asp-action="Login">Авторизація</a>
+                <form method="post" asp-controller="Home" asp-action="SetCulture" asp-route-returnUrl="@returnUrl">
+                    @if (CultureInfo.CurrentCulture.Equals(new CultureInfo("en")))
+                    {
+                        <input name="culture" type="hidden" value="uk">
+                        <button type="submit">Змінити на Українську</button>
+                    }
+                    else
+                    {
+                        <input name="culture" type="hidden" value="en">
+                        <button type="submit">Switch to English</button>
+                    }
+                </form>
             </li>
             <li class="navbar__navigation-item">
-                <a asp-controller="Auth" asp-action="Register">Реєстрація</a>
+                <a asp-controller="Auth" asp-action="Login">@ViewLocalization["Authorization"]</a>
+            </li>
+            <li class="navbar__navigation-item">
+                <a asp-controller="Auth" asp-action="Register">@ViewLocalization["Registration"]</a>
             </li>
         </ul>
         <a class="hamburger hamburger-elastic" id="hamburger-menu">

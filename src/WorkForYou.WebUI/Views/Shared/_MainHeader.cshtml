@@ -1,0 +1,75 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, WorkForYou.WebUI
+
+@inject IViewLocalizer ViewLocalization
+
+@{
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path)
+        ? "~/"
+        : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
+}
+
+<header class="header">
+    <div class="header__logo">
+        <a asp-controller="Main" asp-action="Index">
+            <img src="~/img/favicon.ico" alt="Header icon">
+            WorkForYou
+        </a>
+    </div>
+    <nav class="header__menu">
+        <a asp-controller="Main" asp-action="Index" is-active-header-route class="">@ViewLocalization["HeaderMain"]</a>
+
+        @if (User.IsInRole("candidate"))
+        {
+            <a asp-controller="CandidateAccount" asp-action="AllVacancies" is-active-header-route class="">@ViewLocalization["HeaderVacancies"]</a>
+        }
+        @if (User.IsInRole("employer"))
+        {
+            <a asp-controller="EmployerAccount" asp-action="AllVacancies" is-active-header-route class="">@ViewLocalization["HeaderMyVacancies"]</a>
+            <a asp-controller="EmployerAccount" asp-action="AllCandidates" is-active-header-route class="">@ViewLocalization["HeaderAllCandidates"]</a>
+        }
+    </nav>
+    <div class="header__settings">
+        <div class="header__settings-switcher">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+            </svg>
+        </div>
+        <span class="header__settings-button">
+            @* <img class="header__settings-profile" src="~/img/userImages/default-user-image.png" alt="Default user image"> *@
+            <div class="header__settings-name">
+                Hello, @User.Identity?.Name
+
+                <div class="profile-dropdown">
+                    <a asp-controller="Account" asp-action="Profile" asp-route-username="@User.Identity?.Name">
+                        <i class="fa-solid fa-id-card"></i> @ViewLocalization["HeaderProfile"]
+                    </a>
+                    <form method="post" asp-controller="Main" asp-action="SetCulture" asp-route-returnUrl="@returnUrl">
+                        @if (CultureInfo.CurrentCulture.Equals(new CultureInfo("en")))
+                        {
+                            <input name="culture" type="hidden" value="uk">
+                            <button class="check-language" type="submit"><i class="fa-solid fa-earth-americas"></i> Змінити на Українську</button>
+                        }
+                        else
+                        {
+                            <input name="culture" type="hidden" value="en">
+                            <button class="check-language" type="submit"><i class="fa-solid fa-earth-americas"></i> Switch to English</button>
+                        }
+                    </form>
+                    <a asp-controller="CandidateAccount" asp-action="FavouriteList">
+                        <i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]
+                    </a>
+                    <a asp-controller="Account" asp-action="ChangePassword">
+                        <i class="fa-solid fa-key"></i> @ViewLocalization["HeaderChangePassword"]
+                    </a>
+                    <a asp-controller="Account" asp-action="Logout">
+                        <i class="fa-solid fa-right-from-bracket"></i> @ViewLocalization["HeaderLogout"]
+                    </a>
+                </div>
+            </div>
+        </span>
+    </div>
+</header>

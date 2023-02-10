@@ -1,0 +1,113 @@
+﻿@using WorkForYou.WebUI.Helpers
+
+@{
+    ViewData["Title"] = "Деталі вакансії";
+}
+
+<div class="card-details">
+    <div class="card-details__main">
+        <div class="card-details__header">
+            <h1>@Model.VacancyTitle</h1>
+            <span>$@Model.FromSalary-@Model.ToSalary</span>
+        </div>
+        <div class="card-details__body">
+            <p>@Html.Raw(Model.LongDescription)</p>
+        </div>
+        @if (Model.EmployerUser is not null)
+        {
+            @if (!string.IsNullOrEmpty(Model.EmployerUser.CompanyName)
+                 && !string.IsNullOrEmpty(Model.EmployerUser.AboutCompany))
+            {
+                <div class="card-details__company">
+                    <h3>Про компанію @Model.EmployerUser.CompanyName</h3>
+                    <p>@Model.EmployerUser.AboutCompany</p>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.EmployerUser.DoyCompanyLink))
+            {
+                <h4>Сайт Компанії:</h4>
+                <a href="@Model.EmployerUser.DoyCompanyLink" target="_blank">@Model.EmployerUser.DoyCompanyLink</a>
+            }
+        }
+        <div class="card-details__footer">
+            <div>
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Вакансія опублікована @Model.CreatedDate.ToString("d MMMM yyyy")</span>
+            </div>
+            <div>
+                <i class="fa-regular fa-eye"></i>
+                <span>
+                    @Model.ViewCount
+                    перегляд@(ViewHelpers.GetLastStringLetters(Model.ViewCount))
+                </span>
+                <i class="fa-solid fa-user-group" style="padding-left: 5px;"></i>
+                <span>
+                    5
+                    відгук@(ViewHelpers.GetLastStringLetters(5))
+                </span>
+            </div>
+        </div>
+        @if (User.IsInRole("candidate"))
+        {
+            <div class="card-details__buttons">
+                <button class="search-buttons card-buttons">Відгукнутися</button>
+            </div>
+        }
+    </div>
+    <div class="card-details__info">
+        @if (Model.WorkCategory is not null)
+        {
+            <p><i class="fa-regular fa-clipboard"></i> Категорія: @Model.WorkCategory.CategoryName</p>
+        }
+        @if (Model.EnglishLevel is not null)
+        {
+            <p><i class="fa-solid fa-book"></i> Англійська: @Model.EnglishLevel.NameLevel</p>
+        }
+        @if (Model.EnglishLevel is not null)
+        {
+            @if (Model.ExperienceWork == 0)
+            {
+                <p><i class="fa-solid fa-graduation-cap"></i> Без досвіду</p>
+            }
+            else
+            {
+                <p>
+                    <i class="fa-solid fa-graduation-cap"></i> Досвід: @Model.ExperienceWork
+                    @ViewHelpers.GetLastStringLetters(Model.ExperienceWork, true)
+                </p>
+            }
+        }
+        @if (Model.VacancyDomain is not null)
+        {
+            <p><i class="fa-solid fa-lines-leaning"></i> Домен: @Model.VacancyDomain.VacancyDomainName</p>
+        }
+        @if (Model.HowToWork is not null)
+        {
+            <p>
+                <i class="fa-solid fa-briefcase"></i> @Model.HowToWork.HowToWorkName
+            </p>
+        }
+        @if (Model.CandidateRegion is not null)
+        {
+            <p>
+                <i class="fa-solid fa-earth-americas"></i>
+                @if (Model.CandidateRegion.CandidateRegionName == "Весь світ")
+                {
+                    <span>Кандидат з усього світу</span>
+                }
+                else if (Model.CandidateRegion.CandidateRegionName == "Україна + Європа")
+                {
+                    <span>Лише кандидати з України та Європи</span>
+                }
+                else if (Model.CandidateRegion.CandidateRegionName == "Лише Європа")
+                {
+                    <span>Лише кандидати з Європи</span>
+                }
+                else if (Model.CandidateRegion.CandidateRegionName == "Лише Україна")
+                {
+                    <span>Лише кандидати з України</span>
+                }
+            </p>
+        }
+    </div>
+</div>

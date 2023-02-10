@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Title" xml:space="preserve">
+        <value>Main page</value>
+    </data>
+    <data name="ButtonToRegister" xml:space="preserve">
+        <value>Search</value>
+    </data>
+    <data name="ForCategories" xml:space="preserve">
+        <value>for</value>
+    </data>
+    <data name="TitleEnd" xml:space="preserve">
+        <value>in Ukraine</value>
+    </data>
+    <data name="TitleStart" xml:space="preserve">
+        <value>Site for search</value>
+    </data>
+    <data name="TitleMiddle" xml:space="preserve">
+        <value>job</value>
+    </data>
+    <data name="About" xml:space="preserve">
+        <value>About the site</value>
+    </data>
+    <data name="AboutSectionOne" xml:space="preserve">
+        <value>The user fills out a profile, indicating his position, expected salary, level of English, describes his experience, and chooses a category.</value>
+    </data>
+    <data name="AboutSectionTwo" xml:space="preserve">
+        <value>The company offers various vacancies that the user can respond to, and you may be contacted.</value>
+    </data>
+    <data name="Contact" xml:space="preserve">
+        <value>Contact us</value>
+    </data>
+    <data name="FormSend" xml:space="preserve">
+        <value>Send</value>
+    </data>
+</root>

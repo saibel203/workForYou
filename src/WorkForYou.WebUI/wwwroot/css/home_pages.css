@@ -7,8 +7,25 @@
 .navbar__logo:hover {
   color: #695aa6;
 }
-.navbar .navbar__navigation-item a {
+.navbar__navigation-item a {
   color: #6c757d;
+}
+.navbar__navigation-item button {
+  color: #6c757d !important;
+}
+.navbar.affix .navbar__navigation-item a {
+  color: #6c757d;
+  transition: color 0.2s ease;
+}
+.navbar.affix .navbar__navigation-item a:hover {
+  color: #695aa6;
+}
+.navbar.affix .navbar__navigation-item button {
+  color: #6c757d;
+  transition: color 0.2s ease;
+}
+.navbar.affix .navbar__navigation-item button:hover {
+  color: #695aa6;
 }
 .navbar .hamburger-inner, .navbar .hamburger-inner::before, .navbar .hamburger-inner::after {
   background-color: #6c757d !important;
@@ -19,7 +36,7 @@
   margin-bottom: 30px;
   border: 1px solid #dedede;
   background-color: #fff;
-  color: red;
+  color: var(--text-valication-color);
   padding: 10px 0;
 }
 
@@ -33,6 +50,19 @@
 .confirm-email-result {
   margin-top: 100px;
   min-height: calc(100vh - 100px - 80px);
+}
+
+.contact-form__input {
+  position: relative;
+}
+.contact-form__input i {
+  font-size: 1.2em;
+  color: #7f7f85;
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=home_pages.css.map */

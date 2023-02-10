@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Підтвердження email";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer ViewLocalization
+
+@{
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 @section Styles
@@ -9,7 +12,7 @@
 
 
 <section class="section confirm-email form-section">
-    <h1>Перейдіть до своєї почти та перейдіть по посиланню.</h1>
+    <h1>@ViewLocalization["Message"]</h1>
 </section>
 
 @section Scripts

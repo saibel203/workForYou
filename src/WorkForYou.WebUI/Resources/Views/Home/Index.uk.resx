@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Title" xml:space="preserve">
+        <value>Головна сторінка</value>
+    </data>
+    <data name="ButtonToRegister" xml:space="preserve">
+        <value>Шукати</value>
+    </data>
+    <data name="ForCategories" xml:space="preserve">
+        <value>для</value>
+    </data>
+    <data name="TitleStart" xml:space="preserve">
+        <value>Сайт для пошуку</value>
+    </data>
+    <data name="TitleEnd" xml:space="preserve">
+        <value>в Україні</value>
+    </data>
+    <data name="TitleMiddle" xml:space="preserve">
+        <value>роботи</value>
+    </data>
+    <data name="About" xml:space="preserve">
+        <value>Про сайт</value>
+    </data>
+    <data name="AboutSectionOne" xml:space="preserve">
+        <value>Користувач заповнює профайл, вказуючи свою посаду, очікувану зарплату, рівень англійської, описує досвід, обирає категорію.</value>
+    </data>
+    <data name="AboutSectionTwo" xml:space="preserve">
+        <value>Компанія пропонує різні вакансії, на які користувач може відреагувати, і можливо, з вами зв'яжуться.</value>
+    </data>
+    <data name="Contact" xml:space="preserve">
+        <value>Зв'язатися з нами</value>
+    </data>
+    <data name="FormSend" xml:space="preserve">
+        <value>Відправити</value>
+    </data>
+</root>
