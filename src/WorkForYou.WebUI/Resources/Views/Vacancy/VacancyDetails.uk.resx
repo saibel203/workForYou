@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Title" xml:space="preserve">
+        <value>Деталі вакансії</value>
+    </data>
+    <data name="AboutCompany" xml:space="preserve">
+        <value>Про компанію</value>
+    </data>
+    <data name="CompanySite" xml:space="preserve">
+        <value>Сайт компанії</value>
+    </data>
+    <data name="CompanyPublished" xml:space="preserve">
+        <value>Вакансія опублікована</value>
+    </data>
+    <data name="VacancyView" xml:space="preserve">
+        <value>перегляд</value>
+    </data>
+    <data name="Review" xml:space="preserve">
+        <value>відгук</value>
+    </data>
+    <data name="Respond" xml:space="preserve">
+        <value>Відгукнутися</value>
+    </data>
+    <data name="Category" xml:space="preserve">
+        <value>Категорія</value>
+    </data>
+    <data name="English" xml:space="preserve">
+        <value>Англійська</value>
+    </data>
+    <data name="NoExperience" xml:space="preserve">
+        <value>Без досвіду</value>
+    </data>
+    <data name="Experience" xml:space="preserve">
+        <value>Досвід</value>
+    </data>
+    <data name="Domain" xml:space="preserve">
+        <value>Домен</value>
+    </data>
+    <data name="Ukraine" xml:space="preserve">
+        <value>Лише кандидати з України</value>
+    </data>
+    <data name="Europe" xml:space="preserve">
+        <value>Лише кандидати з Європи</value>
+    </data>
+    <data name="UkraineEurope" xml:space="preserve">
+        <value>Лише кандидати з України та Європи</value>
+    </data>
+    <data name="AllWorld" xml:space="preserve">
+        <value>Кандидати з усього світу</value>
+    </data>
+</root>

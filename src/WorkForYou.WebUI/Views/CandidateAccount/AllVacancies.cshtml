@@ -1,9 +1,14 @@
 ﻿@using WorkForYou.WebUI.Helpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using WorkForYou.Core.IServices
+@using Microsoft.AspNetCore.Mvc.Localization
 @model VacanciesViewModel
 
+@inject IVacancyService VacancyService
+@inject IViewLocalizer ViewLocalization
+
 @{
-    ViewData["Title"] = "Всі вакансії";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 <div class="main__search">
@@ -29,13 +34,17 @@
         <div class="vacancies__searched-bar-general">@Model.VacancyCount @(ViewHelpers.GetLastStringLetters(Model.VacancyCount, false, true))</div>
         <div class="vacancies__searched-bar-sorting">
             @await Html.PartialAsync("_Sorting")
-            <a asp-controller="CandidateAccount" asp-action="AllVacancies" class="search-buttons detail-button detail-danger">Скинути фільтри</a>
+            <a asp-controller="CandidateAccount" asp-action="AllVacancies" class="search-buttons detail-button detail-danger">@ViewLocalization["ResetFilters"]</a>
         </div>
     </div>
 
     <div class="vacancies-cards">
         @foreach (var vacancy in Model.Vacancies)
         {
+            var isVacancyInFavouriteList = await VacancyService
+                .IsVacancyInFavouriteListAsync(vacancy.VacancyId, Convert.ToInt32(ViewData["CandidateId"]));
+            var heartLike = isVacancyInFavouriteList.IsVacancyInFavouriteList ? "is-active" : "";
+
             <div class="vacancies-cards__card">
                 <div class="vacancies-cards__card-title">
                     <span>
@@ -61,14 +70,14 @@
                     {
                         <button class="search-buttons detail-button">@vacancy.HowToWork.HowToWorkName</button>
                     }
-                    <button class="search-buttons detail-button">@vacancy.ExperienceWork роки досвіду</button>
+                    <button class="search-buttons detail-button">@vacancy.ExperienceWork @ViewHelpers.GetLastStringLetters(vacancy.ExperienceWork, true) @ViewLocalization["Experience"]</button>
                     @if (vacancy.EnglishLevel is not null)
                     {
                         <button class="search-buttons detail-button">@vacancy.EnglishLevel.NameLevel</button>
                     }
                     @if (vacancy.Relocate is not null)
                     {
-                        <button class="search-buttons detail-button">Релокейт: @vacancy.Relocate.RelocateName</button>
+                        <button class="search-buttons detail-button">@ViewLocalization["Relocate"]: @vacancy.Relocate.RelocateName</button>
                     }
                 </div>
                 @if (vacancy.EmployerUser is not null && vacancy.EmployerUser.ApplicationUser is not null)
@@ -112,7 +121,8 @@
                     </div>
                 }
                 <div class="vacancies-cards__card-buttons">
-                    <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId" class="search-buttons card-buttons">Read all</a>
+                    <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId" 
+                       class="search-buttons card-buttons">@ViewLocalization["ReadAll"]</a>
 
                     <div class="like-hide">
                         <svg id="utility_like" viewBox="0 0 24.3 22.5" xmlns="http://www.w3.org/2000/svg">
@@ -123,8 +133,9 @@
                         </svg>
                     </div>
 
-                    <a asp-controller="CandidateAccount" asp-action="AddToFavouriteList" asp-route-id="@vacancy.VacancyId">
-                        <span class="like-icon like-icon--heart like-heart">
+                    <a asp-controller="CandidateAccount" asp-action="AddToFavouriteList" 
+                       asp-route-id="@vacancy.VacancyId">
+                        <span class="like-icon like-icon--heart like-heart @heartLike">
                             <svg class="like-icon__asset" viewBox="0 0 24.3 22.5">
                                 <use class="like-icon--heart__fill" xlink:href="#u-heart-fill"
                                      xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -149,6 +160,7 @@
     @section Scripts
     {
         <script src="~/js/custom-select.js"></script>
+        <script src="~/libs/js/signalr.min.js"></script>
     }
 
     <script>

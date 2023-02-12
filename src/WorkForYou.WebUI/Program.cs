@@ -1,8 +1,8 @@
 using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.Extensions.Options;
 using WorkForYou.Core;
-using WorkForYou.Data;
-using WorkForYou.Data.DatabaseContext;
+using WorkForYou.Infrastructure;
+using WorkForYou.Infrastructure.DatabaseContext;
 using WorkForYou.WebUI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +25,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseNotyf();
 app.UseHttpsRedirection();
+app.UseHsts();
+
 app.UseStaticFiles();
 app.UseRouting();
 

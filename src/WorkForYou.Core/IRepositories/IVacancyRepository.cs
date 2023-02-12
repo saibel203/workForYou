@@ -13,7 +13,6 @@ public interface IVacancyRepository : IGenericRepository<Vacancy>
     Task<VacancyResponse> CreateVacancyAsync(ActionVacancyDto? actionVacancyDto);
     Task<VacancyResponse> UpdateVacancyAsync(ActionVacancyDto? actionVacancyDto);
     Task<VacancyResponse> RemoveVacancyAsync(int vacancyId);
-    Task<VacancyResponse> AddVacancyToFavouriteList(string username, int vacancyId);
 
     Task<VacancyResponse> GetAllEmployerVacanciesAsync(UsernameDto? usernameDto, QueryParameters queryParameters);
 }

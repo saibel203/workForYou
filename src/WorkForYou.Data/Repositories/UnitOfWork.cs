@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using WorkForYou.Core.IRepositories;
 using WorkForYou.Core.IServices;
-using WorkForYou.Data.DatabaseContext;
+using WorkForYou.Infrastructure.DatabaseContext;
 
 namespace WorkForYou.Data.Repositories;
 
@@ -21,7 +21,7 @@ public class UnitOfWork : IUnitOfWork
     public ICandidateRegionRepository CandidateRegionRepository { get; }
     public IRelocateRepository RelocateRepository { get; }
     public ITypeOfCompanyRepository TypeOfCompanyRepository { get; }
-    public ICommunicationLanguageRepository CommunicationLanguageRepository { get; set; }
+    public ICommunicationLanguageRepository CommunicationLanguageRepository { get; }
 
     public UnitOfWork(WorkForYouDbContext context, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor, 
         IMapper mapper, IFileService fileService, IAuthService authService)

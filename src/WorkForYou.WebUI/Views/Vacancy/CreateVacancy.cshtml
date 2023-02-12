@@ -1,8 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
 @model WorkForYou.WebUI.ViewModels.Forms.ActionVacancyViewModel
 
+@inject IViewLocalizer ViewLocalization
+
 @{
-    ViewData["Title"] = "Нова вакансія";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 @section Styles
@@ -11,12 +14,12 @@
 }
 
 <div class="create-form">
-    <h1>Нова вакансія</h1>
+    <h1>@ViewLocalization["Title"]</h1>
     <form method="post" asp-controller="Vacancy" asp-action="CreateVacancy" asp-antiforgery="true">
         <div asp-validation-summary="All"></div>
         <div class="create-form__item">
             <label asp-for="VacancyTitle"></label>
-            <input asp-for="VacancyTitle" placeholder="C#-лід">
+            <input asp-for="VacancyTitle" placeholder="C# developer">
             <span asp-validation-for="VacancyTitle"></span>
         </div>
         <div class="create-form__item">
@@ -33,7 +36,7 @@
             <label asp-for="KeyWords"></label>
             <input type="hidden" asp-for="KeyWords" class="keywords-input-item">
             <ul class="create-form__item-keywords">
-                <input placeholder="Ключові слова">
+                <input placeholder="@ViewLocalization["Keywords"]">
             </ul>
             <span asp-validation-for="KeyWords"></span>
         </div>
@@ -59,7 +62,7 @@
         </div>
         <div class="create-form__item">
             <fieldset>
-                <legel>Країна або регіон кандидата</legel>
+                <legel>@ViewLocalization["CountryOfRegion"]</legel>
                 <ul class="create-form__item-radio">
                     @foreach (var candidateRegion in Model.CandidateRegions!)
                     {
@@ -75,7 +78,7 @@
         </div>
         <div class="create-form__item">
             <fieldset>
-                <legel>Релокейт</legel>
+                <legel>@ViewLocalization["Relocate"]</legel>
                 <ul class="create-form__item-radio">
                     @foreach (var relocate in Model.Relocates!)
                     {
@@ -135,7 +138,7 @@
             <span asp-validation-for="ToSalary"></span> 
         </div>
         <div class="vacancies-cards__card-buttons">
-            <input type="submit" class="search-buttons card-buttons" value="Створити">
+            <input type="submit" class="search-buttons card-buttons" value="@ViewLocalization["Create"]">
         </div>
         @* <div class="create-form__item"> *@
         @*     <fieldset> *@

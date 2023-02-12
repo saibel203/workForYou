@@ -1,27 +1,32 @@
-﻿@model WorkForYou.WebUI.ViewModels.Forms.RefreshGeneralProfileInfoViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WorkForYou.WebUI.ViewModels.Forms.RefreshGeneralProfileInfoViewModel
+
+@inject IViewLocalizer ViewLocalization
+
 @{
-    ViewData["Title"] = "title";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 <div class="create-form">
     <div class="create-form__header">
-        <h1>Змінити загальну інформацію</h1>
+        <h1>@ViewLocalization["Title"]</h1>
         <a asp-controller="Account" asp-action="RefreshGeneralProfileInfo"
            class="search-buttons detail-button">
-            Загальна інформація
+            @ViewLocalization["Title"]
         </a>
         @if (User.IsInRole("candidate"))
         {
             <a asp-controller="CandidateAccount" asp-action="RefreshCandidateInfo"
                class="search-buttons detail-button">
-                Детальна інформація
+                @ViewLocalization["DetailsInfo"]
             </a>
         }
         @if (User.IsInRole("employer"))
         {
             <a asp-controller="EmployerAccount" asp-action="RefreshEmployerInfo"
                class="search-buttons detail-button">
-                Детальна інформація
+                @ViewLocalization["DetailsInfo"]
             </a>
         }
     </div>
@@ -59,7 +64,7 @@
             <span asp-validation-for="SkypeLink"></span>
         </div>
         <div class="vacancies-cards__card-buttons">
-            <input type="submit" class="search-buttons card-buttons" value="Редагувати">
+            <input type="submit" class="search-buttons card-buttons" value="@ViewLocalization["Edit"]">
         </div>
     </form>
 </div>

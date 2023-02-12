@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using WorkForYou.Core.AdditionalModels;
 using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.Core.DTOModels.VacancyDTOs;
 using WorkForYou.Core.IRepositories;
 using WorkForYou.Core.IServices;
 using WorkForYou.Core.Models;
-using WorkForYou.Core.ValueObjects;
 using WorkForYou.WebUI.ViewModels;
 using WorkForYou.WebUI.ViewModels.Forms;
 
@@ -15,15 +15,18 @@ namespace WorkForYou.WebUI.Controllers;
 
 public class VacancyController : BaseController
 {
+    private readonly IStringLocalizer<VacancyController> _stringLocalization;
     private readonly INotificationService _notificationService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public VacancyController(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
+    public VacancyController(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService,
+        IStringLocalizer<VacancyController> stringLocalization)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _notificationService = notificationService;
+        _stringLocalization = stringLocalization;
     }
 
     [HttpGet]
@@ -45,7 +48,7 @@ public class VacancyController : BaseController
 
         if (!ModelState.IsValid)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі створити вакансію");
+            _notificationService.CustomErrorMessage(_stringLocalization["CreateVacancyError"]);
             return View(actionVacancyViewModel);
         }
 
@@ -54,11 +57,11 @@ public class VacancyController : BaseController
 
         if (!createVacancyResult.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі створити вакансію");
+            _notificationService.CustomErrorMessage(_stringLocalization["CreateVacancyError"]);
             return View(actionVacancyViewModel);
         }
 
-        _notificationService.CustomSuccessMessage("Вакансія успішно створена");
+        _notificationService.CustomSuccessMessage(_stringLocalization["CreateVacancySuccess"]);
 
         return RedirectToAction("AllVacancies", "EmployerAccount");
     }
@@ -71,7 +74,7 @@ public class VacancyController : BaseController
 
         if (!vacancyData.IsSuccessfully || vacancyData.Vacancy is null)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotFoundError);
+            _notificationService.CustomErrorMessage(_stringLocalization["VacancyNotFoundError"]);
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
@@ -79,7 +82,7 @@ public class VacancyController : BaseController
 
         if (!isOwnerResult)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotOwnerError);
+            _notificationService.CustomErrorMessage(_stringLocalization["NotOwnerError"]);
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
@@ -87,12 +90,11 @@ public class VacancyController : BaseController
 
         if (!removeVacancyResult.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі видалення вакансії");
+            _notificationService.CustomErrorMessage(_stringLocalization["RemoveVacancyError"]);
             return RedirectToAction("VacancyDetails", id);
         }
 
-        _notificationService.CustomSuccessMessage("Вакансія успішно видалена");
-
+        _notificationService.CustomSuccessMessage(_stringLocalization["RemoveVacancySuccess"]);
         return RedirectToAction("AllVacancies", "EmployerAccount");
     }
 
@@ -104,7 +106,7 @@ public class VacancyController : BaseController
 
         if (!vacancy.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotFoundError);
+            _notificationService.CustomErrorMessage(_stringLocalization["VacancyNotFoundError"]);
             return RedirectToAction("Index", "Main");
         }
 
@@ -119,7 +121,7 @@ public class VacancyController : BaseController
 
         if (!vacancyData.IsSuccessfully || vacancyData.Vacancy is null)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotFoundError);
+            _notificationService.CustomErrorMessage(_stringLocalization["VacancyNotFoundError"]);
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
@@ -127,7 +129,7 @@ public class VacancyController : BaseController
 
         if (!isOwnerResult)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotOwnerError);
+            _notificationService.CustomErrorMessage(_stringLocalization["NotOwnerError"]);
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
@@ -149,7 +151,7 @@ public class VacancyController : BaseController
 
         if (!ModelState.IsValid)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі редагувати вакансію");
+            _notificationService.CustomErrorMessage(_stringLocalization["EditVacancyError"]);
             return View(actionVacancyViewModel);
         }
 
@@ -158,11 +160,11 @@ public class VacancyController : BaseController
 
         if (!updateVacancyResult.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі редагувати вакансію");
+            _notificationService.CustomErrorMessage(_stringLocalization["EditVacancyError"]);
             return View(actionVacancyViewModel);
         }
 
-        _notificationService.CustomSuccessMessage("Вакансію успішно обновлено");
+        _notificationService.CustomSuccessMessage(_stringLocalization["EditVacancySuccess"]);
 
         return RedirectToAction("AllVacancies", "EmployerAccount");
     }
@@ -191,16 +193,16 @@ public class VacancyController : BaseController
         {
             if (queryParameters.PageNumber == 0 && !string.IsNullOrEmpty(queryParameters.SearchString))
             {
-                _notificationService.CustomErrorMessage("Кандидатів за запитом не знайдено");
+                _notificationService.CustomErrorMessage(_stringLocalization["VacanciesNotFoundError"]);
                 return View(vacanciesViewModel);
             }
-            
+
             queryParameters.PageNumber = 1;
             return RedirectToAction("AllEmployerVacancies", new
             {
                 queryParameters.PageNumber, queryParameters.SearchString,
                 queryParameters.SortBy, username
-            });   
+            });
         }
 
         if (queryParameters.PageNumber > vacancies.PageCount)
@@ -210,8 +212,9 @@ public class VacancyController : BaseController
             {
                 queryParameters.PageNumber, queryParameters.SearchString,
                 queryParameters.SortBy, username
-            });   
+            });
         }
+
         return View(vacanciesViewModel);
     }
 

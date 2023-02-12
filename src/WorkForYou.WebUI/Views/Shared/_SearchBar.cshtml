@@ -1,5 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
 @model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
+
+@inject IViewLocalizer ViewLocalization
 
 <div class="search">
     <form method="get" asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction">
@@ -7,7 +10,7 @@
             <input type="hidden" name="PageNumber" value="@Model.QueryParameters.PageNumber">
             <input type="hidden" name="SortBy" value="@Model.QueryParameters.SortBy">
             <input type="hidden" name="Username" value="@Model.Username">
-            <input type="search" name="SearchString" class="search-box" placeholder="Введіть назву" 
+            <input type="search" name="SearchString" class="search-box" placeholder="@ViewLocalization["Name"]" 
                    value="@Model.QueryParameters.SearchString">
         </div>
         <button class="search__button" type="submit">

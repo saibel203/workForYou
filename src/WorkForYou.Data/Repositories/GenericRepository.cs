@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WorkForYou.Core.IRepositories;
-using WorkForYou.Data.DatabaseContext;
+using WorkForYou.Infrastructure.DatabaseContext;
 
 namespace WorkForYou.Data.Repositories;
 

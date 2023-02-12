@@ -1,19 +1,22 @@
-﻿@model WorkForYou.WebUI.ViewModels.Forms.RefreshEmployerInfoViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model WorkForYou.WebUI.ViewModels.Forms.RefreshEmployerInfoViewModel
+
+@inject IViewLocalizer ViewLocalization
 
 @{
-    ViewData["Title"] = "";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 <div class="create-form">
     <div class="create-form__header">
-        <h1>Змінити детальну інформацію</h1>
+        <h1>@ViewLocalization["Title"]</h1>
         <a asp-controller="Account" asp-action="RefreshGeneralProfileInfo"
            class="search-buttons detail-button">
-            Загальна інформація
+            @ViewLocalization["GeneralInfo"]
         </a>
         <a asp-controller="CandidateAccount" asp-action="RefreshCandidateInfo"
            class="search-buttons detail-button">
-            Детальна інформація
+            @ViewLocalization["Title"]
         </a>
     </div>
     <form method="post" asp-controller="EmployerAccount" asp-action="RefreshEmployerInfo" asp-antiforgery="true">
@@ -44,7 +47,7 @@
             <span asp-validation-for="AboutCompany"></span>
         </div>
         <div class="vacancies-cards__card-buttons">
-            <input type="submit" class="search-buttons card-buttons" value="Редагувати">
+            <input type="submit" class="search-buttons card-buttons" value="@ViewLocalization["Edit"]">
         </div>
     </form>
 

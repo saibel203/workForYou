@@ -26,4 +26,5 @@ public class CandidateUser : BaseUser
     public WorkCategory? CategoryWork { get; set; }
     
     public ICollection<FavouriteVacancy>? FavouriteVacancyCollection { get; set; }
+    public ICollection<FavouriteCandidate>? FavouriteCandidates { get; set; }
 }

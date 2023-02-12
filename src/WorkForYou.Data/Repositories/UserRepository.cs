@@ -7,7 +7,8 @@ using WorkForYou.Core.IRepositories;
 using WorkForYou.Core.IServices;
 using WorkForYou.Core.Models.IdentityInheritance;
 using WorkForYou.Core.Responses.Repositories;
-using WorkForYou.Data.DatabaseContext;
+using WorkForYou.Data.Helpers;
+using WorkForYou.Infrastructure.DatabaseContext;
 
 namespace WorkForYou.Data.Repositories;
 
@@ -73,9 +74,11 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
                         IsSuccessfully = false
                     };
 
+                const string employerRole = "employer";
+
                 if (!_httpContextAccessor.HttpContext.Session.Keys.Contains(
                         $"IsShowVacancy{candidateUser.CandidateUser!.CandidateUserId}")
-                    && _httpContextAccessor.HttpContext.User.IsInRole("employer"))
+                    && _httpContextAccessor.HttpContext.User.IsInRole(employerRole))
                 {
                     _httpContextAccessor.HttpContext.Session.SetString(
                         $"IsShowVacancy{candidateUser.CandidateUser!.CandidateUserId}", "1");
@@ -120,7 +123,7 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
         }
     }
 
-    public async Task<UserResponse> ShowFavouriteListAsync(UsernameDto? usernameDto)
+    public async Task<UserResponse> ShowFavouriteListAsync(UsernameDto? usernameDto, QueryParameters queryParameters)
     {
         try
         {
@@ -140,17 +143,101 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
                     Message = "An error occurred while retrieving the user, or the user is not a candidate",
                     IsSuccessfully = false
                 };
-
-            var favouriteProperties = await Context.FavouriteVacancies
+            
+            const int pageSize = 6;
+            int skipAmount = pageSize * (queryParameters.PageNumber - 1);
+            
+            var vacancies = Context.FavouriteVacancies
                 .Include(x => x.CandidateUser)
                 .Where(x => x.CandidateId == user.CandidateUser.CandidateUserId)
-                .Select(x => x.Vacancy).ToListAsync();
+                .Select(x => x.Vacancy!).AsQueryable();
+            
+            if (!string.IsNullOrEmpty(queryParameters.SearchString))
+                vacancies = vacancies
+                    .Where(x => EF.Functions.Like(x.VacancyTitle, $"%{queryParameters.SearchString}%"));
+
+            if (queryParameters.SortBy is not null)
+                vacancies = ListSortingHelper.FavouriteListVacancySort(queryParameters.SortBy, vacancies);
+                
+            var vacanciesCount = vacancies.Count();
+            var pageCount = (int) Math.Ceiling((double) vacanciesCount / pageSize);
 
             return new()
             {
                 Message = "FavouriteList successfully received",
                 IsSuccessfully = true,
-                FavouriteList = favouriteProperties!
+                FavouriteList = vacancies.ToList()
+                    .Skip(skipAmount)
+                    .Take(pageSize),
+                PageCount = pageCount,
+                VacancyCount = vacanciesCount,
+                SearchString = queryParameters.SearchString,
+                Pages = PaginationHelper.PageNumbers(queryParameters.PageNumber, pageCount),
+                SortBy = queryParameters.SortBy
+            };
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Data transfer error");
+            return new()
+            {
+                Message = "Data transfer error",
+                IsSuccessfully = false
+            };
+        }
+    }
+
+    public async Task<UserResponse> ShowFavouriteCandidatesListAsync(UsernameDto? usernameDto, QueryParameters queryParameters)
+    {
+        try
+        {
+            if (usernameDto is null)
+                return new()
+                {
+                    Message = "Data transfer error",
+                    IsSuccessfully = false
+                };
+
+            var user = await DbSet.Include(x => x.EmployerUser)
+                .FirstOrDefaultAsync(x => x.UserName == usernameDto.Username);
+
+            if (user is null)
+                return new()
+                {
+                    Message = "An error occurred while retrieving the user, or the user is not a employer",
+                    IsSuccessfully = false
+                };
+            
+            const int pageSize = 6;
+            int skipAmount = pageSize * (queryParameters.PageNumber - 1);
+            
+            var users = Context.FavouriteCandidates
+                .Include(x => x.EmployerUser)
+                .Where(x => x.EmployerUserId == user.EmployerUser!.EmployerUserId)
+                .Select(x => x.CandidateUser!).AsQueryable();
+            
+            if (!string.IsNullOrEmpty(queryParameters.SearchString))
+                users = users
+                    .Where(x => EF.Functions.Like(x.CompanyPosition!, $"%{queryParameters.SearchString}%"));
+
+            if (queryParameters.SortBy is not null)
+                users = ListSortingHelper.FavouriteListUserSort(queryParameters.SortBy, users);
+            
+            var vacanciesCount = users.Count();
+            var pageCount = (int) Math.Ceiling((double) vacanciesCount / pageSize);
+
+            return new()
+            {
+                Message = "FavouriteList successfully received",
+                IsSuccessfully = true,
+                FavouriteCandidates = users.ToList()
+                    .Skip(skipAmount)
+                    .Take(pageSize),
+                PageCount = pageCount,
+                VacancyCount = vacanciesCount,
+                SearchString = queryParameters.SearchString,
+                Pages = PaginationHelper.PageNumbers(queryParameters.PageNumber, pageCount),
+                SortBy = queryParameters.SortBy
             };
         }
         catch (Exception ex)
@@ -171,7 +258,7 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
             const int pageSize = 6;
             int skipAmount = pageSize * (queryParameters.PageNumber - 1);
 
-            IEnumerable<ApplicationUser> users;
+            IReadOnlyList<ApplicationUser> users;
 
             if (!string.IsNullOrEmpty(queryParameters.SearchString))
                 users = await DbSet
@@ -189,43 +276,12 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
                     .Include(x => x.CandidateUser!.LevelEnglish)
                     .Include(x => x.CandidateUser!.CommunicationLanguage)
                     .ToListAsync();
-            
-            switch (queryParameters.SortBy)
-            {
-                case "publication-date":
-                    users = users.OrderByDescending(x => x.CandidateUser!.CreatedDate).ToList();
-                    break;
-                case "from-salary":
-                    users = users.OrderBy(x => x.CandidateUser!.ExpectedSalary).ToList();
-                    break;
-                case "to-salary":
-                    users = users.OrderByDescending(x => x.CandidateUser!.ExpectedSalary).ToList();
-                    break;
-                case "from-experience":
-                    users = users.OrderBy(x => x.CandidateUser!.ExperienceWorkTime).ToList();
-                    break;
-                case "to-experience":
-                    users = users.OrderByDescending(x => x.CandidateUser!.ExperienceWorkTime).ToList();
-                    break;
-                case "from-view-count":
-                    users = users.OrderBy(x => x.CandidateUser!.ViewCount).ToList();
-                    break;
-                case "to-view-count":
-                    users = users.OrderByDescending(x => x.CandidateUser!.ViewCount).ToList();
-                    break;
-                // case "from-reviews-count":
-                //     vacancies = vacancies.OrderBy(x => x.FromSalary).ToList();
-                //     break;
-                // case "to-reviews-count":
-                //     vacancies = vacancies.OrderByDescending(x => x.FromSalary).ToList();
-                //     break;
-                default:
-                    users = users.OrderBy(x => x.CandidateUser!.CreatedDate).ToList();
-                    break;
-            }
 
-            int vacanciesCount = users.Count();
-            int pageCount = (int) Math.Ceiling((double) vacanciesCount / pageSize);
+            if (queryParameters.SortBy is not null)
+                users = ListSortingHelper.ListUserSort(queryParameters.SortBy, users);
+
+            var vacanciesCount = users.Count;
+            var pageCount = (int) Math.Ceiling((double) vacanciesCount / pageSize);
 
             return new()
             {
@@ -239,15 +295,15 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
                 VacancyCount = vacanciesCount,
                 SearchString = queryParameters.SearchString,
                 SortBy = queryParameters.SortBy,
-                Pages = PageNumbers(queryParameters.PageNumber, pageCount)
+                Pages = PaginationHelper.PageNumbers(queryParameters.PageNumber, pageCount)
             };
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "");
+            Logger.LogError(ex, "Error receiving candidates");
             return new()
             {
-                Message = "",
+                Message = "Error receiving candidates",
                 IsSuccessfully = false
             };
         }
@@ -443,43 +499,43 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
         }
     }
 
-    private IEnumerable<int> PageNumbers(int pageNumber, int pageCount)
+    public async Task<UserResponse> RemoveUserAsync(UsernameDto? usernameDto)
     {
-        if (pageCount <= 5)
+        try
         {
-            for (int i = 1; i <= pageCount; i++)
+            if (usernameDto is null)
+                return new()
+                {
+                    Message = "Error getting user",
+                    IsSuccessfully = false
+                };
+
+            var userResult = await GetUserDataAsync(usernameDto);
+            
+            if (!userResult.IsSuccessfully)
+                return new()
+                {
+                    Message = "Error getting user",
+                    IsSuccessfully = false
+                };
+
+            DbSet.Remove(userResult.User);
+            await Context.SaveChangesAsync();
+
+            return new()
             {
-                yield return i;
-            }
+                Message = "User deleted successfully",
+                IsSuccessfully = true
+            };
         }
-        else
+        catch (Exception ex)
         {
-            int midPoint = pageNumber < 3 ? 3
-                : pageNumber > pageCount - 2 ? pageCount - 2
-                : pageNumber;
-
-            int lowerBound = midPoint - 2;
-            int upperBound = midPoint + 2;
-
-            if (lowerBound != 1)
+            Logger.LogError(ex, "Error getting user");
+            return new()
             {
-                yield return 1;
-                if (lowerBound - 1 > 1)
-                    yield return -1;
-            }
-
-            for (int i = midPoint - 2; i <= upperBound; i++)
-                yield return i;
-
-
-            if (upperBound != pageCount)
-            {
-                if (pageCount - upperBound > 1)
-                    yield return -1;
-
-
-                yield return pageCount;
-            }
+                Message = "Error getting user",
+                IsSuccessfully = false
+            };
         }
     }
 }

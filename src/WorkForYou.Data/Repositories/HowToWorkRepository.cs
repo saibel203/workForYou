@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using WorkForYou.Core.IRepositories;
 using WorkForYou.Core.Models;
 using WorkForYou.Core.Responses.Repositories;
-using WorkForYou.Data.DatabaseContext;
+using WorkForYou.Infrastructure.DatabaseContext;
 
 namespace WorkForYou.Data.Repositories;
 

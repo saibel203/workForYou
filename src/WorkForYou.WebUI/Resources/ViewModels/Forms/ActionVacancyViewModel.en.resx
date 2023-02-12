@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Домен вакансії" xml:space="preserve">
+        <value>Vacancy domain</value>
+    </data>
+    <data name="Категорія" xml:space="preserve">
+        <value>Category</value>
+    </data>
+    <data name="Рівень англійської" xml:space="preserve">
+        <value>English level</value>
+    </data>
+    <data name="Релокейт" xml:space="preserve">
+        <value>Relocate</value>
+    </data>
+    <data name="Регіон кандидата" xml:space="preserve">
+        <value>Candidate region</value>
+    </data>
+    <data name="Ремоут / офіс" xml:space="preserve">
+        <value>Remote / office</value>
+    </data>
+    <data name="Тип компанії" xml:space="preserve">
+        <value>Company type</value>
+    </data>
+    <data name="Короткий опис" xml:space="preserve">
+        <value>Short description</value>
+    </data>
+    <data name="Ключові слова для пошуку" xml:space="preserve">
+        <value>Keywords for search</value>
+    </data>
+    <data name="Зарплата від" xml:space="preserve">
+        <value>Salary from</value>
+    </data>
+    <data name="Зарплата до" xml:space="preserve">
+        <value>Salary to</value>
+    </data>
+    <data name="Досвід роботи" xml:space="preserve">
+        <value>Experience</value>
+    </data>
+    <data name="Детальний опис" xml:space="preserve">
+        <value>Long description</value>
+    </data>
+    <data name="Хто вам потрібен" xml:space="preserve">
+        <value>Who do you need</value>
+    </data>
+    <data name="VacancyTitle поле має бути заповненим" xml:space="preserve">
+        <value>VacancyTitle field is required</value>
+    </data>
+    <data name="ShortDescription поле має бути заповненим" xml:space="preserve">
+        <value>ShortDescription field is required</value>
+    </data>
+    <data name="LongDescription поле має бути заповненим" xml:space="preserve">
+        <value>LongDescription field is required</value>
+    </data>
+    <data name="FromSalary поле має бути заповненим" xml:space="preserve">
+        <value>FromSalary field is required</value>
+    </data>
+    <data name="ToSalary поле має бути заповненим" xml:space="preserve">
+        <value>ToSalary field is required</value>
+    </data>
+    <data name="KeyWords поле має бути заповненим (бажано &gt; 100 символів)" xml:space="preserve">
+        <value>KeyWords field is required (&gt; 100 characters)</value>
+    </data>
+    <data name="Experience поле має бути заповненим" xml:space="preserve">
+        <value>Experience field is required</value>
+    </data>
+    <data name="VacancyDomain поле має бути заповненим" xml:space="preserve">
+        <value>VacancyDomain field is required</value>
+    </data>
+    <data name="WorkCategory поле має бути заповненим" xml:space="preserve">
+        <value>WorkCategory field is required</value>
+    </data>
+    <data name="HowToWork поле має бути заповненим" xml:space="preserve">
+        <value>HowToWork field is required</value>
+    </data>
+    <data name="Relocate поле має бути заповненим" xml:space="preserve">
+        <value>Relocate field is required</value>
+    </data>
+    <data name="TypesOfCompany поле має бути заповненим" xml:space="preserve">
+        <value>TypesOfCompany field is required</value>
+    </data>
+    <data name="EnglishLevel поле має бути заповненим" xml:space="preserve">
+        <value>EnglishLevel field is required</value>
+    </data>
+    <data name="CandidateRegion поле має бути заповненим" xml:space="preserve">
+        <value>CandidateRegion field is required</value>
+    </data>
+    <data name="Довжина назви має бути в діапазоні від 10 до 100 символів" xml:space="preserve">
+        <value>The name must be between 10 and 100 characters long</value>
+    </data>
+    <data name="Довжина короткого опису має бути в діапазоні від 30 до 250 символів" xml:space="preserve">
+        <value>The length of the short description should be between 30 and 250 characters</value>
+    </data>
+    <data name="Довжина детального опису має бути в діапазоні від 200 до 5000 символів" xml:space="preserve">
+        <value>The length of the detailed description must be between 200 and 5000 characters</value>
+    </data>
+    <data name="Мінімальна зарплата не може перевищувати максимальну" xml:space="preserve">
+        <value>The minimum wage cannot exceed the maximum</value>
+    </data>
+    <data name="Досвід повинен сягати від 0 до 15 років" xml:space="preserve">
+        <value>Experience should range from 0 to 15 years</value>
+    </data>
+    <data name="Довжина ключових слів має бути в діапазоні від 10 до 300 символів" xml:space="preserve">
+        <value>Keywords must be between 10 and 300 characters long</value>
+    </data>
+</root>

@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Folder Include="Hubs" />
         <Folder Include="wwwroot\css" />
         <Folder Include="wwwroot\libs" />
     </ItemGroup>
@@ -131,38 +132,6 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>ConfirmEmailResult.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\ViewModels\LoginViewModel.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>LoginViewModel.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\ViewModels\LoginViewModel.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>LoginViewModel.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\ViewModels\RegisterViewModel.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>RegisterViewModel.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\ViewModels\RegisterViewModel.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>RegisterViewModel.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\ViewModels\RemindPasswordViewModel.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>RemindPasswordViewModel.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\ViewModels\RemindPasswordViewModel.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>RemindPasswordViewModel.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\ViewModels\ResetPasswordViewModel.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>ResetPasswordViewModel.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\ViewModels\ResetPasswordViewModel.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>ResetPasswordViewModel.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
       <EmbeddedResource Update="Resources\Views\Shared\_MainHeader.en.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>_MainHeader.en.Designer.cs</LastGenOutput>
@@ -170,6 +139,238 @@
       <EmbeddedResource Update="Resources\Views\Shared\_MainHeader.uk.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>_MainHeader.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_SearchBar.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_SearchBar.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_SearchBar.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_SearchBar.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_Sorting.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_Sorting.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_Sorting.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_Sorting.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Account\Profile.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Profile.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Account\Profile.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Profile.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\LoginViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LoginViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\LoginViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LoginViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RegisterViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RegisterViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RegisterViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RegisterViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RemindPasswordViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RemindPasswordViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RemindPasswordViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RemindPasswordViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\ResetPasswordViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ResetPasswordViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\ResetPasswordViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ResetPasswordViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RefreshGeneralProfileInfoViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshGeneralProfileInfoViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RefreshGeneralProfileInfoViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshGeneralProfileInfoViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RefreshCandidateInfoViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshCandidateInfoViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RefreshCandidateInfoViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshCandidateInfoViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RefreshEmployerInfoViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshEmployerInfoViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\RefreshEmployerInfoViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshEmployerInfoViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\CandidateAccount\AllVacancies.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllVacancies.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\CandidateAccount\AllVacancies.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllVacancies.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\CandidateAccount\FavouriteList.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteList.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\CandidateAccount\FavouriteList.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteList.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\CandidateAccount\RefreshCandidateInfo.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshCandidateInfo.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\CandidateAccount\RefreshCandidateInfo.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshCandidateInfo.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Vacancy\AllEmployerVacancies.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllEmployerVacancies.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Vacancy\AllEmployerVacancies.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllEmployerVacancies.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Vacancy\CreateVacancy.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>CreateVacancy.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Vacancy\CreateVacancy.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>CreateVacancy.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Vacancy\EditVacancy.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>EditVacancy.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Vacancy\EditVacancy.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>EditVacancy.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Vacancy\VacancyDetails.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>VacancyDetails.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Vacancy\VacancyDetails.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>VacancyDetails.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Account\RefreshGeneralProfileInfo.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshGeneralProfileInfo.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Account\RefreshGeneralProfileInfo.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshGeneralProfileInfo.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\EmployerAccount\AllCandidates.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllCandidates.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\EmployerAccount\AllCandidates.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllCandidates.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\EmployerAccount\AllVacancies.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllVacancies.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\EmployerAccount\AllVacancies.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllVacancies.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\EmployerAccount\FavouriteList.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteList.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\EmployerAccount\FavouriteList.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteList.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\EmployerAccount\RefreshEmployerInfo.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshEmployerInfo.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\EmployerAccount\RefreshEmployerInfo.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RefreshEmployerInfo.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\ActionVacancyViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ActionVacancyViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\ActionVacancyViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ActionVacancyViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\ChangePasswordViewModel.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ChangePasswordViewModel.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\ViewModels\Forms\ChangePasswordViewModel.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ChangePasswordViewModel.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\AccountController.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AccountController.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\AccountController.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AccountController.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\AuthController.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AuthController.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\AuthController.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AuthController.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\CandidateAccountController.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>CandidateAccountController.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\CandidateAccountController.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>CandidateAccountController.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\EmployerAccountController.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>EmployerAccountController.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\EmployerAccountController.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>EmployerAccountController.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\VacancyController.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>VacancyController.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\VacancyController.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>VacancyController.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -279,46 +480,6 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>ConfirmEmailResult.en.resx</DependentUpon>
       </Compile>
-      <Compile Update="Resources\ViewModels\LoginViewModel.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>LoginViewModel.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\ViewModels\LoginViewModel.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>LoginViewModel.uk.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\ViewModels\RegisterViewModel.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>RegisterViewModel.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\ViewModels\RegisterViewModel.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>RegisterViewModel.uk.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\ViewModels\RemindPasswordViewModel.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>RemindPasswordViewModel.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\ViewModels\RemindPasswordViewModel.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>RemindPasswordViewModel.uk.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\ViewModels\ResetPasswordViewModel.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>ResetPasswordViewModel.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\ViewModels\ResetPasswordViewModel.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>ResetPasswordViewModel.uk.resx</DependentUpon>
-      </Compile>
       <Compile Update="Resources\Views\Shared\_MainHeader.en.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -328,6 +489,296 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>_MainHeader.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_SearchBar.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_SearchBar.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_SearchBar.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_SearchBar.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_Sorting.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_Sorting.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_Sorting.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_Sorting.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Account\Profile.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Profile.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Account\Profile.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Profile.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\LoginViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LoginViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\LoginViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LoginViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RegisterViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RegisterViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RegisterViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RegisterViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RemindPasswordViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RemindPasswordViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RemindPasswordViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RemindPasswordViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\ResetPasswordViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ResetPasswordViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\ResetPasswordViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ResetPasswordViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RefreshGeneralProfileInfoViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshGeneralProfileInfoViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RefreshGeneralProfileInfoViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshGeneralProfileInfoViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RefreshCandidateInfoViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshCandidateInfoViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RefreshCandidateInfoViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshCandidateInfoViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RefreshEmployerInfoViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshEmployerInfoViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\RefreshEmployerInfoViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshEmployerInfoViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\CandidateAccount\AllVacancies.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllVacancies.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\CandidateAccount\AllVacancies.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllVacancies.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\CandidateAccount\FavouriteList.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteList.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\CandidateAccount\FavouriteList.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteList.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\CandidateAccount\RefreshCandidateInfo.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshCandidateInfo.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\CandidateAccount\RefreshCandidateInfo.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshCandidateInfo.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Vacancy\AllEmployerVacancies.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllEmployerVacancies.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Vacancy\AllEmployerVacancies.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllEmployerVacancies.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Vacancy\CreateVacancy.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>CreateVacancy.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Vacancy\CreateVacancy.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>CreateVacancy.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Vacancy\EditVacancy.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>EditVacancy.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Vacancy\EditVacancy.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>EditVacancy.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Vacancy\VacancyDetails.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>VacancyDetails.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Vacancy\VacancyDetails.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>VacancyDetails.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Account\RefreshGeneralProfileInfo.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshGeneralProfileInfo.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Account\RefreshGeneralProfileInfo.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshGeneralProfileInfo.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\EmployerAccount\AllCandidates.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllCandidates.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\EmployerAccount\AllCandidates.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllCandidates.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\EmployerAccount\AllVacancies.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllVacancies.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\EmployerAccount\AllVacancies.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllVacancies.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\EmployerAccount\FavouriteList.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteList.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\EmployerAccount\FavouriteList.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteList.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\EmployerAccount\RefreshEmployerInfo.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshEmployerInfo.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\EmployerAccount\RefreshEmployerInfo.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RefreshEmployerInfo.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\ActionVacancyViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ActionVacancyViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\ActionVacancyViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ActionVacancyViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\ChangePasswordViewModel.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ChangePasswordViewModel.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\ViewModels\Forms\ChangePasswordViewModel.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ChangePasswordViewModel.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\AccountController.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AccountController.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\AccountController.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AccountController.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\AuthController.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AuthController.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\AuthController.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AuthController.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\CandidateAccountController.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>CandidateAccountController.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\CandidateAccountController.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>CandidateAccountController.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\EmployerAccountController.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>EmployerAccountController.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\EmployerAccountController.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>EmployerAccountController.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\VacancyController.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>VacancyController.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\VacancyController.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>VacancyController.en.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

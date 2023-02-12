@@ -59,9 +59,18 @@
                             <button class="check-language" type="submit"><i class="fa-solid fa-earth-americas"></i> Switch to English</button>
                         }
                     </form>
-                    <a asp-controller="CandidateAccount" asp-action="FavouriteList">
-                        <i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]
-                    </a>
+                    @if (User.IsInRole("candidate"))
+                    {
+                        <a asp-controller="CandidateAccount" asp-action="FavouriteList">
+                            <i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]
+                        </a>
+                    }
+                    @if (User.IsInRole("employer"))
+                    {
+                        <a asp-controller="EmployerAccount" asp-action="FavouriteList">
+                            <i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]
+                        </a>
+                    }
                     <a asp-controller="Account" asp-action="ChangePassword">
                         <i class="fa-solid fa-key"></i> @ViewLocalization["HeaderChangePassword"]
                     </a>

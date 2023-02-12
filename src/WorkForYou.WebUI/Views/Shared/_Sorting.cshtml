@@ -1,22 +1,25 @@
-﻿@model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
+
+@inject IViewLocalizer ViewLocalization
 
 <div class="vacancies__searched-bar-sort">
-    <span class="vacancies__searched-bar-sort-text">Sort by:</span>
+    <span class="vacancies__searched-bar-sort-text">@ViewLocalization["SortTitle"]:</span>
     <form method="get" asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction">
         <input type="hidden" name="PageNumber" value="@Model.QueryParameters.PageNumber">
         <input type="hidden" name="SearchString" value="@Model.QueryParameters.SearchString">
         <input type="hidden" name="Username" value="@Model.Username">
         <select class="vacancies__searched-bar-sort-select" name="SortBy" asp-for="@Model.QueryParameters.SortBy">
-            <option value="start-publication-date">+ За датою публікації</option>
-            <option value="publication-date">- За датою публікації</option>
-            <option value="from-salary">+ За зарплатою</option>
-            <option value="to-salary">- За зарплатою</option>
-            <option value="from-experience">+ За досвідом роботи</option>
-            <option value="to-experience">- За досвідом роботи</option>
-            @* <option value="from-view-count">+ За кількістю відгуків</option> *@
-            @* <option value="to-view-count">- За кількістю відгуків</option> *@
-            <option value="from-reviews-count">+ За кількістю переглядів</option>
-            <option value="to-reviews-count">- За кількістю переглядів</option>
+            <option value="start-publication-date">+ @ViewLocalization["ByDate"]</option>
+            <option value="publication-date">- @ViewLocalization["ByDate"]</option>
+            <option value="from-salary">+ @ViewLocalization["BySalary"]</option>
+            <option value="to-salary">- @ViewLocalization["BySalary"]</option>
+            <option value="from-experience">+ @ViewLocalization["ByExperience"]</option>
+            <option value="to-experience">- @ViewLocalization["ByExperience"]</option>
+            @* <option value="from-view-count">+ @ViewLocalization["ByReviews"]</option> *@
+            @* <option value="to-view-count">- @ViewLocalization["ByReviews"]</option> *@
+            <option value="from-reviews-count">+ @ViewLocalization["ByViews"]</option>
+            <option value="to-reviews-count">- @ViewLocalization["ByViews"]</option>
         </select>
     </form>
 </div>

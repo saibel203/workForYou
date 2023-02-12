@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="UserNotFound" xml:space="preserve">
+        <value>User not found or an error occurred</value>
+    </data>
+    <data name="ChangePasswordError" xml:space="preserve">
+        <value>An error occurred while trying to change the password</value>
+    </data>
+    <data name="ChangePasswordSuccess" xml:space="preserve">
+        <value>Password changed successfully</value>
+    </data>
+    <data name="LogoutSuccess" xml:space="preserve">
+        <value>You have successfully exited</value>
+    </data>
+    <data name="UploadImageError" xml:space="preserve">
+        <value>Error loading picture</value>
+    </data>
+    <data name="UploadImageSuccess" xml:space="preserve">
+        <value>The picture has been successfully changed</value>
+    </data>
+    <data name="RefreshProfileError" xml:space="preserve">
+        <value>An error occurred while trying to change the user's general information</value>
+    </data>
+    <data name="RefreshProfileSuccess" xml:space="preserve">
+        <value>General user information successfully changed</value>
+    </data>
+    <data name="RemoveUserError" xml:space="preserve">
+        <value>Error trying to delete user</value>
+    </data>
+    <data name="RemoveUserSuccess" xml:space="preserve">
+        <value>User deleted successfully</value>
+    </data>
+</root>

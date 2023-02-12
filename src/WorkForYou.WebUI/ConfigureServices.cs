@@ -3,7 +3,9 @@ using AspNetCoreHero.ToastNotification;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using WorkForYou.Core.IOptions;
+using WorkForYou.Core.IRepositories;
 using WorkForYou.Core.IServices;
+using WorkForYou.Data.Repositories;
 using WorkForYou.Services;
 
 namespace WorkForYou.WebUI;
@@ -13,6 +15,8 @@ public static class ConfigureServices
     public static IServiceCollection AddWebUiServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
+
+        services.AddSignalR();
         
         services.AddAutoMapper(typeof(Program));
 
@@ -27,10 +31,13 @@ public static class ConfigureServices
             enabled: sp.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
             logger: sp.GetRequiredService<ILogger<NpmWatchHosted>>()));
 
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<INotificationService, NotificationService>();
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IMailService, MailService>();
+        services.AddTransient<IVacancyService, VacancyService>();
+        services.AddTransient<IUserService, UserService>();
 
         services.AddLocalization(options => options.ResourcesPath = "Resources");
 
