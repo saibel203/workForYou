@@ -1,5 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.ServiceInterfaces;
 
 namespace WorkForYou.Services;
 

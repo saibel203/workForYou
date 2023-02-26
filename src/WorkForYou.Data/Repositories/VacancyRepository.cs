@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WorkForYou.Core.AdditionalModels;
 using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.Core.DTOModels.VacancyDTOs;
-using WorkForYou.Core.IRepositories;
+using WorkForYou.Core.RepositoryInterfaces;
 using WorkForYou.Core.Models;
 using WorkForYou.Core.Responses.Repositories;
 using WorkForYou.Data.Helpers;
@@ -15,14 +14,13 @@ namespace WorkForYou.Data.Repositories;
 
 public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMapper _mapper;
 
-    public VacancyRepository(WorkForYouDbContext context, ILogger logger, IHttpContextAccessor httpContextAccessor,
-        IMapper mapper)
+    private const int PageSize = 7;
+
+    public VacancyRepository(WorkForYouDbContext context, ILogger logger, IMapper mapper)
         : base(context, logger)
     {
-        _httpContextAccessor = httpContextAccessor;
         _mapper = mapper;
     }
 
@@ -30,8 +28,7 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
     {
         try
         {
-            const int pageSize = 6;
-            int skipAmount = pageSize * (queryParameters.PageNumber - 1);
+            int skipAmount = PageSize * (queryParameters.PageNumber - 1);
 
             IReadOnlyList<Vacancy> vacancies;
 
@@ -61,11 +58,11 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     .Include(x => x.EmployerUser!.ApplicationUser)
                     .ToListAsync();
 
-            if (queryParameters.SortBy is not null)
-                vacancies = ListSortingHelper.ListVacancySort(queryParameters.SortBy, vacancies);
+            vacancies = ListSortingHelper.ListVacancySort(queryParameters, vacancies);
+            vacancies = FilteringHelper.VacancyFiltering(queryParameters, vacancies);
 
             var vacanciesCount = vacancies.Count;
-            var pageCount = (int) Math.Ceiling((double) vacanciesCount / pageSize);
+            var pageCount = (int) Math.Ceiling((double) vacanciesCount / PageSize);
 
             return new()
             {
@@ -73,12 +70,13 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                 IsSuccessfully = true,
                 VacancyList = vacancies
                     .Skip(skipAmount)
-                    .Take(pageSize),
+                    .Take(PageSize),
                 PageCount = pageCount,
                 VacancyCount = vacanciesCount,
                 SearchString = queryParameters.SearchString,
-                Pages = PaginationHelper.PageNumbers(queryParameters.PageNumber, pageCount),
-                SortBy = queryParameters.SortBy
+                SortBy = queryParameters.SortBy,
+                WorkCategory = queryParameters.WorkCategory,
+                Pages = PaginationHelper.PageNumbers(queryParameters.PageNumber, pageCount)
             };
         }
         catch (Exception ex)
@@ -105,8 +103,7 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     IsSuccessfully = false
                 };
 
-            const int pageSize = 6;
-            int skipAmount = pageSize * (queryParameters.PageNumber - 1);
+            int skipAmount = PageSize * (queryParameters.PageNumber - 1);
 
             var user = await Context.Users
                 .Include(x => x.EmployerUser)
@@ -145,20 +142,19 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     .Where(x => x.EmployerUser!.EmployerUserId == user.EmployerUser!.EmployerUserId)
                     .ToListAsync();
 
-            if (queryParameters.SortBy is not null)
-                employerVacancies = ListSortingHelper.ListVacancySort(queryParameters.SortBy, employerVacancies);
+            employerVacancies = ListSortingHelper.ListVacancySort(queryParameters, employerVacancies);
+            employerVacancies = FilteringHelper.VacancyFiltering(queryParameters, employerVacancies);
 
             var vacanciesCount = employerVacancies.Count;
-            var pageCount = (int) Math.Ceiling((double) vacanciesCount / pageSize);
+            var pageCount = (int) Math.Ceiling((double) vacanciesCount / PageSize);
 
             return new()
             {
                 Message = "The list of employer vacancies has been successfully received",
                 IsSuccessfully = true,
                 VacancyList = employerVacancies
-                    .Reverse()
                     .Skip(skipAmount)
-                    .Take(pageSize),
+                    .Take(PageSize),
                 PageCount = pageCount,
                 VacancyCount = vacanciesCount,
                 SearchString = queryParameters.SearchString,
@@ -200,16 +196,6 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
                     Message = "No vacancy with this Id found",
                     IsSuccessfully = false
                 };
-
-            const string candidateRole = "candidate";
-
-            if (!_httpContextAccessor.HttpContext.Session.Keys.Contains($"IsShowVacancy{vacancyId}")
-                && _httpContextAccessor.HttpContext.User.IsInRole(candidateRole))
-            {
-                _httpContextAccessor.HttpContext.Session.SetString($"IsShowVacancy{vacancyId}", "1");
-                vacancy.ViewCount++;
-                await Context.SaveChangesAsync();
-            }
 
             return new()
             {
@@ -253,11 +239,11 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Vacancy model is null");
+            Logger.LogError(ex, "An error occurred while trying to create a vacancy");
 
             return new()
             {
-                Message = "Vacancy model is null",
+                Message = "An error occurred while trying to create a vacancy",
                 IsSuccessfully = false
             };
         }
@@ -319,10 +305,43 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Vacancy model is null");
+            Logger.LogError(ex, "An error occurred while trying to update the job");
             return new()
             {
-                Message = "Vacancy model is null",
+                Message = "An error occurred while trying to update the job",
+                IsSuccessfully = false
+            };
+        }
+    }
+
+    public async Task<VacancyResponse> UpdateViewNumberOfCountAsync(int vacancyId)
+    {
+        try
+        {
+            var vacancyResult = await GetVacancyByIdAsync(vacancyId);
+
+            if (!vacancyResult.IsSuccessfully || vacancyResult.Vacancy is null)
+                return new()
+                {
+                    Message = "An error occurred when receiving a vacancy",
+                    IsSuccessfully = false
+                };
+
+            vacancyResult.Vacancy.ViewCount++;
+            await Context.SaveChangesAsync();
+
+            return new()
+            {
+                Message = "Job view counter has been updated successfully",
+                IsSuccessfully = true
+            };
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "An error occurred while trying to update the job view counter");
+            return new()
+            {
+                Message = "An error occurred while trying to update the job view counter",
                 IsSuccessfully = false
             };
         }

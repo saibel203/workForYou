@@ -6,7 +6,7 @@
 @inject IViewLocalizer ViewLocalization
 
 @{
-    ViewData["Title"] = @ViewLocalization["Title"];
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 <div class="card-details">
@@ -64,10 +64,13 @@
             </div>
         }
 
-        <div class="card-details__buttons">
-            <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
-            <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RemoveUser">@ViewLocalization["Delete"]</a>
-        </div>
+        @if (Model.UserName == User.Identity?.Name!)
+        {
+            <div class="card-details__buttons">
+                <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
+                <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RemoveUser">@ViewLocalization["Delete"]</a>
+            </div>
+        }
     </div>
     <div class="card-details__info">
         @if (Model.CandidateUser.ExpectedSalary != 0)
@@ -202,9 +205,7 @@
                 @if (Model.EmployerUser.CompanyName is not null)
                 {
                     @: @ViewLocalization["InCompany"] 
-                    <a asp-controller="Vacancy" asp-action="AllEmployerVacancies" asp-route-username="@Model.UserName">
-                        @Model.EmployerUser.CompanyName
-                    </a>
+                    @Model.EmployerUser.CompanyName
                 }
             </h2>
         </div>
@@ -268,10 +269,13 @@
             </div>
         }
 
-        <div class="card-details__buttons">
-            <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
-            <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RemoveUser">@ViewLocalization["Delete"]</a>
-        </div>
+        @if (Model.UserName == User.Identity?.Name!)
+        {
+            <div class="card-details__buttons">
+                <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
+                <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RemoveUser">@ViewLocalization["Delete"]</a>
+            </div>
+        }
     </div>
     <div class="card-details__info">
         <ul class="footer__social-links mb-0">

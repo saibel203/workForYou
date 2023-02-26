@@ -12,7 +12,6 @@
         <div class="all-employer-vacancies__header">
             <h1>@ViewLocalization["YourVacancies"] (@Model.VacancyCount)</h1>
             @await Html.PartialAsync("_SearchBar")
-
             @await Html.PartialAsync("_Sorting")
         </div>
 
@@ -32,7 +31,7 @@
                 <div class="all-employer-vacancies__vacancy-main">
                     <a asp-controller="Vacancy" asp-action="EditVacancy" asp-route-id="@vacancy.VacancyId">@ViewLocalization["Edit"]</a>
                     <span>·</span>
-                    <a href="">@ViewLocalization["Candidates"]</a>
+                    <a asp-controller="Vacancy" asp-action="AllVacancyResponses" asp-route-vacancyId="@vacancy.VacancyId">@ViewLocalization["Candidates"]</a>
                     <span>·</span>
                     <a asp-controller="Vacancy" asp-action="RemoveVacancy" asp-route-id="@vacancy.VacancyId">@ViewLocalization["Delete"]</a>
                 </div>
@@ -40,10 +39,7 @@
         }
     </div>
 
-    @if (Model.PageCount > 1)
-    {
-        @await Html.PartialAsync("_Pagination")
-    }
+    @await Html.PartialAsync("_Pagination")
 
     @section Scripts
     {

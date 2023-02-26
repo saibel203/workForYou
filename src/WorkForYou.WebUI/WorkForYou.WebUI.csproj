@@ -8,7 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Hubs" />
         <Folder Include="wwwroot\css" />
         <Folder Include="wwwroot\libs" />
     </ItemGroup>
@@ -20,15 +19,17 @@
 
     <ItemGroup>
         <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.9.4">
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.0.0-beta">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -38,13 +39,6 @@
         <TypeScriptCompile Include="Views\Resources\Scripts\home-password.ts" />
         <TypeScriptCompile Include="Views\Resources\Scripts\home.ts" />
         <TypeScriptCompile Include="Views\Resources\Scripts\main.ts" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="Views\Resources\Scripts\libs\typed.js">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -371,6 +365,22 @@
       <EmbeddedResource Update="Resources\Controllers\VacancyController.en.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>VacancyController.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Error\PageNotFound.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PageNotFound.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Error\PageNotFound.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PageNotFound.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Error\AccessDenied.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AccessDenied.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Error\AccessDenied.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AccessDenied.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -779,6 +789,26 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>VacancyController.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Error\PageNotFound.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PageNotFound.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Error\PageNotFound.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PageNotFound.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Error\AccessDenied.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AccessDenied.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Error\AccessDenied.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AccessDenied.en.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

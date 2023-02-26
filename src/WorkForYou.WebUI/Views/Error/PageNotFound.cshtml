@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer ViewLocalization
+
+@{
+    ViewData["Title"] = @ViewLocalization["Title"];
+}
+
+<div class="container-title">
+    <div class="title">
+        <div class="number">4</div>
+        <div class="moon">
+            <div class="face">
+                <div class="mouth"></div>
+                <div class="eyes">
+                    <div class="eye-left"></div>
+                    <div class="eye-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="number">4</div>
+    </div>
+    <div class="subtitle">@ViewLocalization["Error"]</div>
+    <a asp-controller="Home" asp-action="Index">@ViewLocalization["GoToMainPage"]</a>
+</div>

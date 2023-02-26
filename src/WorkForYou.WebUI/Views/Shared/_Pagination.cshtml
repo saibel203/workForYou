@@ -1,17 +1,19 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
+﻿@model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
 
-@if (Model.VacancyCount != 0)
+@{
+    var workCategoryQueryString = Context.Request.Query["WorkCategory"].ToString().Split(",");
+    var englishLevelQueryString = Context.Request.Query["EnglishLevel"].ToString().Split(",");
+    var companyTypeQueryString = Context.Request.Query["CompanyType"].ToString().Split(",");
+    var howToWorkQueryString = Context.Request.Query["HowToWork"].ToString().Split(",");
+    var candidateRegionQueryString = Context.Request.Query["CandidateRegion"].ToString().Split(",");
+}
+
+@if (Model.VacancyCount != 0 && Model.PageCount > 1)
 {
     <div class="vacancies-pagination">
         <ul class="pagination">
             <li>
-                <a asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction"
-                   asp-route-pageNumber="@(Model.QueryParameters.PageNumber - 1)"
-                   asp-route-searchString="@Model.QueryParameters.SearchString" class="prev"
-                   asp-route-username="@Model.Username" asp-route-sortBy="@Model.QueryParameters.SortBy">
-                    Prev
-                </a>
+                <a href="@Url.Page("", new {WorkCategory = workCategoryQueryString, EnglishLevel = englishLevelQueryString, CompanyType = companyTypeQueryString, HowToWork = howToWorkQueryString, CandidateRegion = candidateRegionQueryString, PageNumber = Model.QueryParameters.PageNumber - 1, Model.QueryParameters.SearchString, Model.Username, Model.QueryParameters.SortBy, VacancyId = Model.CurrentVacancyId})" class="next">Prev</a>
             </li>
 
             @foreach (var i in Model.Pages)
@@ -25,24 +27,12 @@
                 else
                 {
                     <li class="pagination-item @activeClass">
-                        <a asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction" 
-                           asp-route-pageNumber='@i'
-                           asp-route-searchString="@Model.QueryParameters.SearchString" 
-                           asp-route-username="@Model.Username"
-                           asp-route-sortBy="@Model.QueryParameters.SortBy">
-                            @i
-                        </a>
+                        <a href="@Url.Page("", new {WorkCategory = workCategoryQueryString, EnglishLevel = englishLevelQueryString, CompanyType = companyTypeQueryString, HowToWork = howToWorkQueryString, CandidateRegion = candidateRegionQueryString, PageNumber = i, Model.QueryParameters.SearchString, Model.Username, Model.QueryParameters.SortBy, VacancyId = Model.CurrentVacancyId})" class="next">@i</a>
                     </li>
                 }
             }
             <li>
-                <a asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction"
-                   asp-route-pageNumber="@(Model.QueryParameters.PageNumber + 1)" 
-                   asp-route-searchString="@Model.QueryParameters.SearchString"
-                   asp-route-username="@Model.Username" 
-                   asp-route-sortBy="@Model.QueryParameters.SortBy" class="next">
-                    Next
-                </a>
+                <a href="@Url.Page("", new {WorkCategory = workCategoryQueryString, EnglishLevel = englishLevelQueryString, CompanyType = companyTypeQueryString, HowToWork = howToWorkQueryString, CandidateRegion = candidateRegionQueryString, PageNumber = Model.QueryParameters.PageNumber + 1, Model.QueryParameters.SearchString, Model.Username, Model.QueryParameters.SortBy, VacancyId = Model.CurrentVacancyId})" class="next">Next</a>
             </li>
         </ul>
     </div>

@@ -5,12 +5,49 @@
 @inject IViewLocalizer ViewLocalization
 
 <div class="search">
-    <form method="get" asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction">
+    <form method="get" asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction" asp-antiforgery="true">
         <div class="search__bar">
             <input type="hidden" name="PageNumber" value="@Model.QueryParameters.PageNumber">
             <input type="hidden" name="SortBy" value="@Model.QueryParameters.SortBy">
+            <input type="hidden" name="VacancyId" value="@Model.CurrentVacancyId">
+            @if (Model.QueryParameters.WorkCategory is not null)
+            {
+                @foreach (var workCategory in Model.QueryParameters.WorkCategory)
+                {
+                    <input type="hidden" name="WorkCategory" value="@workCategory">
+                }
+            }
+            @if (Model.QueryParameters.EnglishLevel is not null)
+            {
+                @foreach (var englishLevel in Model.QueryParameters.EnglishLevel)
+                {
+                    <input type="hidden" name="EnglishLevel" value="@englishLevel">
+                }
+            }
+            @if (Model.QueryParameters.CompanyType is not null)
+            {
+                @foreach (var companyType in Model.QueryParameters.CompanyType)
+                {
+                    <input type="hidden" name="CompanyType" value="@companyType">
+                }
+            }
+            @if (Model.QueryParameters.HowToWork is not null)
+            {
+                @foreach (var howToWork in Model.QueryParameters.HowToWork)
+                {
+                    <input type="hidden" name="HowToWork" value="@howToWork">
+                }
+            }
+            @if (Model.QueryParameters.CandidateRegion is not null)
+            {
+                @foreach (var candidateRegion in Model.QueryParameters.CandidateRegion)
+                {
+                    <input type="hidden" name="CandidateRegion" value="@candidateRegion">
+                }
+            }
             <input type="hidden" name="Username" value="@Model.Username">
-            <input type="search" name="SearchString" class="search-box" placeholder="@ViewLocalization["Name"]" 
+            <input type="hidden" name="Username" value="@Model.CurrentVacancyId">
+            <input type="search" name="SearchString" class="search-box" placeholder="@ViewLocalization["Name"]"
                    value="@Model.QueryParameters.SearchString">
         </div>
         <button class="search__button" type="submit">

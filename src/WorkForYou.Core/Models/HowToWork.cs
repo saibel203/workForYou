@@ -1,8 +1,10 @@
-﻿namespace WorkForYou.Core.Models;
+﻿using System.Collections;
+
+namespace WorkForYou.Core.Models;
 
 public class HowToWork
 {
     public int HowToWorkId { get; set; }
     public string HowToWorkName { get; set; } = string.Empty;
-    public Vacancy? Vacancy { get; set; }
+    public IEnumerable<Vacancy>? Vacancies { get; set; }
 }

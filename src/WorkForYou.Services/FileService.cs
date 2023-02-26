@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.Responses.Services;
 
 namespace WorkForYou.Services;

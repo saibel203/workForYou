@@ -1,0 +1,111 @@
+﻿@using WorkForYou.WebUI.Helpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using WorkForYou.WebUI.ViewModels.AdditionalViewModels
+@model CandidatesViewModel
+
+@{
+    ViewData["Title"] = "Всі відгуки на вакансію";
+    var currentPath = Context.Request.Path + Context.Request.QueryString;
+
+    const string employerController = "EmployerAccount";
+}
+
+<div class="main__search">
+    @await Html.PartialAsync("_SearchBar")
+    @await Html.PartialAsync("_Filtering")
+</div>
+
+<div class="vacancies">
+    <div class="vacancies__searched-bar">
+        <div class="vacancies__searched-bar-general">@Model.VacancyCount перегляд@(ViewHelpers.GetLastStringLetters(Model.VacancyCount))</div>
+        <div class="vacancies__searched-bar-sort">
+            @await Html.PartialAsync("_Sorting")
+            <a asp-controller="Vacancy" asp-action="AllVacancyResponses" asp-route-vacancyId="@Model.CurrentVacancyId" class="search-buttons detail-button detail-danger">Скинути фільтри</a>
+        </div>
+    </div>
+
+    <div class="vacancies-cards">
+        @foreach (var user in Model.ApplicationUsers)
+        {
+            if (user.CandidateUser is not null)
+            {
+                <div class="vacancies-cards__card">
+                    <div class="vacancies-cards__card-title">
+                        <span>@user.CandidateUser.CompanyPosition</span>
+                        <div class="vacancies-cards__card-title-details">
+                            <span>@user.CandidateUser.CreatedDate.ToString("d MMMM yyyy")</span>
+                            <i class="fa-regular fa-eye"></i>
+                            <span>@user.CandidateUser.ViewCount</span>
+                            <i class="fa-regular fa-money-bill-1"></i>
+                            <span>@user.CandidateUser.ExpectedSalary</span>
+                        </div>
+                    </div>
+                    <div class="vacancies-cards__card-header">
+                        <span>@user.CandidateUser.Country</span> ·
+                        <span>@user.CandidateUser.City</span> ·
+                        @if (user.CandidateUser.ExperienceWorkTime == 0)
+                        {
+                            <span>Без досвіду</span>
+                            <span> ·</span>
+                        }
+                        else
+                        {
+                            <span>
+                                @user.CandidateUser.ExperienceWorkTime
+                                @ViewHelpers.GetLastStringLetters(user.CandidateUser.ExperienceWorkTime, true) досвіду
+                            </span>
+                            <span> ·</span>
+                        }
+                        <span>@user.CandidateUser.LevelEnglish?.NameLevel</span>
+                    </div>
+                    <div class="vacancies-cards__card-subtitle">
+                        @if (user.CandidateUser.ExperienceWorkDescription is not null)
+                        {
+                            @if (user.CandidateUser.ExperienceWorkDescription.Length > 300)
+                            {
+                                @user.CandidateUser.ExperienceWorkDescription.Substring(0, 300)
+                                <span>...</span>
+                            }
+                            else
+                            {
+                                @user.CandidateUser.ExperienceWorkDescription
+                            }
+                        }
+                    </div>
+                    @if (user.CandidateUser.KeyWords is not null)
+                    {
+                        var keyWords = user.CandidateUser.KeyWords.Split(", ", StringSplitOptions.RemoveEmptyEntries);
+
+                        <div class="vacancies-cards__card-tags">
+                            @foreach (var tag in keyWords)
+                            {
+                                <button class="search-buttons detail-button">@tag</button>
+                            }
+                        </div>
+                    }
+                    <div class="vacancies-cards__card-buttons">
+                        <div class="vacancies-cards__card-buttons-header">
+                            <a asp-controller="Account" asp-action="Profile" asp-route-username="@user.UserName"
+                               class="search-buttons card-buttons">
+                                Читати все
+                            </a>
+                            <a class="search-buttons card-buttons">Написати</a>
+                        </div>
+                        @await Html.PartialAsync("_LikeButton", new SettingsViewModel
+                               {
+                                   CurrentVacancyId = user.CandidateUser.CandidateUserId, ReturnUrl = currentPath,
+                                   CurrentController = employerController
+                               })
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    
+    @await Html.PartialAsync("_Pagination")
+
+    @section Scripts
+    {
+        <script src="~/js/custom-select.js"></script>
+    }
+</div>

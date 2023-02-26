@@ -14,16 +14,16 @@ Project for job search and job candidates. The possibility of registering a cand
 - [x] email list design
 - [x] a page for unauthorized users only and a page for authorized users only
 - [x] candidate or employer registration + authorization
-- [ ] delete, preview account
+- [x] delete, preview account
 - [x] account confirmation
 - [x] password recovery
 - [x] password change
 - [ ] authentication with google, linkedin, etc
-- [ ] profile change for candidate or employer
+- [x] profile change for candidate or employer
 - [x] CRUD operations for vacancies for the employer
 - [x] for a candidate - a list of vacancies; for an employee - a list of workers
 - [ ] make filters for searching vacancies and candidates: country, work experience, employment, company type, salary from..., English level, technical / non-technical tags, simple search
-- [ ] possibility to save vacancies or candidates (saved list)
+- [x] possibility to save vacancies or candidates (saved list)
 - [x] mini-rating of vacancies: views, number of reviews, number of saves, etc
 - [ ] the possibility to subscribe to the company: when new vacancies appear - a letter to the mail or a message; or make them hidden
 - [ ] list of recommendations for the candidate

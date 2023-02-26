@@ -1,0 +1,55 @@
+﻿@model ChatDetailsViewModel
+@{
+    ViewData["Title"] = "";
+}
+
+<div class="chat-details-wrapper">
+    <div class="chat-details-wrapper__header">
+        <div class="chat-details-wrapper-inner">
+            <div class="chat-details-wrapper__header-image">
+                <img src="~/img/userImages/default-user-image.png" alt="User images">
+            </div>
+            <div class="chat-details-wrapper__header-info">
+                <h3>Name Surname <span></span></h3>
+                <p>.NET developer</p>
+            </div>
+        </div>
+    </div>
+    <div class="chat-details-wrapper__body" id="messagesList">
+        <div class="chat-details-wrapper__body-message message-own">
+            <p>Own message</p>
+        </div>
+        <div class="chat-details-wrapper__body-message message-not-my">
+            <p>Not my message</p>
+        </div>
+        @if (Model.ChatDetails is not null && Model.ChatDetails.ChatMessages is not null)
+        {
+            @foreach (var message in Model.ChatDetails.ChatMessages)
+            {
+                <div class="chat-details-wrapper__body-message message-not-my">
+                    <p>@message.Content</p>
+                </div>
+            }
+        }
+    </div>
+    <div class="chat-details-wrapper__footer">
+        @* <form> *@
+        @* <input type="text" placeholder="Напишіть повідомлення..." id="messageInput"> *@
+        @* <button type="submit" id="sendButton"><i class="fa-solid fa-share"></i> Відправити</button> *@
+        @* <input type="text" placeholder="Receiver" id="receiverInput"> *@
+        @* <input type="text" placeholder="Sender" id="senderInput"> *@
+        @* <input type="button" id="sendButton" value="Send"> *@
+        @* </form> *@
+
+        <input type="hidden" asp-for="SenderUsername" id="senderInput">
+        <input type="hidden" asp-for="RecipientUsername" id="recipientInput">
+        <input type="text" placeholder="Enter message" id="messageInput">
+        <input type="submit" value="Send..." id="sendButton">
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/chat.js"></script>
+}

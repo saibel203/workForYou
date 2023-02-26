@@ -4,6 +4,8 @@ using WorkForYou.Core;
 using WorkForYou.Infrastructure;
 using WorkForYou.Infrastructure.DatabaseContext;
 using WorkForYou.WebUI;
+using WorkForYou.WebUI.Extensions;
+using WorkForYou.WebUI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,8 @@ if (app.Environment.IsDevelopment())
     await init.SeedDataAsync();
 }
 
+app.UsePageErrors();
+
 app.UseNotyf();
 app.UseHttpsRedirection();
 app.UseHsts();
@@ -38,5 +42,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+app.MapHub<ChatHub>("/hubs/chatHub");
 
 app.Run();

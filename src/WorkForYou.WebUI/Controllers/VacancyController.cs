@@ -5,9 +5,8 @@ using Microsoft.Extensions.Localization;
 using WorkForYou.Core.AdditionalModels;
 using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.Core.DTOModels.VacancyDTOs;
-using WorkForYou.Core.IRepositories;
-using WorkForYou.Core.IServices;
-using WorkForYou.Core.Models;
+using WorkForYou.Core.RepositoryInterfaces;
+using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.WebUI.ViewModels;
 using WorkForYou.WebUI.ViewModels.Forms;
 
@@ -78,7 +77,7 @@ public class VacancyController : BaseController
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
-        var isOwnerResult = IsUserOwner(vacancyData.Vacancy);
+        var isOwnerResult = IsUserVacancyOwner(vacancyData.Vacancy);
 
         if (!isOwnerResult)
         {
@@ -102,15 +101,51 @@ public class VacancyController : BaseController
     [Authorize]
     public async Task<IActionResult> VacancyDetails(int id)
     {
+        const string candidateRole = "candidate";
         var vacancy = await _unitOfWork.VacancyRepository.GetVacancyByIdAsync(id);
-
+        VacancyViewModel vacancyViewModel;
+        
         if (!vacancy.IsSuccessfully)
         {
             _notificationService.CustomErrorMessage(_stringLocalization["VacancyNotFoundError"]);
             return RedirectToAction("Index", "Main");
         }
 
-        return View(vacancy.Vacancy);
+        if (!HttpContext.Session.Keys.Contains($"IsShowVacancy{id}")
+            && HttpContext.User.IsInRole(candidateRole))
+        {
+            HttpContext.Session.SetString($"IsShowVacancy{id}", "1");
+
+            var addViewCountResult = await _unitOfWork.VacancyRepository.UpdateViewNumberOfCountAsync(id);
+
+            if (!addViewCountResult.IsSuccessfully)
+                return RedirectToAction("Index", "Main");
+        }
+        
+        if (HttpContext.User.IsInRole("candidate"))
+        {
+            var username = User.Identity?.Name!;
+            var usernameDto = new UsernameDto {Username = username};
+            var userData = await _unitOfWork.UserRepository.GetUserDataAsync(usernameDto);
+
+            var isVacancyInRespondedList = await _unitOfWork.RespondedListRepository
+                .IsVacancyInRespondedListAsync(userData.User.Id, id);
+
+            vacancyViewModel = new VacancyViewModel
+            {
+                Vacancy = vacancy.Vacancy,
+                IsVacancyInRespondedList = isVacancyInRespondedList.IsVacancyInFavouriteList
+            };
+
+            return View(vacancyViewModel);
+        }
+
+        vacancyViewModel = new VacancyViewModel
+        {
+            Vacancy = vacancy.Vacancy
+        };
+
+        return View(vacancyViewModel);
     }
 
     [HttpGet]
@@ -125,7 +160,7 @@ public class VacancyController : BaseController
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
-        var isOwnerResult = IsUserOwner(vacancyData.Vacancy);
+        var isOwnerResult = IsUserVacancyOwner(vacancyData.Vacancy);
 
         if (!isOwnerResult)
         {
@@ -170,12 +205,27 @@ public class VacancyController : BaseController
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = "candidate")]
     public async Task<IActionResult> AllEmployerVacancies(string username, QueryParameters queryParameters)
     {
+        const string candidateRole = "candidate";
+        
+        var currentUsername = User.Identity?.Name!;
+        var currentUsernameDto = new UsernameDto {Username = currentUsername, UserRole = candidateRole};
+
+        var userData = await _unitOfWork.UserRepository.GetUserDataAsync(currentUsernameDto);
+
         var vacancies =
             await _unitOfWork.VacancyRepository.GetAllEmployerVacanciesAsync(new UsernameDto {Username = username},
                 queryParameters);
+        
+        var workCategories = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
+        var englishLevels = await _unitOfWork.EnglishLevelRepository.GetAllEnglishLevelsAsync();
+        var typesOfCompany = await _unitOfWork.TypeOfCompanyRepository.GetAllTypesOfCompanyAsync();
+        var howToWorks = await _unitOfWork.HowToWorkRepository.GetAllHowToWorkAsync();
+        var candidateRegions = await _unitOfWork.CandidateRegionRepository.GetAllCandidateRegionsAsync();
+        
+        ViewData["CandidateId"] = userData.User.CandidateUser!.CandidateUserId;
 
         var vacanciesViewModel = new VacanciesViewModel
         {
@@ -186,7 +236,12 @@ public class VacancyController : BaseController
             VacancyCount = vacancies.VacancyCount,
             Vacancies = vacancies.VacancyList,
             Pages = vacancies.Pages,
-            Username = username
+            Username = username,
+            WorkCategories = workCategories.WorkCategories,
+            EnglishLevels = englishLevels.EnglishLevels,
+            TypesOfCompanies = typesOfCompany.TypesOfCompanies,
+            HowToWorks = howToWorks.HowToWorks,
+            CandidateRegions = candidateRegions.CandidateRegions
         };
 
         if (queryParameters.PageNumber < 1)
@@ -201,7 +256,8 @@ public class VacancyController : BaseController
             return RedirectToAction("AllEmployerVacancies", new
             {
                 queryParameters.PageNumber, queryParameters.SearchString,
-                queryParameters.SortBy, username
+                queryParameters.SortBy, username, queryParameters.WorkCategory, queryParameters.EnglishLevel,
+                queryParameters.CandidateRegion, queryParameters.CompanyType, queryParameters.HowToWork
             });
         }
 
@@ -211,20 +267,116 @@ public class VacancyController : BaseController
             return RedirectToAction("AllEmployerVacancies", new
             {
                 queryParameters.PageNumber, queryParameters.SearchString,
-                queryParameters.SortBy, username
+                queryParameters.SortBy, Username = username, queryParameters.WorkCategory, queryParameters.EnglishLevel,
+                queryParameters.CandidateRegion, queryParameters.CompanyType, queryParameters.HowToWork
             });
         }
 
         return View(vacanciesViewModel);
     }
 
-    private bool IsUserOwner(Vacancy vacancy)
+    [HttpGet]
+    [Authorize(Roles = "candidate")]
+    public async Task<IActionResult> RespondedVacancy(int vacancyId)
     {
-        var currentUserId = GetUserId();
-        if (vacancy.EmployerUser?.ApplicationUser?.Id != currentUserId)
-            return false;
+        var username = User.Identity?.Name!;
+        const string candidateRole = "candidate";
 
-        return true;
+        var respondedResult = await _unitOfWork.RespondedListRepository
+            .RespondToVacancyAsync(new() {Username = username, UserRole = candidateRole}, vacancyId);
+
+        if (!respondedResult.IsSuccessfully)
+        {
+            _notificationService.CustomErrorMessage("При спробі відгукнутися на вакансію відбулася помилка");
+            return RedirectToAction(nameof(VacancyDetails), new {id = vacancyId});
+        }
+
+        _notificationService.CustomSuccessMessage("Ви успішно відгукнулися на вакансію");
+        return RedirectToAction(nameof(VacancyDetails), new {id = vacancyId});
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "candidate")]
+    public async Task<IActionResult> RemoveRespondVacancy(int vacancyId)
+    {
+        var username = User.Identity?.Name!;
+        var usernameDto = new UsernameDto {Username = username};
+
+        var removeRespondResult = await _unitOfWork.RespondedListRepository
+            .RemoveRespondToVacancyAsync(usernameDto, vacancyId);
+        
+        if (!removeRespondResult.IsSuccessfully)
+            _notificationService.CustomErrorMessage("При спробі відмінити відгук на вакансію відбулася помилка");
+        
+        _notificationService.CustomSuccessMessage("Ви успішно відмінили відгук на вакансію");
+        return RedirectToAction(nameof(VacancyDetails), new {id = vacancyId});
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "employer")]
+    public async Task<IActionResult> AllVacancyResponses(QueryParameters queryParameters, int vacancyId)
+    {
+        var username = User.Identity?.Name!;
+        var usernameDto = new UsernameDto {Username = username};
+        var userData = await _unitOfWork.UserRepository.GetUserDataAsync(usernameDto);
+        
+        var workCategories = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
+        var englishLevels = await _unitOfWork.EnglishLevelRepository.GetAllEnglishLevelsAsync();
+        var communicationLanguages =
+            await _unitOfWork.CommunicationLanguageRepository.GetAllCommunicationLanguagesAsync();
+
+        ViewData["EmployerId"] = userData.User.EmployerUser!.EmployerUserId;
+
+        var vacancyResponsesResult = await _unitOfWork.RespondedListRepository
+            .AllVacancyResponses(vacancyId, queryParameters);
+
+        var candidatesViewModel = new CandidatesViewModel
+        {
+            QueryParameters = queryParameters,
+            CurrentController = ControllerContext.RouteData.Values["controller"]?.ToString(),
+            CurrentAction = ControllerContext.RouteData.Values["action"]?.ToString(),
+            PageCount = vacancyResponsesResult.PageCount,
+            VacancyCount = vacancyResponsesResult.VacancyCount,
+            ApplicationUsers = vacancyResponsesResult.ApplicationUsers,
+            Pages = vacancyResponsesResult.Pages,
+            Username = User.Identity?.Name!,
+            CurrentVacancyId = vacancyId,
+            WorkCategories = workCategories.WorkCategories,
+            EnglishLevels = englishLevels.EnglishLevels,
+            CommunicationLanguages = communicationLanguages.CommunicationLanguages
+        };
+        
+        if (queryParameters.PageNumber < 1)
+        {
+            if (queryParameters.PageNumber == 0 && !string.IsNullOrEmpty(queryParameters.SearchString)
+                || candidatesViewModel.VacancyCount == 0)
+            {
+                _notificationService.CustomErrorMessage("Error getting vacancies");
+                return View(candidatesViewModel);
+            }
+
+            queryParameters.PageNumber = 1;
+            return RedirectToAction(nameof(AllVacancyResponses), new
+            {
+                queryParameters.PageNumber, queryParameters.SearchString, queryParameters.SortBy,
+                queryParameters.Username, vacancyId, queryParameters.WorkCategory, queryParameters.EnglishLevel,
+                queryParameters.CommunicationLanguages
+            });
+        }
+
+        if (queryParameters.PageNumber > vacancyResponsesResult.PageCount)
+        {
+            queryParameters.PageNumber = vacancyResponsesResult.PageCount;
+            return RedirectToAction(nameof(AllVacancyResponses), new
+            {
+                queryParameters.PageNumber, queryParameters.SearchString,
+                queryParameters.SortBy, queryParameters.Username, vacancyId,
+                queryParameters.WorkCategory, queryParameters.EnglishLevel,
+                queryParameters.CommunicationLanguages
+            });
+        }
+
+        return View(candidatesViewModel);
     }
 
     private async Task<ActionVacancyViewModel> InitActionVacancyViewModel()

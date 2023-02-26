@@ -1,0 +1,157 @@
+﻿@model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
+
+@{
+    var workCategoryQueryString = Context.Request.Query["WorkCategory"].ToString().Split(",");
+    var englishLevelQueryString = Context.Request.Query["EnglishLevel"].ToString().Split(",");
+    var companyTypeQueryString = Context.Request.Query["CompanyType"].ToString().Split(",");
+    var howToWorkQueryString = Context.Request.Query["HowToWork"].ToString().Split(",");
+    var candidateRegionQueryString = Context.Request.Query["CandidateRegion"].ToString().Split(",");
+
+    const string employerController = "EmployerAccount";
+    const string vacancyController = "Vacancy";
+}
+
+<div class="main__search-category">
+    <form method="get" asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction" asp-antiforgery="true">
+        <input type="hidden" name="PageNumber" value="@Model.QueryParameters.PageNumber">
+        <input type="hidden" name="SearchString" value="@Model.QueryParameters.SearchString">
+        <input type="hidden" name="SortBy" value="@Model.QueryParameters.SortBy">
+        <input type="hidden" name="Username" value="@Model.Username">
+        <input type="hidden" name="VacancyId" value="@Model.CurrentVacancyId">
+        <div class="main__search-category-title">Категорії</div>
+        <div class="main__search-category-wrapper">
+            @foreach (var category in Model.WorkCategories)
+            {
+                var elementsCount = Model.CurrentController == employerController || Model.CurrentController == vacancyController
+                    ? category.CandidateUsers?.Count()
+                    : category.Vacancies?.Count();
+
+                <div class="main__search-category-container">
+                    @if (workCategoryQueryString.Any(categoryString => categoryString == category.CategoryName))
+                    {
+                        <input type="checkbox" id="@category.CategoryName@category.WorkCategoryId" name="WorkCategory"
+                               class="category-style" value="@category.CategoryName" checked>
+                    }
+                    else
+                    {
+                        <input type="checkbox" id="@category.CategoryName@category.WorkCategoryId" name="WorkCategory"
+                               class="category-style" value="@category.CategoryName">
+                    }
+                    <label for="@category.CategoryName@category.WorkCategoryId">@category.CategoryName</label>
+                    <span class="category-number">@elementsCount</span>
+                </div>
+            }
+        </div>
+        <div class="main__search-category-title">Рівень англійської</div>
+        <div class="main__search-category-wrapper">
+            @foreach (var englishLevel in Model.EnglishLevels)
+            {
+                var elementsCount = Model.CurrentController == employerController || Model.CurrentController == vacancyController
+                    ? englishLevel.CandidateUsers?.Count()
+                    : englishLevel.Vacancies?.Count();
+
+                <div class="main__search-category-container">
+                    @if (englishLevelQueryString.Any(englishLevelString => englishLevelString == englishLevel.NameLevel))
+                    {
+                        <input type="checkbox" id="@englishLevel.NameLevel@englishLevel.EnglishLevelId"
+                               name="EnglishLevel" value="@englishLevel.NameLevel" class="category-style" checked>
+                    }
+                    else
+                    {
+                        <input type="checkbox" id="@englishLevel.NameLevel@englishLevel.EnglishLevelId"
+                               name="EnglishLevel" value="@englishLevel.NameLevel" class="category-style">
+                    }
+                    <label for="@englishLevel.NameLevel@englishLevel.EnglishLevelId">@englishLevel.NameLevel</label>
+                    <span class="category-number">@elementsCount</span>
+                </div>
+            }
+        </div>
+        @if (Model.CurrentController != employerController && Model.CurrentController != vacancyController)
+        {
+            <div class="main__search-category-title">Тип компанії</div>
+            <div class="main__search-category-wrapper">
+                @foreach (var companyType in Model.TypesOfCompanies)
+                {
+                    <div class="main__search-category-container">
+                        @if (companyTypeQueryString.Any(companyTypeString => companyTypeString == companyType.TypeOfCompanyName))
+                        {
+                            <input type="checkbox" id="@companyType.TypeOfCompanyName@companyType.TypesOfCompanyId" name="CompanyType"
+                                   value="@companyType.TypeOfCompanyName" class="category-style" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="@companyType.TypeOfCompanyName@companyType.TypesOfCompanyId" name="CompanyType"
+                                   value="@companyType.TypeOfCompanyName" class="category-style">
+                        }
+                        <label for="@companyType.TypeOfCompanyName@companyType.TypesOfCompanyId">@companyType.TypeOfCompanyName</label>
+                        <span class="category-number">@companyType.Vacancies?.Count()</span>
+                    </div>
+                }
+            </div>
+            <div class="main__search-category-title">Зайнятість</div>
+            <div class="main__search-category-wrapper">
+                @foreach (var howToWork in Model.HowToWorks)
+                {
+                    <div class="main__search-category-container">
+                        @if (howToWorkQueryString.Any(howToWorkString => howToWorkString == howToWork.HowToWorkName))
+                        {
+                            <input type="checkbox" id="@howToWork.HowToWorkName@howToWork.HowToWorkId" name="HowToWork"
+                                   value="@howToWork.HowToWorkName" class="category-style" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="@howToWork.HowToWorkName@howToWork.HowToWorkId" name="HowToWork"
+                                   value="@howToWork.HowToWorkName" class="category-style">
+                        }
+                        <label for="@howToWork.HowToWorkName@howToWork.HowToWorkId">@howToWork.HowToWorkName</label>
+                        <span class="category-number">@howToWork.Vacancies?.Count()</span>
+                    </div>
+                }
+            </div>
+            <div class="main__search-category-title">Регіон</div>
+            <div class="main__search-category-wrapper">
+                @foreach (var region in Model.CandidateRegions)
+                {
+                    <div class="main__search-category-container">
+                        @if (candidateRegionQueryString.Any(regionString => regionString == region.CandidateRegionName))
+                        {
+                            <input type="checkbox" id="@region.CandidateRegionName@region.CandidateRegionId" name="CandidateRegion"
+                                   value="@region.CandidateRegionName" class="category-style" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="@region.CandidateRegionName@region.CandidateRegionId" name="CandidateRegion"
+                                   value="@region.CandidateRegionName" class="category-style">
+                        }
+                        <label for="@region.CandidateRegionName@region.CandidateRegionId">@region.CandidateRegionName</label>
+                        <span class="category-number">@region.Vacancies?.Count()</span>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="main__search-category-title">Мова спілкування</div>
+            <div class="main__search-category-wrapper">
+                @foreach (var language in Model.CommunicationLanguages)
+                {
+                    <div class="main__search-category-container">
+                        @if (candidateRegionQueryString.Any(regionString => regionString == language.CommunicationLanguageName))
+                        {
+                            <input type="checkbox" id="@language.CommunicationLanguageName@language.CommunicationLanguageId" name="CandidateRegion"
+                                   value="@language.CommunicationLanguageName" class="category-style" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="@language.CommunicationLanguageName@language.CommunicationLanguageId" name="CandidateRegion"
+                                   value="@language.CommunicationLanguageName" class="category-style">
+                        }
+                        <label for="@language.CommunicationLanguageName@language.CommunicationLanguageId">@language.CommunicationLanguageName</label>
+                        <span class="category-number">@language.CandidateUsers?.Count()</span>
+                    </div>
+                }
+            </div>
+        }
+        <button type="submit" class="search-buttons card-buttons">Шукати</button>
+    </form>
+</div>

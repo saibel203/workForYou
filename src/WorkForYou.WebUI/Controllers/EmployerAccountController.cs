@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using WorkForYou.Core.AdditionalModels;
 using WorkForYou.Core.DTOModels.UserDTOs;
-using WorkForYou.Core.IRepositories;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.RepositoryInterfaces;
+using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.WebUI.ViewModels;
 using WorkForYou.WebUI.ViewModels.Forms;
 
@@ -96,6 +96,11 @@ public class EmployerAccountController : Controller
         var username = User.Identity?.Name!;
         var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = username});
 
+        var workCategories = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
+        var englishLevels = await _unitOfWork.EnglishLevelRepository.GetAllEnglishLevelsAsync();
+        var communicationLanguages =
+            await _unitOfWork.CommunicationLanguageRepository.GetAllCommunicationLanguagesAsync();
+
         ViewData["EmployerId"] = userData.User.EmployerUser!.EmployerUserId;
 
         var candidatesViewModel = new CandidatesViewModel
@@ -107,12 +112,16 @@ public class EmployerAccountController : Controller
             VacancyCount = candidatesResult.VacancyCount,
             ApplicationUsers = candidatesResult.ApplicationUsers,
             Pages = candidatesResult.Pages,
-            Username = User.Identity?.Name!
+            Username = User.Identity?.Name!,
+            WorkCategories = workCategories.WorkCategories,
+            EnglishLevels = englishLevels.EnglishLevels,
+            CommunicationLanguages = communicationLanguages.CommunicationLanguages
         };
 
         if (queryParameters.PageNumber < 1)
         {
-            if (queryParameters.PageNumber == 0 && !string.IsNullOrEmpty(queryParameters.SearchString))
+            if (queryParameters.PageNumber == 0 && !string.IsNullOrEmpty(queryParameters.SearchString)
+                || candidatesViewModel.VacancyCount == 0 || candidatesViewModel.PageCount == 0)
             {
                 _notificationService.CustomErrorMessage(_stringLocalization["CandidatesNotFoundError"]);
                 return View(candidatesViewModel);
@@ -122,7 +131,8 @@ public class EmployerAccountController : Controller
             return RedirectToAction(nameof(AllCandidates), new
             {
                 queryParameters.PageNumber, queryParameters.SearchString, queryParameters.SortBy,
-                queryParameters.Username
+                queryParameters.Username, queryParameters.WorkCategory, queryParameters.EnglishLevel,
+                queryParameters.CommunicationLanguages
             });
         }
 
@@ -132,7 +142,9 @@ public class EmployerAccountController : Controller
             return RedirectToAction(nameof(AllCandidates), new
             {
                 queryParameters.PageNumber, queryParameters.SearchString,
-                queryParameters.SortBy, queryParameters.Username
+                queryParameters.SortBy, queryParameters.Username, queryParameters.WorkCategory,
+                queryParameters.EnglishLevel,
+                queryParameters.CommunicationLanguages
             });
         }
 
@@ -184,17 +196,20 @@ public class EmployerAccountController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> AddToFavouriteList(int candidateId)
+    public async Task<IActionResult> AddToFavouriteList(int id, string? returnUrl)
     {
         var username = User.Identity?.Name!;
 
         var addToFavouriteResult = await _userService
-            .AddCandidateToFavouriteListAsync(new() {Username = username}, candidateId);
+            .AddCandidateToFavouriteListAsync(new() {Username = username}, id);
 
         if (!addToFavouriteResult.IsSuccessfully)
             _notificationService.CustomErrorMessage(_stringLocalization["AddToFavouriteError"]);
 
         _notificationService.CustomSuccessMessage(addToFavouriteResult.Message);
+
+        if (Url.IsLocalUrl(returnUrl))
+            return Redirect(returnUrl);
 
         return RedirectToAction(nameof(AllCandidates));
     }
@@ -207,6 +222,11 @@ public class EmployerAccountController : Controller
         var candidates = await _unitOfWork.UserRepository
             .ShowFavouriteCandidatesListAsync(new() {Username = username}, queryParameters);
 
+        var workCategories = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
+        var englishLevels = await _unitOfWork.EnglishLevelRepository.GetAllEnglishLevelsAsync();
+        var communicationLanguages =
+            await _unitOfWork.CommunicationLanguageRepository.GetAllCommunicationLanguagesAsync();
+
         ViewData["EmployerId"] = userData.User.EmployerUser!.EmployerUserId;
 
         var candidatesViewModel = new CandidatesViewModel
@@ -218,7 +238,10 @@ public class EmployerAccountController : Controller
             VacancyCount = candidates.VacancyCount,
             CandidateUsers = candidates.FavouriteCandidates,
             Pages = candidates.Pages,
-            Username = username
+            Username = username,
+            WorkCategories = workCategories.WorkCategories,
+            EnglishLevels = englishLevels.EnglishLevels,
+            CommunicationLanguages = communicationLanguages.CommunicationLanguages
         };
 
         if (queryParameters.PageNumber < 1)
@@ -231,20 +254,22 @@ public class EmployerAccountController : Controller
             }
 
             queryParameters.PageNumber = 1;
-            return RedirectToAction(nameof(AllCandidates), new
+            return RedirectToAction(nameof(FavouriteList), new
             {
                 queryParameters.PageNumber, queryParameters.SearchString, queryParameters.SortBy,
-                queryParameters.Username
+                queryParameters.Username, queryParameters.WorkCategory, queryParameters.EnglishLevel,
+                queryParameters.CommunicationLanguages
             });
         }
 
         if (queryParameters.PageNumber > candidates.PageCount)
         {
             queryParameters.PageNumber = candidates.PageCount;
-            return RedirectToAction(nameof(AllCandidates), new
+            return RedirectToAction(nameof(FavouriteList), new
             {
                 queryParameters.PageNumber, queryParameters.SearchString,
-                queryParameters.SortBy, queryParameters.Username
+                queryParameters.SortBy, queryParameters.Username, queryParameters.WorkCategory,
+                queryParameters.EnglishLevel, queryParameters.CommunicationLanguages
             });
         }
 

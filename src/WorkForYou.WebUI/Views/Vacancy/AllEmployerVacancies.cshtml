@@ -1,31 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using WorkForYou.WebUI.Helpers
 @using Microsoft.AspNetCore.Mvc.Localization
+@using WorkForYou.WebUI.ViewModels.AdditionalViewModels
 @model VacanciesViewModel
 
 @inject IViewLocalizer ViewLocalization
 
 @{
-    ViewData["Title"] = @ViewLocalization["Title"];
+    ViewData["Title"] = ViewLocalization["Title"];
+    var currentPath = Context.Request.Path + Context.Request.QueryString;
 }
 
 <div class="main__search">
     @await Html.PartialAsync("_SearchBar")
-    <div class="main__search-category">
-        <div class="main__search-category-title">Type of Employment</div>
-        <div class="main__search-category-wrapper">
-            <div class="main__search-category-container">
-                <input type="checkbox" id="job1" class="category-style">
-                <label for="job1">Full Time Jobs</label>
-                <span class="category-number">56</span>
-            </div>
-            <div class="main__search-category-container">
-                <input type="checkbox" id="job2" class="category-style">
-                <label for="job2">Part Time Jobs</label>
-                <span class="category-number">43</span>
-            </div>
-        </div>
-    </div>
+    @await Html.PartialAsync("_Filtering")
 </div>
 <div class="vacancies">
     <div class="vacancies__searched-bar">
@@ -50,7 +38,7 @@
                         <i class="fa-regular fa-eye"></i>
                         <span>@vacancy.ViewCount</span>
                         <i class="fa-solid fa-users"></i>
-                        <span>0</span>
+                        <span>@vacancy.ReviewsCount</span>
                     </div>
                 </div>
                 <div class="vacancies-cards__card-subtitle">
@@ -117,6 +105,8 @@
                 }
                 <div class="vacancies-cards__card-buttons">
                     <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId" class="search-buttons card-buttons">@ViewLocalization["ReadAll"]</a>
+                    @await Html.PartialAsync("_LikeButton", new SettingsViewModel
+                           {CurrentVacancyId = vacancy.VacancyId, ReturnUrl = currentPath})
                 </div>
             </div>
         }

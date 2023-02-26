@@ -12,8 +12,8 @@ public class AutomapperProfile : Profile
     public AutomapperProfile()
     {
         CreateMap<UserRegisterDto, ApplicationUser>();
-        CreateMap<RegisterViewModel, UserRegisterDto>();
         CreateMap<LoginViewModel, UserLoginDto>();
+        CreateMap<RegisterViewModel, UserRegisterDto>();
         CreateMap<ResetPasswordViewModel, ResetPasswordDto>();
         CreateMap<RemindPasswordViewModel, RemindPasswordDto>();
         CreateMap<ChangePasswordViewModel, ChangePasswordDto>();

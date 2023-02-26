@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WorkForYou.Core.Models;
 using WorkForYou.Core.Models.IdentityInheritance;
+using WorkForYou.Infrastructure.DatabaseContext.ModelCreatingConfigurations;
 
 namespace WorkForYou.Infrastructure.DatabaseContext;
 
@@ -25,94 +26,28 @@ public class WorkForYouDbContext : IdentityDbContext<ApplicationUser, Applicatio
     public DbSet<FavouriteVacancy> FavouriteVacancies => Set<FavouriteVacancy>();
     public DbSet<FavouriteCandidate> FavouriteCandidates => Set<FavouriteCandidate>();
     public DbSet<CommunicationLanguage> CommunicationLanguages => Set<CommunicationLanguage>();
+    public DbSet<RespondedList> RespondedList => Set<RespondedList>();
+    public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
+    public DbSet<ChatRoom> ChatRooms => Set<ChatRoom>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<ApplicationUser>()
-            .HasOne(x => x.CandidateUser)
-            .WithOne(x => x.ApplicationUser)
-            .HasForeignKey<CandidateUser>(x => x.ApplicationUserId);
-
-        builder.Entity<ApplicationUser>()
-            .HasOne(x => x.EmployerUser)
-            .WithOne(x => x.ApplicationUser)
-            .HasForeignKey<EmployerUser>(x => x.ApplicationUserId);
-
-        builder.Entity<CommunicationLanguage>()
-            .HasOne(x => x.User)
-            .WithOne(x => x.CommunicationLanguage)
-            .HasForeignKey<CandidateUser>(x => x.CommunicationLanguageId);
-
-        builder.Entity<EnglishLevel>()
-            .HasOne(x => x.User)
-            .WithOne(x => x.LevelEnglish)
-            .HasForeignKey<CandidateUser>(x => x.EnglishLevelId);
-
-        builder.Entity<WorkCategory>()
-            .HasOne(x => x.User)
-            .WithOne(x => x.CategoryWork)
-            .HasForeignKey<CandidateUser>(x => x.WorkCategoryId);
-
-        builder.Entity<HowToWork>()
-            .HasOne(x => x.Vacancy)
-            .WithOne(x => x.HowToWork)
-            .HasForeignKey<Vacancy>(x => x.HowToWorkId);
-
-        builder.Entity<Relocate>()
-            .HasOne(x => x.Vacancy)
-            .WithOne(x => x.Relocate)
-            .HasForeignKey<Vacancy>(x => x.RelocateId);
-
-        builder.Entity<CandidateRegion>()
-            .HasOne(x => x.Vacancy)
-            .WithOne(x => x.CandidateRegion)
-            .HasForeignKey<Vacancy>(x => x.CandidateRegionId);
-
-        builder.Entity<TypesOfCompany>()
-            .HasOne(x => x.Vacancy)
-            .WithOne(x => x.TypeOfCompany)
-            .HasForeignKey<Vacancy>(x => x.TypesOfCompanyId);
-
-        builder.Entity<VacancyDomain>()
-            .HasOne(x => x.Vacancy)
-            .WithOne(x => x.VacancyDomain)
-            .HasForeignKey<Vacancy>(x => x.VacancyDomainId);
-
-        builder.Entity<EmployerUser>()
-            .HasMany(x => x.Vacancies)
-            .WithOne(x => x.EmployerUser)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<FavouriteVacancy>()
-            .HasKey(x => new {x.CandidateId, x.VacancyId});
-
-        builder.Entity<FavouriteVacancy>()
-            .HasOne(x => x.Vacancy)
-            .WithMany(x => x.FavouriteVacancyCollection)
-            .HasForeignKey(x => x.VacancyId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder.Entity<FavouriteVacancy>()
-            .HasOne(x => x.CandidateUser)
-            .WithMany(x => x.FavouriteVacancyCollection)
-            .HasForeignKey(x => x.CandidateId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder.Entity<FavouriteCandidate>()
-            .HasKey(x => new {x.CandidateUserId, x.EmployerUserId});
-
-        builder.Entity<FavouriteCandidate>()
-            .HasOne(x => x.EmployerUser)
-            .WithMany(x => x.FavouriteCandidates)
-            .HasForeignKey(x => x.EmployerUserId)
-            .OnDelete(DeleteBehavior.NoAction);
-        
-        builder.Entity<FavouriteCandidate>()
-            .HasOne(x => x.CandidateUser)
-            .WithMany(x => x.FavouriteCandidates)
-            .HasForeignKey(x => x.CandidateUserId)
-            .OnDelete(DeleteBehavior.NoAction);
+        builder.ApplyConfigurationsFromAssembly(typeof(UserEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(CommunicationEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(EnglishLevelEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(WorkCategoryEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(HowToWorkEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(RelocateEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(RegionEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(CompanyTypesEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(CompanyTypesEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(FavouriteVacancyEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(FavouriteCandidateEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(RespondedListEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(CandidateEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(EmployerEntitiesConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(ChatRoomEntitiesConfiguration).Assembly);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WorkForYou.Core.IRepositories;
+using WorkForYou.Core.RepositoryInterfaces;
 using WorkForYou.Infrastructure.DatabaseContext;
 
 namespace WorkForYou.Data.Repositories;

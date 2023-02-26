@@ -2,5 +2,5 @@
 
 public class WebUiOptions
 {
-    public string ApplicationUrl { get; set; } = string.Empty;
+    public string WebUIApplicationUrl { get; set; } = string.Empty;
 }

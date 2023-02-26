@@ -14,4 +14,6 @@ public class ApplicationUser : IdentityUser
     
     public CandidateUser? CandidateUser { get; set; }
     public EmployerUser? EmployerUser { get; set; }
+    public IEnumerable<RespondedList>? RespondedList { get; set; }
+    public IEnumerable<ChatMessage>? ChatMessages { get; set; }
 }

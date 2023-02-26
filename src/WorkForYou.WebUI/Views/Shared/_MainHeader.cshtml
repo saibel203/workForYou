@@ -64,11 +64,20 @@
                         <a asp-controller="CandidateAccount" asp-action="FavouriteList">
                             <i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]
                         </a>
+                        <a asp-controller="CandidateAccount" asp-action="RespondedList">
+                            <i class="fa-solid fa-reply"></i> Мої відгуки
+                        </a>
+                        <a asp-controller="Chat" asp-action="AllCandidateChats">
+                            <i class="fa-solid fa-comments"></i> Чат
+                        </a>
                     }
                     @if (User.IsInRole("employer"))
                     {
                         <a asp-controller="EmployerAccount" asp-action="FavouriteList">
                             <i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]
+                        </a>
+                        <a asp-controller="Chat" asp-action="AllEmployerChats">
+                            <i class="fa-solid fa-comments"></i> Чат
                         </a>
                     }
                     <a asp-controller="Account" asp-action="ChangePassword">

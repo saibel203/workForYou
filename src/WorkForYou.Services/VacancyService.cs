@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using WorkForYou.Core.DTOModels.UserDTOs;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.Models;
 using WorkForYou.Core.Responses.Services;
 using WorkForYou.Infrastructure.DatabaseContext;

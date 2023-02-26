@@ -26,4 +26,6 @@ public class RegisterViewModel
     
     [Required (ErrorMessage = "SelectedRole поле є обов'язвовим")] 
     public string SelectedRole { get; set; } = string.Empty;
+
+    public string ReturnUrl { get; set; } = string.Empty;
 }

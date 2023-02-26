@@ -361,6 +361,7 @@ namespace WorkForYou.Infrastructure.DatabaseContext.Migrations
                     ToSalary = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "date", nullable: false),
                     ViewCount = table.Column<int>(type: "int", nullable: false),
+                    ReviewsCount = table.Column<int>(type: "int", nullable: false),
                     VacancyDomainId = table.Column<int>(type: "int", nullable: false),
                     WorkCategoryId = table.Column<int>(type: "int", nullable: false),
                     HowToWorkId = table.Column<int>(type: "int", nullable: false),
@@ -458,7 +459,7 @@ namespace WorkForYou.Infrastructure.DatabaseContext.Migrations
                 {
                     table.PrimaryKey("PK_FavouriteCandidates", x => new { x.EmployerUserId, x.CandidateUserId });
                     table.ForeignKey(
-                        name: "FK_FavouriteCandidates_EmployerUserWs_EmployerUserId",
+                        name: "FK_FavouriteCandidates_EmployerUsers_EmployerUserId", // Ws
                         column: x => x.EmployerUserId,
                         principalTable: "EmployerUsers",
                         principalColumn: "EmployerUserId",
@@ -469,6 +470,89 @@ namespace WorkForYou.Infrastructure.DatabaseContext.Migrations
                         principalTable: "CandidateUsers",
                         principalColumn: "CandidateUserId",
                         onDelete: ReferentialAction.Cascade);
+                });
+            
+            migrationBuilder.CreateTable(
+                name: "RespondedList",
+                columns: table => new
+                {
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    VacancyId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RespondedList", x => new { x.ApplicationUserId, x.VacancyId });
+                    table.ForeignKey(
+                        name: "FK_RespondedList_AspNetUsers_Id",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_RespondedList_Vacancies_VacancyId",
+                        column: x => x.VacancyId,
+                        principalTable: "Vacancies",
+                        principalColumn: "VacancyId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChatRooms",
+                columns: table => new
+                {
+                    ChatRoomId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CandidateUserId = table.Column<int>(type: "int", nullable: false),
+                    EmployerUserId = table.Column<int>(type: "int", nullable: false),
+                    ChatMessageId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatRooms", x => x.ChatRoomId);
+                    
+                    table.ForeignKey(
+                        name: "FK_ChatRooms_CandidateUsers_CandidateUserId",
+                        column: x => x.CandidateUserId,
+                        principalTable: "CandidateUsers",
+                        principalColumn: "CandidateUserId",
+                        onDelete: ReferentialAction.Restrict);
+                    
+                    table.ForeignKey(
+                        name: "FK_ChatRooms_EmployerUsers_EmployerUserId",
+                        column: x => x.EmployerUserId,
+                        principalTable: "EmployerUsers",
+                        principalColumn: "EmployerUserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+            
+            migrationBuilder.CreateTable(
+                name: "ChatMessages",
+                columns: table => new
+                {
+                    ChatMessageId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SendTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ChatRoomId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatMessages", x => x.ChatMessageId);
+                    
+                    table.ForeignKey(
+                        name: "FK_ChatMessages_AspNetUsers_Id",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    
+                    table.ForeignKey(
+                        name: "FK_ChatMessages_ChatRooms_ChatRoomId",
+                        column: x => x.ChatRoomId,
+                        principalTable: "ChatRooms",
+                        principalColumn: "ChatRoomId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

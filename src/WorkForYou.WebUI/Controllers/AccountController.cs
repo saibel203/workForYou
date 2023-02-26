@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using WorkForYou.Core.IRepositories;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.RepositoryInterfaces;
+using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.DTOModels.UserDTOs;
+using WorkForYou.Core.Responses.Repositories;
 using WorkForYou.WebUI.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Controllers;
@@ -41,11 +42,10 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
     {
-        var changePasswordUsernameDto = _mapper.Map<UsernameDto>(changePasswordViewModel);
-
-        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(changePasswordUsernameDto);
+        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
         ViewData["CurrentEmail"] = currentUser.User.Email;
 
         if (!ModelState.IsValid)
@@ -88,15 +88,40 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Profile(string username)
     {
-        var user = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = username});
+        const string employerRole = "employer";
+        const string candidateRole = "candidate";
 
-        if (!user.IsSuccessfully)
+        UserResponse userData;
+        var test = await _authService.IsUserCandidate(new() {Username = username});
+
+        if (test.IsUserCandidate)
+        {
+            userData = await _unitOfWork.UserRepository
+                .GetUserDataAsync(new() {Username = username, UserRole = candidateRole});
+
+            if (!HttpContext.Session.Keys.Contains($"IsShowCandidate{userData.User.CandidateUser!.CandidateUserId}")
+                && HttpContext.User.IsInRole(employerRole))
+            {
+                HttpContext.Session.SetString($"IsShowCandidate{userData.User.CandidateUser!.CandidateUserId}", "1");
+
+                var addViewCountResult = await _unitOfWork.UserRepository
+                    .UpdateCandidateViewNumberIfCountAsync(new() {Username = username});
+
+                if (!addViewCountResult.IsSuccessfully)
+                    return RedirectToAction("Index", "Main");
+            }
+        }
+        else
+            userData = await _unitOfWork.UserRepository
+                .GetUserDataAsync(new() {Username = username, UserRole = employerRole});
+
+        if (!userData.IsSuccessfully)
         {
             _notificationService.CustomErrorMessage(_stringLocalization["UserNotFound"]);
             return RedirectToAction("Index", "Main");
         }
 
-        return View(user.User);
+        return View(userData.User);
     }
 
     [HttpPost]

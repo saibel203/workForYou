@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.WebUI.Attributes;
 using WorkForYou.WebUI.ViewModels.Forms;
@@ -11,8 +11,8 @@ namespace WorkForYou.WebUI.Controllers;
 [Unauthorized]
 public class AuthController : Controller
 {
-    private readonly INotificationService _notificationService;
     private readonly IStringLocalizer<AuthController> _stringLocalization;
+    private readonly INotificationService _notificationService;
     private readonly IAuthService _authService;
     private readonly IMapper _mapper;
 
@@ -30,7 +30,7 @@ public class AuthController : Controller
     {
         return View();
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
@@ -40,11 +40,11 @@ public class AuthController : Controller
             _notificationService.CustomErrorMessage(_stringLocalization["RegisterError"]);
             return View(registerViewModel);
         }
-
+    
         var registerModelDto = _mapper.Map<UserRegisterDto>(registerViewModel);
-
+    
         var registerResult = await _authService.RegisterAsync(registerModelDto);
-
+    
         if (!registerResult.IsSuccessfully)
         {
             if (registerResult.Errors is not null)
@@ -52,46 +52,46 @@ public class AuthController : Controller
                     ModelState.AddModelError(error.Code, error.Description);
             else
                 ModelState.AddModelError("", registerResult.Message);
-
+    
             _notificationService.CustomErrorMessage(_stringLocalization["RegisterError"]);
             return View(registerViewModel);
         }
-
+    
         _notificationService.CustomSuccessMessage(_stringLocalization["RegisterSuccess"]);
         return RedirectToAction(nameof(ConfirmEmail));
     }
-
+    
     [HttpGet]
     public IActionResult Login(string? returnUrl)
     {
         ViewData["ReturnUrl"] = returnUrl;
         return View();
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel, string? returnUrl)
     {
         returnUrl ??= Url.Content("~/");
-
+    
         if (!ModelState.IsValid)
         {
             _notificationService.CustomErrorMessage(_stringLocalization["LoginError"]);
             return View(loginViewModel);
         }
-
+    
         var loginModelDto = _mapper.Map<UserLoginDto>(loginViewModel);
         var loginResult = await _authService.LoginAsync(loginModelDto);
-
+    
         if (!loginResult.IsSuccessfully)
         {
             ModelState.AddModelError("", loginResult.Message);
             _notificationService.CustomErrorMessage(_stringLocalization["LoginError"]);
             return View(loginViewModel);
         }
-
+    
         _notificationService.CustomSuccessMessage(_stringLocalization["LoginSuccess"]);
-
+    
         return RedirectToLocal(returnUrl);
     }
 
@@ -216,7 +216,7 @@ public class AuthController : Controller
     {
         if (Url.IsLocalUrl(returnUrl))
             return Redirect(returnUrl);
-
+    
         return RedirectToAction("Index", "Main");
     }
 }

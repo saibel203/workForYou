@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using WorkForYou.Core.IOptions;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.Models.IdentityInheritance;
 using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.Core.Responses.Services;
@@ -61,7 +61,7 @@ public class AuthService : IAuthService
         var encodedEmailToken = Encoding.UTF8.GetBytes(confirmEmailToken);
         var validEmailToken = WebEncoders.Base64UrlEncode(encodedEmailToken);
 
-        string url = $"{_webUiOptions.ApplicationUrl}/auth/confirmEmailResult" +
+        string url = $"{_webUiOptions.WebUIApplicationUrl}/auth/confirmEmailResult" +
                      $"?userId={user.Id}&token={validEmailToken}";
         
         await _mailService.SendEmailAsync(user.Email!, "Підтвердження email", 
@@ -191,7 +191,7 @@ public class AuthService : IAuthService
         var encodedToken = Encoding.UTF8.GetBytes(defaultToken);
         var currentToken = WebEncoders.Base64UrlEncode(encodedToken);
 
-        var url = $"{_webUiOptions.ApplicationUrl}/Auth/ResetPassword?email={forgetPasswordDto.Email}&token={currentToken}";
+        var url = $"{_webUiOptions.WebUIApplicationUrl}/Auth/ResetPassword?email={forgetPasswordDto.Email}&token={currentToken}";
         
         await _mailService.SendEmailAsync(forgetPasswordDto.Email, "Відновлення паролю",
             "Відновлення паролю на сайті WorkForYou. Якщо ви нічого не змінювали, проігноруйте це повідомлення.",

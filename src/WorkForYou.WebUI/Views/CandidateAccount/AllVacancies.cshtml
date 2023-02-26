@@ -1,33 +1,19 @@
 ﻿@using WorkForYou.WebUI.Helpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using WorkForYou.Core.IServices
 @using Microsoft.AspNetCore.Mvc.Localization
+@using WorkForYou.WebUI.ViewModels.AdditionalViewModels
 @model VacanciesViewModel
 
-@inject IVacancyService VacancyService
 @inject IViewLocalizer ViewLocalization
 
 @{
     ViewData["Title"] = ViewLocalization["Title"];
+    var currentPath = Context.Request.Path + Context.Request.QueryString;
 }
 
 <div class="main__search">
     @await Html.PartialAsync("_SearchBar")
-    <div class="main__search-category">
-        <div class="main__search-category-title">Type of Employment</div>
-        <div class="main__search-category-wrapper">
-            <div class="main__search-category-container">
-                <input type="checkbox" id="job1" class="category-style">
-                <label for="job1">Full Time Jobs</label>
-                <span class="category-number">56</span>
-            </div>
-            <div class="main__search-category-container">
-                <input type="checkbox" id="job2" class="category-style">
-                <label for="job2">Part Time Jobs</label>
-                <span class="category-number">43</span>
-            </div>
-        </div>
-    </div>
+    @await Html.PartialAsync("_Filtering")
 </div>
 <div class="vacancies">
     <div class="vacancies__searched-bar">
@@ -41,10 +27,6 @@
     <div class="vacancies-cards">
         @foreach (var vacancy in Model.Vacancies)
         {
-            var isVacancyInFavouriteList = await VacancyService
-                .IsVacancyInFavouriteListAsync(vacancy.VacancyId, Convert.ToInt32(ViewData["CandidateId"]));
-            var heartLike = isVacancyInFavouriteList.IsVacancyInFavouriteList ? "is-active" : "";
-
             <div class="vacancies-cards__card">
                 <div class="vacancies-cards__card-title">
                     <span>
@@ -55,7 +37,7 @@
                         <i class="fa-regular fa-eye"></i>
                         <span>@vacancy.ViewCount</span>
                         <i class="fa-solid fa-users"></i>
-                        <span>0</span>
+                        <span>@vacancy.ReviewsCount</span>
                     </div>
                 </div>
                 <div class="vacancies-cards__card-subtitle">
@@ -78,6 +60,14 @@
                     @if (vacancy.Relocate is not null)
                     {
                         <button class="search-buttons detail-button">@ViewLocalization["Relocate"]: @vacancy.Relocate.RelocateName</button>
+                    }
+                    @if (vacancy.WorkCategory is not null)
+                    {
+                        <button class="search-buttons detail-button">@vacancy.WorkCategory.CategoryName</button>
+                    }
+                    @if (vacancy.CandidateRegion is not null)
+                    {
+                        <button class="search-buttons detail-button">@vacancy.CandidateRegion.CandidateRegionName</button>
                     }
                 </div>
                 @if (vacancy.EmployerUser is not null && vacancy.EmployerUser.ApplicationUser is not null)
@@ -121,52 +111,26 @@
                     </div>
                 }
                 <div class="vacancies-cards__card-buttons">
-                    <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId" 
-                       class="search-buttons card-buttons">@ViewLocalization["ReadAll"]</a>
-
-                    <div class="like-hide">
-                        <svg id="utility_like" viewBox="0 0 24.3 22.5" xmlns="http://www.w3.org/2000/svg">
-                            <path id="u-heart-fill"
-                                  d="M12.2 22.5c-.2 0-.4-.1-.6-.2C4.4 18 .8 13.7.1 8.7-.4 5 1.6.7 6.5.1 9-.3 11 1 12.2 1.9c1.1-1 3.1-2.2 5.7-1.9 4.8.7 6.9 4.9 6.4 8.6-.7 5-4.3 9.3-11.4 13.7-.3.1-.5.2-.7.2z"/>
-                            <path id="u-heart-stroke"
-                                  d="M12.2 22.5c-.2 0-.4-.1-.6-.2C4.4 18 .8 13.7.1 8.7-.4 5 1.6.7 6.5.1 9-.3 11 1 12.2 1.9c1.1-1 3.1-2.2 5.7-1.9 4.8.7 6.9 4.9 6.4 8.6-.7 5-4.3 9.3-11.4 13.7-.3.1-.5.2-.7.2zm-4.9-20h-.5C3.2 3 2.3 6.3 2.6 8.3c.4 2.6 1.8 6.5 9.6 11.5 7.8-4.9 9.2-8.9 9.6-11.5.3-2-.6-5.3-4.3-5.8-2.5-.4-4.4 1.9-4.4 1.9-.2.3-.6.4-1 .5-.4 0-.7-.2-1-.5 0 0-1.6-1.9-3.8-1.9z"/>
-                        </svg>
-                    </div>
-
-                    <a asp-controller="CandidateAccount" asp-action="AddToFavouriteList" 
-                       asp-route-id="@vacancy.VacancyId">
-                        <span class="like-icon like-icon--heart like-heart @heartLike">
-                            <svg class="like-icon__asset" viewBox="0 0 24.3 22.5">
-                                <use class="like-icon--heart__fill" xlink:href="#u-heart-fill"
-                                     xmlns:xlink="http://www.w3.org/1999/xlink">
-                                </use>
-                                <use class="a-icon--heart__stroke" xlink:href="#u-heart-stroke"
-                                     xmlns:xlink="http://www.w3.org/1999/xlink">
-                                </use>
-                            </svg>
-                        </span>
+                    <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId"
+                       class="search-buttons card-buttons">
+                        @ViewLocalization["ReadAll"]
                     </a>
-
+                    @await Html.PartialAsync("_LikeButton", new SettingsViewModel
+                           {
+                               CurrentVacancyId = vacancy.VacancyId, ReturnUrl = currentPath,
+                               CurrentController = Model.CurrentController
+                           })
                 </div>
             </div>
         }
     </div>
 
-    @if (Model.PageCount > 1)
-    {
-        @await Html.PartialAsync("_Pagination")
-    }
+    @await Html.PartialAsync("_Pagination")
 
     @section Scripts
     {
         <script src="~/js/custom-select.js"></script>
-        <script src="~/libs/js/signalr.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     }
 
-    <script>
-        const likeButton = document.querySelector('.like-heart');
-        likeButton.addEventListener('click', () => {
-            likeButton.classList.toggle('is-active');
-        });
-    </script>
 </div>
