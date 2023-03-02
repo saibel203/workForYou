@@ -40,7 +40,9 @@ public class VacancyController : BaseController
     [Authorize(Roles = "employer")]
     public async Task<IActionResult> CreateVacancy(ActionVacancyViewModel actionVacancyViewModel)
     {
-        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+        var currentUsername = GetUsername();
+        var currentUser = await _unitOfWork.UserRepository
+            .GetUserDataAsync(new() {Username = currentUsername});
 
         actionVacancyViewModel = await InitActionVacancyViewModel(actionVacancyViewModel);
         actionVacancyViewModel.EmployerUser = currentUser.User.EmployerUser;
@@ -101,10 +103,9 @@ public class VacancyController : BaseController
     [Authorize]
     public async Task<IActionResult> VacancyDetails(int id)
     {
-        const string candidateRole = "candidate";
         var vacancy = await _unitOfWork.VacancyRepository.GetVacancyByIdAsync(id);
         VacancyViewModel vacancyViewModel;
-        
+
         if (!vacancy.IsSuccessfully)
         {
             _notificationService.CustomErrorMessage(_stringLocalization["VacancyNotFoundError"]);
@@ -112,7 +113,7 @@ public class VacancyController : BaseController
         }
 
         if (!HttpContext.Session.Keys.Contains($"IsShowVacancy{id}")
-            && HttpContext.User.IsInRole(candidateRole))
+            && HttpContext.User.IsInRole(CandidateRole))
         {
             HttpContext.Session.SetString($"IsShowVacancy{id}", "1");
 
@@ -121,10 +122,10 @@ public class VacancyController : BaseController
             if (!addViewCountResult.IsSuccessfully)
                 return RedirectToAction("Index", "Main");
         }
-        
-        if (HttpContext.User.IsInRole("candidate"))
+
+        if (HttpContext.User.IsInRole(CandidateRole))
         {
-            var username = User.Identity?.Name!;
+            var username = GetUsername();
             var usernameDto = new UsernameDto {Username = username};
             var userData = await _unitOfWork.UserRepository.GetUserDataAsync(usernameDto);
 
@@ -179,7 +180,9 @@ public class VacancyController : BaseController
     [Authorize(Roles = "employer")]
     public async Task<IActionResult> EditVacancy(ActionVacancyViewModel actionVacancyViewModel)
     {
-        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+        var currentUsername = GetUsername();
+        var currentUser = await _unitOfWork.UserRepository
+            .GetUserDataAsync(new() {Username = currentUsername});
 
         actionVacancyViewModel = await InitActionVacancyViewModel(actionVacancyViewModel);
         actionVacancyViewModel.EmployerUser = currentUser.User.EmployerUser;
@@ -208,23 +211,21 @@ public class VacancyController : BaseController
     [Authorize(Roles = "candidate")]
     public async Task<IActionResult> AllEmployerVacancies(string username, QueryParameters queryParameters)
     {
-        const string candidateRole = "candidate";
-        
-        var currentUsername = User.Identity?.Name!;
-        var currentUsernameDto = new UsernameDto {Username = currentUsername, UserRole = candidateRole};
+        var currentUsername = GetUsername();
+        var currentUsernameDto = new UsernameDto {Username = currentUsername, UserRole = CandidateRole};
 
         var userData = await _unitOfWork.UserRepository.GetUserDataAsync(currentUsernameDto);
 
         var vacancies =
             await _unitOfWork.VacancyRepository.GetAllEmployerVacanciesAsync(new UsernameDto {Username = username},
                 queryParameters);
-        
+
         var workCategories = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
         var englishLevels = await _unitOfWork.EnglishLevelRepository.GetAllEnglishLevelsAsync();
         var typesOfCompany = await _unitOfWork.TypeOfCompanyRepository.GetAllTypesOfCompanyAsync();
         var howToWorks = await _unitOfWork.HowToWorkRepository.GetAllHowToWorkAsync();
         var candidateRegions = await _unitOfWork.CandidateRegionRepository.GetAllCandidateRegionsAsync();
-        
+
         ViewData["CandidateId"] = userData.User.CandidateUser!.CandidateUserId;
 
         var vacanciesViewModel = new VacanciesViewModel
@@ -279,11 +280,10 @@ public class VacancyController : BaseController
     [Authorize(Roles = "candidate")]
     public async Task<IActionResult> RespondedVacancy(int vacancyId)
     {
-        var username = User.Identity?.Name!;
-        const string candidateRole = "candidate";
+        var username = GetUsername();
 
         var respondedResult = await _unitOfWork.RespondedListRepository
-            .RespondToVacancyAsync(new() {Username = username, UserRole = candidateRole}, vacancyId);
+            .RespondToVacancyAsync(new() {Username = username, UserRole = CandidateRole}, vacancyId);
 
         if (!respondedResult.IsSuccessfully)
         {
@@ -299,15 +299,15 @@ public class VacancyController : BaseController
     [Authorize(Roles = "candidate")]
     public async Task<IActionResult> RemoveRespondVacancy(int vacancyId)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var usernameDto = new UsernameDto {Username = username};
 
         var removeRespondResult = await _unitOfWork.RespondedListRepository
             .RemoveRespondToVacancyAsync(usernameDto, vacancyId);
-        
+
         if (!removeRespondResult.IsSuccessfully)
             _notificationService.CustomErrorMessage("При спробі відмінити відгук на вакансію відбулася помилка");
-        
+
         _notificationService.CustomSuccessMessage("Ви успішно відмінили відгук на вакансію");
         return RedirectToAction(nameof(VacancyDetails), new {id = vacancyId});
     }
@@ -316,10 +316,10 @@ public class VacancyController : BaseController
     [Authorize(Roles = "employer")]
     public async Task<IActionResult> AllVacancyResponses(QueryParameters queryParameters, int vacancyId)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var usernameDto = new UsernameDto {Username = username};
         var userData = await _unitOfWork.UserRepository.GetUserDataAsync(usernameDto);
-        
+
         var workCategories = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
         var englishLevels = await _unitOfWork.EnglishLevelRepository.GetAllEnglishLevelsAsync();
         var communicationLanguages =
@@ -339,13 +339,13 @@ public class VacancyController : BaseController
             VacancyCount = vacancyResponsesResult.VacancyCount,
             ApplicationUsers = vacancyResponsesResult.ApplicationUsers,
             Pages = vacancyResponsesResult.Pages,
-            Username = User.Identity?.Name!,
+            Username = username,
             CurrentVacancyId = vacancyId,
             WorkCategories = workCategories.WorkCategories,
             EnglishLevels = englishLevels.EnglishLevels,
             CommunicationLanguages = communicationLanguages.CommunicationLanguages
         };
-        
+
         if (queryParameters.PageNumber < 1)
         {
             if (queryParameters.PageNumber == 0 && !string.IsNullOrEmpty(queryParameters.SearchString)

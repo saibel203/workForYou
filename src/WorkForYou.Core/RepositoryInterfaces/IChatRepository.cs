@@ -1,13 +1,12 @@
-﻿using WorkForYou.Core.DTOModels.UserDTOs;
-using WorkForYou.Core.Responses.Repositories;
+﻿using WorkForYou.Core.Responses.Repositories;
 
 namespace WorkForYou.Core.RepositoryInterfaces;
 
 public interface IChatRepository
 {
-    Task<ChatResponse> CreateChatAsync(UsernameDto? candidateUsername, UsernameDto? employerUsername);
-    Task<ChatResponse> GetChatDataAsync(int candidateId, int employerId);
-    Task<ChatResponse> GetAllEmployerChatsAsync(UsernameDto? employerUsername);
-    Task<ChatResponse> GetAllCandidateChatsAsync(UsernameDto candidateUsername);
-    Task<ChatResponse> CreateMessageAsync(string content, int roomId, string applicationUserId);
+    Task<ChatResponse> CreateChatRoomAsync(string chatName, string currentUserId, string converseUserId);
+    Task<ChatResponse> RemoveChatRoomAsync(int chatRoomId);
+    Task<ChatResponse> GetChatDetailsAsync(int chatId, string userRole, string currentUserId);
+    Task<ChatResponse> GetAllUserChatsAsync(string userId, string userRole);
+    Task<ChatResponse> CreateChatMessageAsync(string messageContent, string currentUsername, int roomId);
 }

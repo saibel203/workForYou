@@ -1,55 +1,77 @@
-﻿@model ChatDetailsViewModel
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using WorkForYou.WebUI.Extensions
+@model WorkForYou.Core.Models.ChatRoom
+
 @{
-    ViewData["Title"] = "";
+    ViewData["Title"] = "Чат";
+    const string ownClassName = "chat-details-wrapper__body-message message-own";
+    const string notOwnClassName = "chat-details-wrapper__body-message message-not-my";
+
+    var oppositeUser = Model.ChatUsers.FirstOrDefault(chatUserData => chatUserData.ChatRoomId == Model.ChatRoomId
+                                                                      && chatUserData.ApplicationUser?.Id !=
+                                                                      User.GetUserId())?.ApplicationUser;
 }
 
 <div class="chat-details-wrapper">
-    <div class="chat-details-wrapper__header">
-        <div class="chat-details-wrapper-inner">
-            <div class="chat-details-wrapper__header-image">
-                <img src="~/img/userImages/default-user-image.png" alt="User images">
-            </div>
-            <div class="chat-details-wrapper__header-info">
-                <h3>Name Surname <span></span></h3>
-                <p>.NET developer</p>
-            </div>
-        </div>
-    </div>
-    <div class="chat-details-wrapper__body" id="messagesList">
-        <div class="chat-details-wrapper__body-message message-own">
-            <p>Own message</p>
-        </div>
-        <div class="chat-details-wrapper__body-message message-not-my">
-            <p>Not my message</p>
-        </div>
-        @if (Model.ChatDetails is not null && Model.ChatDetails.ChatMessages is not null)
-        {
-            @foreach (var message in Model.ChatDetails.ChatMessages)
-            {
-                <div class="chat-details-wrapper__body-message message-not-my">
-                    <p>@message.Content</p>
+    @if (oppositeUser is not null)
+    {
+        <div class="chat-details-wrapper__header">
+            <div class="chat-details-wrapper-inner">
+                <div class="chat-details-wrapper__header-image">
+                    @if (string.IsNullOrEmpty(oppositeUser.ImagePath))
+                    {
+                        <img src="~/img/userImages/default-user-image.png" alt="User image">
+                    }
+                    else
+                    {
+                        <img src="@oppositeUser.ImagePath" alt="User image">
+                    }
                 </div>
-            }
+                <div class="chat-details-wrapper__header-info">
+                    <h3>
+                        @oppositeUser.FirstName @oppositeUser.LastName <span></span>
+                    </h3>
+                    @if (User.IsInRole("employer"))
+                    {
+                        <p>@oppositeUser.CandidateUser?.CompanyPosition</p>
+                    }
+                    else
+                    {
+                        <p>@oppositeUser.EmployerUser?.CompanyName (@oppositeUser.EmployerUser?.CompanyPosition)</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <div class="chat-details-wrapper__body" id="message-list">
+        @foreach (var message in Model.ChatMessages)
+        {
+            var className = User.Identity?.Name! == message.Name
+                ? ownClassName
+                : notOwnClassName;
+
+            <div class="@className">
+                <p>
+                    @message.Content <span>@message.Name</span>
+                </p>
+                <span>@message.SendTime</span>
+            </div>
         }
     </div>
     <div class="chat-details-wrapper__footer">
-        @* <form> *@
-        @* <input type="text" placeholder="Напишіть повідомлення..." id="messageInput"> *@
-        @* <button type="submit" id="sendButton"><i class="fa-solid fa-share"></i> Відправити</button> *@
-        @* <input type="text" placeholder="Receiver" id="receiverInput"> *@
-        @* <input type="text" placeholder="Sender" id="senderInput"> *@
-        @* <input type="button" id="sendButton" value="Send"> *@
-        @* </form> *@
-
-        <input type="hidden" asp-for="SenderUsername" id="senderInput">
-        <input type="hidden" asp-for="RecipientUsername" id="recipientInput">
-        <input type="text" placeholder="Enter message" id="messageInput">
-        <input type="submit" value="Send..." id="sendButton">
+        <form id="send-message-form" autocomplete="off">
+            <input type="hidden" name="roomId" value="@Model.ChatRoomId" id="message-id-input">
+            <input type="hidden" name="roomName" value="@Model.Name">
+            <input type="hidden" name="currentUsername" value="@User.Identity?.Name" id="current-username">
+            <input type="text" name="message" id="message-input" placeholder="Введіть повідомлення...">
+            <input type="submit" value="Відправити">
+        </form>
     </div>
 </div>
 
 @section Scripts
 {
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/js/chat.js"></script>
 }

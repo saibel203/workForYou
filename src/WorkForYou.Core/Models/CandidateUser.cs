@@ -27,5 +27,4 @@ public class CandidateUser : BaseUser
     
     public IEnumerable<FavouriteVacancy>? FavouriteVacancyCollection { get; set; }
     public IEnumerable<FavouriteCandidate>? FavouriteCandidates { get; set; }
-    public IEnumerable<ChatRoom>? ChatRooms { get; set; }
 }

@@ -16,8 +16,5 @@ public class UserEntitiesConfiguration : IEntityTypeConfiguration<ApplicationUse
         builder.HasOne(x => x.EmployerUser)
             .WithOne(x => x.ApplicationUser)
             .HasForeignKey<EmployerUser>(x => x.ApplicationUserId);
-        
-        builder.HasMany(x => x.ChatMessages)
-            .WithOne(x => x.ApplicationUser);
     }
 }

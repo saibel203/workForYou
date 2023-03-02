@@ -630,12 +630,12 @@ body {
   margin-top: 4px;
 }
 .vacancies-cards__card-buttons-header {
+  min-width: 50%;
   margin-top: 20px;
+  display: flex;
+  align-items: center;
 }
-.vacancies-cards__card-buttons a:first-child {
-  width: 33%;
-}
-.vacancies-cards__card-buttons button, .vacancies-cards__card-buttons a {
+.vacancies-cards__card-buttons button, .vacancies-cards__card-buttons a, .vacancies-cards__card-buttons input[type=submit] {
   font-size: 15px;
 }
 .vacancies-cards__card-company-info {
@@ -1457,30 +1457,47 @@ body {
 .chat-details-wrapper__body {
   display: flex;
   flex-direction: column;
-  min-width: 100%;
 }
 .chat-details-wrapper__body-message {
-  margin: 15px 0;
   display: flex;
+  flex-direction: column;
+  margin: 15px 0;
   max-width: 500px;
+  min-width: 100px;
+  width: 100%;
+}
+.chat-details-wrapper__body-message p > span {
+  display: flex;
+  justify-content: end;
+}
+.chat-details-wrapper__body-message span {
+  font-size: 0.8em;
 }
 .chat-details-wrapper__body-message.message-own {
   position: relative;
   display: flex;
   margin-left: auto;
 }
+.chat-details-wrapper__body-message.message-own span {
+  display: flex;
+  justify-content: end;
+}
 .chat-details-wrapper__body-message.message-own p {
   color: #fff;
   font-size: 14px;
   line-height: 1.5;
   font-weight: 400;
-  padding: 15px;
+  padding: 10px;
   background: #4b7bec;
   display: inline-block;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom-left-radius: 10px;
   margin-bottom: 0;
+}
+.chat-details-wrapper__body-message.message-own p > span {
+  color: #fff;
+  opacity: 0.8;
 }
 .chat-details-wrapper__body-message.message-not-my {
   display: flex;
@@ -1492,13 +1509,17 @@ body {
   font-size: 14px;
   line-height: 1.5;
   font-weight: 400;
-  padding: 15px;
+  padding: 10px;
   background: #f5f5f5;
   display: inline-block;
   border-bottom-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   margin-bottom: 0;
+}
+.chat-details-wrapper__body-message.message-not-my p > span {
+  color: #000;
+  opacity: 0.8;
 }
 .chat-details-wrapper__footer {
   display: flex;
@@ -1530,7 +1551,7 @@ body {
   color: var(--placeholder-color);
   background-color: var(--theme-bg-color);
 }
-.chat-details-wrapper__footer button {
+.chat-details-wrapper__footer input[type=submit] {
   width: 25%;
   background-color: #3867d6;
   color: #fff;
@@ -1538,7 +1559,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
 }
-.chat-details-wrapper__footer button i {
+.chat-details-wrapper__footer input[type=submit] i {
   padding-right: 10px;
 }
 
@@ -1566,6 +1587,12 @@ body {
 .modal-window__inner {
   margin-top: 30px !important;
 }
+.modal-window form {
+  display: flex;
+}
+.modal-window form input[type=submit] {
+  font-size: 1em;
+}
 .modal-window.show {
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
@@ -1580,7 +1607,7 @@ body {
   min-height: inherit;
   text-align: center;
 }
-.modal-window a {
+.modal-window a, .modal-window input {
   margin-top: 10px;
 }
 .modal-window__backdrop {
@@ -1641,6 +1668,8 @@ body {
   height: 50px;
   border-radius: 50%;
   transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
 }
 .chat-wrapper__chats-chat .chat-remove-btn i {
   color: #fff;

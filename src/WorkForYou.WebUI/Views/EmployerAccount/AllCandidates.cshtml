@@ -1,7 +1,7 @@
 ﻿@using WorkForYou.WebUI.Helpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using WorkForYou.Core.ServiceInterfaces;
 @using Microsoft.AspNetCore.Mvc.Localization
+@using WorkForYou.Core.ServiceInterfaces
 @using WorkForYou.WebUI.ViewModels.AdditionalViewModels
 @model CandidatesViewModel
 
@@ -32,8 +32,8 @@
         {
             if (user.CandidateUser is not null)
             {
-                var isChatExists = await ChatService
-                    .IsChatExists(user.CandidateUser.CandidateUserId, Convert.ToInt32(ViewData["EmployerId"]));
+                var chatName = $"{User.Identity?.Name!} - {user.UserName}";
+                var isChatExists = await ChatService.IsChatExistsAsync(chatName);
 
                 <div class="vacancies-cards__card">
                     <div class="vacancies-cards__card-title">
@@ -97,25 +97,16 @@
                             </a>
                             @if (isChatExists.IsChatExists)
                             {
-                                <a class="search-buttons card-buttons" asp-controller="Chat" asp-action="AllEmployerChats">@ViewLocalization["Write"]</a>
+                                <a class="search-buttons card-buttons" asp-controller="Chat" asp-action="ChatDetails" asp-route-id="">@ViewLocalization["Write"]</a>
                             }
                             else
                             {
-                                <a class="search-buttons card-buttons js-modal" data-modal="#modal">@ViewLocalization["Write"]</a>
-
-                                <div id="modal" class="modal-window">
-                                    <div class="modal-window__title">
-                                        <h3>Впевнені, що хочете створити чат кімнату з кандидатом?</h3>
-                                        <div class="modal-window__inner">
-                                            <a asp-controller="Chat" asp-action="CreateChat"
-                                               asp-route-candidateUsername="@user.UserName" class="search-buttons card-buttons">
-                                                Так, впевнений
-                                            </a>
-                                            <a href="#" class="modal-close search-buttons card-buttons detail-danger">Ні, закрити</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-window__backdrop hidden" id="modal-backdrop"></div>
+                                <form method="post" asp-controller="Chat" asp-action="CreateChatRoom"
+                                      asp-antiforgery="true">
+                                    <input type="hidden" name="chatName" value="@chatName">
+                                    <input type="hidden" name="userId" value="@user.Id">
+                                    <input type="submit" value="Написати" class="search-buttons card-buttons">
+                                </form>
                             }
                         </div>
 
@@ -129,13 +120,13 @@
             }
         }
     </div>
+    <div class="modal-window__backdrop hidden" id="modal-backdrop"></div>
 
     @await Html.PartialAsync("_Pagination")
 
     @section Scripts
     {
         <script src="~/js/custom-select.js"></script>
-        <script src="~/js/modal-window.js"></script>
     }
 
 </div>

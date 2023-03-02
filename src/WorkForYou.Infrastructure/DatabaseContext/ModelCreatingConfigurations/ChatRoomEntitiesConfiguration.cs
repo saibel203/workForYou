@@ -12,5 +12,8 @@ public class ChatRoomEntitiesConfiguration : IEntityTypeConfiguration<ChatRoom>
 
         builder.HasMany(x => x.ChatMessages)
             .WithOne(x => x.ChatRoom);
+
+        builder.HasMany(x => x.ChatUsers)
+            .WithOne(x => x.ChatRoom);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WorkForYou.Core.DTOModels.UserDTOs;
+using WorkForYou.Core.Enums;
 using WorkForYou.Core.Models;
 using WorkForYou.Core.RepositoryInterfaces;
 using WorkForYou.Core.Responses.Repositories;
@@ -11,207 +11,218 @@ namespace WorkForYou.Data.Repositories;
 
 public class ChatRepository : GenericRepository<ChatRoom>, IChatRepository
 {
+    private const string EmployerRole = "employer";
+
+    private readonly IChatService _chatService;
     
-    public ChatRepository(WorkForYouDbContext context, ILogger logger) : base(context, logger)
+    public ChatRepository(WorkForYouDbContext context, ILogger logger, IChatService chatService) : base(context, logger)
     {
+        _chatService = chatService;
     }
 
-    public async Task<ChatResponse> CreateChatAsync(UsernameDto? candidateUsername, UsernameDto? employerUsername)
+    public async Task<ChatResponse> CreateChatRoomAsync(string chatName, string currentUserId, string converseUserId)
     {
         try
         {
-            if (candidateUsername is null || employerUsername is null)
-                return new()
-                {
-                    Message = "Error getting user",
-                    IsSuccessfully = false
-                };
-
-            var candidateUser = await Context.Users
-                .Include(x => x.CandidateUser)
-                .FirstOrDefaultAsync(userData => userData.UserName == candidateUsername.Username);
-            var employerUser = await Context.Users
-                .Include(x => x.EmployerUser)
-                .FirstOrDefaultAsync(userData => userData.UserName == employerUsername.Username);
-
-            if (candidateUser is null || employerUser is null)
-                return new()
-                {
-                    Message = "Error getting user",
-                    IsSuccessfully = false
-                };
-
-            if (candidateUser.CandidateUser is null || employerUser.EmployerUser is null)
-                return new()
-                {
-                    Message = "Error getting user",
-                    IsSuccessfully = false
-                };
-
-            // var isCandidate = await _authService.IsUserCandidate(candidateUsername);
-            // var isEmployer = await _authService.IsUserCandidate(employerUsername);
-
-            // if (!isCandidate.IsUserCandidate || isEmployer.IsUserCandidate)
-            //     return new()
-            //     {
-            //         Message = "Error defining user role",
-            //         IsSuccessfully = false
-            //     };
-
-            var chatRoom = new ChatRoom
+            var chat = new ChatRoom
             {
-                CandidateUserId = candidateUser.CandidateUser.CandidateUserId,
-                EmployerUserId = employerUser.EmployerUser.EmployerUserId
+                Name = chatName
             };
 
-            await DbSet.AddAsync(chatRoom);
+            var currentChatUser = new ChatUser
+            {
+                ApplicationUserId = currentUserId,
+                Role = ChatUserRole.Admin
+            };
+
+            var converseChatUser = new ChatUser
+            {
+                ApplicationUserId = converseUserId,
+                Role = ChatUserRole.Member
+            };
+
+            chat.ChatUsers.Add(currentChatUser);
+            chat.ChatUsers.Add(converseChatUser);
+
+            await Context.AddAsync(chat);
             await Context.SaveChangesAsync();
 
             return new()
             {
-                Message = "The room has been successfully created",
+                Message = "Chat successfully created",
+                IsSuccessfully = true,
+                ChatRoom = chat
+            };
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "An error occurred while trying to create a chat");
+            return new()
+            {
+                Message = "An error occurred while trying to create a chat",
+                IsSuccessfully = false
+            };
+        }
+    }
+
+    public async Task<ChatResponse> RemoveChatRoomAsync(int chatRoomId)
+    {
+        try
+        {
+            var chatRoom = await DbSet
+                .FirstOrDefaultAsync(chatData => chatData.ChatRoomId == chatRoomId);
+
+            if (chatRoom is null)
+                return new()
+                {
+                    Message = "Error receiving chat",
+                    IsSuccessfully = false
+                };
+            
+            Context.ChatRooms.Remove(chatRoom);
+            await Context.SaveChangesAsync();
+            
+            return new()
+            {
+                Message = "Chat deleted successfully",
                 IsSuccessfully = true
             };
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error getting user");
+            Logger.LogError(ex, "Error trying to delete chat");
             return new()
             {
-                Message = "Error getting user",
+                Message = "Error trying to delete chat",
                 IsSuccessfully = false
             };
         }
     }
 
-    public async Task<ChatResponse> GetChatDataAsync(int employerId, int candidateId)
+    public async Task<ChatResponse> GetChatDetailsAsync(int chatId, string userRole, string currentUserId)
     {
         try
         {
-            var chatData = await DbSet
-                .Include(x => x.ChatMessages)
-                .FirstOrDefaultAsync(chatData => chatData.EmployerUserId == employerId
-                    && chatData.CandidateUserId == candidateId);
+            ChatRoom? chatDetails;
+            
+            if (userRole == EmployerRole)
+                chatDetails = await Context.ChatUsers
+                    .Include(chatUserData => chatUserData.ChatRoom)
+                    .ThenInclude(chatUserData => chatUserData!.ChatUsers)
+                    .ThenInclude(chatUserData => chatUserData.ApplicationUser)
+                    .ThenInclude(chatUserData => chatUserData!.CandidateUser)
+                    .Include(chatUserData => chatUserData.ApplicationUser)
+                    .Include(chatUserData => chatUserData.ChatRoom!.ChatMessages)
+                    .AsSplitQuery()
+                    .Select(chatData => chatData.ChatRoom)
+                    .FirstOrDefaultAsync(chatData => chatData!.ChatRoomId == chatId);
+            else 
+                chatDetails = await Context.ChatUsers
+                    .Include(chatUserData => chatUserData.ChatRoom)
+                    .ThenInclude(chatUserData => chatUserData!.ChatUsers)
+                    .ThenInclude(chatUserData => chatUserData.ApplicationUser)
+                    .ThenInclude(chatUserData => chatUserData!.EmployerUser)
+                    .Include(chatUserData => chatUserData.ApplicationUser)
+                    .Include(chatUserData => chatUserData.ChatRoom!.ChatMessages)
+                    .AsSplitQuery()
+                    .Select(chatData => chatData.ChatRoom)
+                    .FirstOrDefaultAsync(chatData => chatData!.ChatRoomId == chatId);
+
+            if (chatDetails is null)
+                return new()
+                {
+                    Message = "Error retrieving chat data",
+                    IsSuccessfully = false
+                };
+
+            var opponentResult = await _chatService.OpponentNameAsync(chatId, currentUserId);
+
+            var isThisUsers = chatDetails.ChatUsers
+                .Any(chatData => chatData.ChatRoomId == chatId && chatData.ApplicationUserId == currentUserId);
+            var isOpponentUser = chatDetails.ChatUsers
+                .Any(chatData => chatData.ChatRoomId == chatId && chatData.ApplicationUserId == opponentResult.OpponentUserId);
+
+            if (!isThisUsers || !isOpponentUser)
+                return new()
+                {
+                    Message = "You are not the owner of this chat",
+                    IsSuccessfully = false
+                };
             
             return new()
             {
-                Message = "",
+                Message = "Error retrieving chat data",
                 IsSuccessfully = true,
-                ChatRoom = chatData
+                ChatRoom = chatDetails
             };
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "");
+            Logger.LogError(ex, "Error retrieving chat data");
             return new()
             {
-                Message = "",
+                Message = "Error retrieving chat data",
                 IsSuccessfully = false
             };
         }
     }
-    
-    public async Task<ChatResponse> GetAllEmployerChatsAsync(UsernameDto? employerUsername)
+
+    public async Task<ChatResponse> GetAllUserChatsAsync(string userId, string userRole)
     {
         try
         {
-            if (employerUsername is null)
-                return new()
-                {
-                    Message = "Error getting user",
-                    IsSuccessfully = false
-                };
+            List<ChatRoom?> chats;
 
-            var employer = await Context.Users
-                .Include(x => x.EmployerUser)
-                .FirstOrDefaultAsync(userData => userData.UserName == employerUsername.Username);
-
-            if (employer is null || employer.EmployerUser is null)
-                return new()
-                {
-                    Message = "Error getting user or user is not employer",
-                    IsSuccessfully = false
-                };
-
-            var employerChats = await DbSet
-                .Include(x => x.EmployerUser)
-                .Include(x => x.EmployerUser!.ApplicationUser)
-                .Where(x => x.EmployerUser!.ApplicationUser!.UserName == employerUsername.Username)
-                .Select(x => x.CandidateUser!.ApplicationUser!).ToListAsync();
+            if (userRole == EmployerRole)
+                chats = await Context.ChatUsers
+                    .Include(chatUserData => chatUserData.ChatRoom)
+                    .ThenInclude(chatUserData => chatUserData!.ChatUsers)
+                    .ThenInclude(chatUserData => chatUserData.ApplicationUser)
+                    .ThenInclude(chatUserData => chatUserData!.CandidateUser)
+                    .Include(chatUserData => chatUserData.ApplicationUser)
+                    .Where(chatData => chatData.ApplicationUserId == userId)
+                    .Select(chatData => chatData.ChatRoom)
+                    .ToListAsync();
+            else 
+                chats = await Context.ChatUsers
+                    .Include(chatUserData => chatUserData.ChatRoom)
+                    .ThenInclude(chatUserData => chatUserData!.ChatUsers)
+                    .ThenInclude(chatUserData => chatUserData.ApplicationUser)
+                    .ThenInclude(chatUserData => chatUserData!.EmployerUser)
+                    .Include(chatUserData => chatUserData.ApplicationUser)
+                    .Where(chatData => chatData.ApplicationUserId == userId)
+                    .Select(chatData => chatData.ChatRoom)
+                    .ToListAsync();
 
             return new()
             {
-                Message = "Employer chats successfully get",
+                Message = "User chats received successfully",
                 IsSuccessfully = true,
-                EmployerChats = employerChats
+                ChatRooms = chats!
             };
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error getting user");
+            Logger.LogError(ex, "Error retrieving user chats");
             return new()
             {
-                Message = "Error getting user",
+                Message = "Error retrieving user chats",
                 IsSuccessfully = false
             };
         }
     }
 
-    public async Task<ChatResponse> GetAllCandidateChatsAsync(UsernameDto? usernameDto)
-    {
-        try
-        {
-            if (usernameDto is null)
-                return new()
-                {
-                    Message = "Error getting user",
-                    IsSuccessfully = false
-                };
-            
-            var candidate = await Context.Users
-                .Include(x => x.CandidateUser)
-                .FirstOrDefaultAsync(userData => userData.UserName == usernameDto.Username);
-
-            if (candidate is null || candidate.CandidateUser is null)
-                return new()
-                {
-                    Message = "Error getting user or user is not employer",
-                    IsSuccessfully = false
-                };
-
-            var candidateChats = await DbSet
-                .Include(x => x.CandidateUser)
-                .Include(x => x.CandidateUser!.ApplicationUser)
-                .Where(x => x.CandidateUser!.ApplicationUser!.UserName == usernameDto.Username)
-                .Select(x => x.EmployerUser!.ApplicationUser!).ToListAsync();
-
-            return new()
-            {
-                Message = "Employer chats successfully get",
-                IsSuccessfully = true,
-                CandidateChats = candidateChats
-            };
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Error getting user");
-            return new()
-            {
-                Message = "Error getting user",
-                IsSuccessfully = false
-            };
-        }
-    }
-
-    public async Task<ChatResponse> CreateMessageAsync(string content, int roomId, string applicationUserId)
+    public async Task<ChatResponse> CreateChatMessageAsync(string messageContent, string currentUsername,
+        int roomId)
     {
         try
         {
             var chatMessage = new ChatMessage
             {
-                Content = content,
                 ChatRoomId = roomId,
-                ApplicationUserId = applicationUserId
+                Content = messageContent,
+                Name = currentUsername,
+                SendTime = DateTime.Now
             };
 
             await Context.ChatMessages.AddAsync(chatMessage);
@@ -219,17 +230,17 @@ public class ChatRepository : GenericRepository<ChatRoom>, IChatRepository
 
             return new()
             {
-                Message = "",
+                Message = "Message successfully created",
                 IsSuccessfully = true,
                 ChatMessage = chatMessage
             };
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "");
+            Logger.LogError(ex, "Error creating message");
             return new()
             {
-                Message = "",
+                Message = "Error creating message",
                 IsSuccessfully = false
             };
         }

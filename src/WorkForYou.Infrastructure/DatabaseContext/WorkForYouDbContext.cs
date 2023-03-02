@@ -29,6 +29,7 @@ public class WorkForYouDbContext : IdentityDbContext<ApplicationUser, Applicatio
     public DbSet<RespondedList> RespondedList => Set<RespondedList>();
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
     public DbSet<ChatRoom> ChatRooms => Set<ChatRoom>();
+    public DbSet<ChatUser> ChatUsers => Set<ChatUser>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

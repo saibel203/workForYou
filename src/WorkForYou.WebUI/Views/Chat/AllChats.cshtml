@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using WorkForYou.WebUI.Extensions
+@model IEnumerable<WorkForYou.Core.Models.ChatRoom>
+
+@{
+    ViewData["Title"] = "Мої чати";
+}
+
+<div class="chat-wrapper">
+    <h1>Мої чати</h1>
+
+    <div class="chat-wrapper__chats">
+        @foreach (var chat in Model)
+        {
+            var oppositeUser = chat.ChatUsers
+                .FirstOrDefault(chatUserData => chatUserData.ChatRoomId == chat.ChatRoomId
+                                                && chatUserData.ApplicationUser?.Id != User.GetUserId())?.ApplicationUser;
+
+            if (oppositeUser is not null)
+            {
+                <a asp-controller="Chat" asp-action="ChatDetails" asp-route-id="@chat.ChatRoomId">
+                    <div class="chat-wrapper__chats-chat">
+                        <div class="char-wrapper__chats-chat-inner-wrapper">
+                            <div class="chat-wrapper__chats-chat-main">
+                                @if (string.IsNullOrEmpty(oppositeUser.ImagePath))
+                                {
+                                    <img src="~/img/userImages/default-user-image.png" alt="User image">
+                                }
+                                else
+                                {
+                                    <img src="@oppositeUser.ImagePath" alt="User image">
+                                }
+                            </div>
+                            <div class="chat-wrapper__chats-chat-info">
+                                <h3>
+                                    @oppositeUser.LastName @oppositeUser.FirstName (@oppositeUser.UserName) <span></span>
+                                </h3>
+                                @if (User.IsInRole("employer"))
+                                {
+                                    <p>@oppositeUser.CandidateUser?.CompanyPosition</p>
+                                }
+                                else
+                                {
+                                    <p>@oppositeUser.EmployerUser?.CompanyName (@oppositeUser.EmployerUser?.CompanyPosition)</p>
+                                }
+                            </div>
+                        </div>
+                        <form method="post" asp-controller="Chat" asp-action="RemoveChatRoom" asp-antiforgery="true">
+                            <input type="hidden" name="chatId" value="@chat.ChatRoomId">
+                            <button type="submit" class="chat-remove-btn"><i class="fa-sharp fa-solid fa-bucket"></i></button>
+                        </form>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+</div>

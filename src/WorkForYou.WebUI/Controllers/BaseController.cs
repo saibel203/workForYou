@@ -6,17 +6,17 @@ namespace WorkForYou.WebUI.Controllers;
 
 public class BaseController : Controller
 {
-    public string GetUserId()
-    {
-        return User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-    }
+    private protected const string CandidateRole = "candidate";
+    private protected const string EmployerRole = "employer";
+    
+    private protected string GetUserId() => User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
 
-    public bool IsUserVacancyOwner(Vacancy vacancy)
+    private protected string GetUsername() => User.Identity?.Name!;
+
+    private protected bool IsUserVacancyOwner(Vacancy vacancy)
     {
         var currentUserId = GetUserId();
         
         return vacancy.EmployerUser?.ApplicationUser?.Id == currentUserId;
     }
-    
-    
 }

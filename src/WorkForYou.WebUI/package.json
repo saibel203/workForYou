@@ -19,5 +19,8 @@
   "main": "postcss.config.js",
   "author": "",
   "license": "MIT",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    
+  }
 }

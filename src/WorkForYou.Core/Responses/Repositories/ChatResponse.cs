@@ -9,4 +9,6 @@ public class ChatResponse : BaseResponse
     public IEnumerable<ApplicationUser>? CandidateChats { get; set; }
     public ChatRoom? ChatRoom { get; set; }
     public ChatMessage? ChatMessage { get; set; }
+
+    public IEnumerable<ChatRoom>? ChatRooms { get; set; } 
 }

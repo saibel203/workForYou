@@ -11,8 +11,5 @@ public class EmployerEntitiesConfiguration : IEntityTypeConfiguration<EmployerUs
         builder.HasMany(x => x.Vacancies)
             .WithOne(x => x.EmployerUser)
             .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasMany(x => x.ChatRooms)
-            .WithOne(x => x.EmployerUser);
     }
 }

@@ -16,38 +16,80 @@ public class ChatService : IChatService
         _logger = logger;
         _context = context;
     }
-    
-    public async Task<ChatResponse> IsChatExists(int candidateId, int employerId)
+
+    public async Task<ChatResponse> IsChatExistsAsync(string chatName)
     {
         try
         {
-            var existsResult = await _context.ChatRooms
-                .AnyAsync(x => x.CandidateUserId == candidateId && x.EmployerUserId == employerId);
+            var isChatExists = await _context.ChatRooms
+                .AnyAsync(chatRoomData => chatRoomData.Name == chatName);
 
-            if (existsResult)
+            if (!isChatExists)
                 return new()
                 {
-                    Message = "The room exists",
+                    Message = "Chat does not exist",
                     IsSuccessfully = true,
-                    IsChatExists = true
+                    IsChatExists = false
                 };
 
             return new()
             {
-                Message = "The not room exists",
+                Message = "Chat exists",
                 IsSuccessfully = true,
-                IsChatExists = false
+                IsChatExists = true
             };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting user");
+            _logger.LogError(ex, "Error receiving chat");
             return new()
             {
-                Message = "Error getting user",
+                Message = "Error receiving chat",
                 IsSuccessfully = false
             };
         }
     }
 
+    public async Task<ChatResponse> OpponentNameAsync(int chatId, string currentUserId)
+    {
+        try
+        {
+            var chatData = await _context.ChatRooms
+                .FirstOrDefaultAsync(chatData => chatData.ChatRoomId == chatId);
+
+            if (chatData is null)
+                return new()
+                {
+                    Message = "Error receiving chat",
+                    IsSuccessfully = false
+                };
+
+            var opponentData = await _context.ChatUsers
+                .FirstOrDefaultAsync(chatUserData => chatUserData.ChatRoomId == chatId
+                    && chatUserData.ApplicationUserId != currentUserId);
+
+            if (opponentData is null)
+                return new()
+                {
+                    Message = "Failed to get the opposite chat user",
+                    IsSuccessfully = false
+                };
+
+            return new()
+            {
+                Message = "Opposite chat user received successfully",
+                IsSuccessfully = true,
+                OpponentUserId = opponentData.ApplicationUserId
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while retrieving the opposite chat user");
+            return new()
+            {
+                Message = "An error occurred while retrieving the opposite chat user",
+                IsSuccessfully = false
+            };
+        }
+    }
 }

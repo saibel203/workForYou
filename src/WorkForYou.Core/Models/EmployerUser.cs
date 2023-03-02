@@ -10,5 +10,4 @@ public class EmployerUser : BaseUser
     public string? AboutCompany { get; set; } = string.Empty;
     public IEnumerable<Vacancy>? Vacancies { get; set; } = new List<Vacancy>();
     public IEnumerable<FavouriteCandidate>? FavouriteCandidates { get; set; }
-    public IEnumerable<ChatRoom>? ChatRooms { get; set; }
 }

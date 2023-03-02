@@ -37,6 +37,8 @@ public static class ConfigureServices
             .AddInMemoryClients(IdentityServerConfiguration.GetClients())
             .AddAspNetIdentity<ApplicationUser>()
             .AddDeveloperSigningCredential();
+
+        services.AddControllersWithViews();
         
         return services;
     }

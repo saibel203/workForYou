@@ -1,180 +1,101 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkForYou.Core.DTOModels.UserDTOs;
+using Microsoft.AspNetCore.SignalR;
 using WorkForYou.Core.RepositoryInterfaces;
 using WorkForYou.Core.Responses.Repositories;
-using WorkForYou.WebUI.ViewModels;
+using WorkForYou.WebUI.Hubs;
 
 namespace WorkForYou.WebUI.Controllers;
 
-public class ChatController : Controller
+public class ChatController : BaseController
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IHubContext<ChatHub> _hubContext;
 
-    public ChatController(IUnitOfWork unitOfWork)
+    public ChatController(IUnitOfWork unitOfWork, IHubContext<ChatHub> hubContext)
     {
         _unitOfWork = unitOfWork;
-    }
-    
-
-    [HttpGet]
-    [Authorize(Roles = "employer")]
-    public async Task<IActionResult> CreateChat(string candidateUsername)
-    {
-        var currentUserUsername = User.Identity?.Name!;
-        var currentUserDto = new UsernameDto {Username = currentUserUsername};
-        var candidateUserDto = new UsernameDto {Username = candidateUsername};
-
-        var createResult = await _unitOfWork.ChatRepository
-            .CreateChatAsync(candidateUserDto, currentUserDto);
-
-        if (!createResult.IsSuccessfully)
-        {
-            return RedirectToAction("AllCandidates", "EmployerAccount");
-        }
-
-        return RedirectToAction(nameof(AllEmployerChats));
-    }
-
-    [HttpGet]
-    [Authorize(Roles = "employer")]
-    public async Task<IActionResult> AllEmployerChats()
-    {
-        var username = User.Identity?.Name!;
-        var usernameDto = new UsernameDto {Username = username};
-
-        var employerChats = await _unitOfWork.ChatRepository.GetAllEmployerChatsAsync(usernameDto);
-
-        if (!employerChats.IsSuccessfully)
-            return RedirectToAction("Index", "Main");
-
-        return View(employerChats.EmployerChats);
-    }
-
-    [HttpGet]
-    [Authorize(Roles = "candidate")]
-    public async Task<IActionResult> AllCandidateChats()
-    {
-        var username = User.Identity?.Name!;
-        var usernameDto = new UsernameDto {Username = username};
-
-        var candidateChats = await _unitOfWork.ChatRepository.GetAllCandidateChatsAsync(usernameDto);
-
-        if (!candidateChats.IsSuccessfully)
-            return RedirectToAction("Index", "Main");
-
-        return View(candidateChats.CandidateChats);
+        _hubContext = hubContext;
     }
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> ChatDetails(string candidateUsername, string employerUsername)
+    public async Task<IActionResult> ChatDetails(int id)
     {
-        var senderUsername = User.Identity?.Name!;
-        var senderUsernameDto = new UsernameDto {Username = senderUsername};
-        var senderData = await _unitOfWork.UserRepository.GetUserDataAsync(senderUsernameDto);
-
-        string recipientUsername;
-        UsernameDto recipientUsernameDto;
-        UserResponse recipientData;
-
-        int senderId, recipientId;
-
-        ChatResponse chatData;
-        ChatDetailsViewModel chatDetailsViewModel;
+        ChatResponse chatDetailsResult;
         
-        if (User.IsInRole("employer"))
-        {
-            recipientUsername = candidateUsername;
-            recipientUsernameDto = new UsernameDto {Username = recipientUsername};
-            recipientData = await _unitOfWork.UserRepository.GetUserDataAsync(recipientUsernameDto);
+        if (User.IsInRole(EmployerRole))
+            chatDetailsResult = await _unitOfWork.ChatRepository.GetChatDetailsAsync(id, EmployerRole, GetUserId());
+        else 
+            chatDetailsResult = await _unitOfWork.ChatRepository.GetChatDetailsAsync(id, CandidateRole, GetUserId());
+        
+        if (!chatDetailsResult.IsSuccessfully)
+            return RedirectToAction(nameof(AllChats));
 
-            if (!recipientData.IsSuccessfully || recipientData.User.CandidateUser is null)
-                return RedirectToAction(nameof(AllEmployerChats));
-            
-            if (!senderData.IsSuccessfully || senderData.User.EmployerUser is null)
-                return RedirectToAction(nameof(AllEmployerChats));
-
-            senderId = senderData.User.EmployerUser.EmployerUserId;
-            recipientId = recipientData.User.CandidateUser.CandidateUserId;
-
-            chatData = await _unitOfWork.ChatRepository.GetChatDataAsync(recipientId, senderId);
-
-            chatDetailsViewModel = new()
-            {
-                ChatDetails = chatData.ChatRoom,
-                SenderUsername = senderUsername,
-                RecipientUsername = recipientUsername
-            };
-        }
-        else
-        {
-            recipientUsername = employerUsername;
-            recipientUsernameDto = new UsernameDto {Username = recipientUsername};
-            recipientData = await _unitOfWork.UserRepository.GetUserDataAsync(recipientUsernameDto);
-            
-            if (!recipientData.IsSuccessfully || recipientData.User.EmployerUser is null)
-                return RedirectToAction(nameof(AllCandidateChats));
-            
-            if (!senderData.IsSuccessfully || senderData.User.CandidateUser is null)
-                return RedirectToAction(nameof(AllCandidateChats));
-
-            senderId = senderData.User.CandidateUser.CandidateUserId;
-            recipientId = recipientData.User.EmployerUser.EmployerUserId;
-            
-            chatData = await _unitOfWork.ChatRepository.GetChatDataAsync(senderId, recipientId);
-            
-            chatDetailsViewModel = new()
-            {
-                ChatDetails = chatData.ChatRoom,
-                SenderUsername = senderUsername,
-                RecipientUsername = recipientUsername
-            };
-        }
-
-        return View(chatDetailsViewModel);
+        return View(chatDetailsResult.ChatRoom);
     }
 
-    // [HttpPost]
-    // [Authorize]
-    // public async Task<IActionResult> CreateMessage(string content, int chatId)
-    // {
-    //     var candidateUsername = "candidate";
-    //
-    //     var candidate = new UsernameDto {Username = candidateUsername};
-    //     var candidateId = await _unitOfWork.UserRepository.GetUserDataAsync(candidate);
-    //     
-    //     _unitOfWork.ChatRepository.CreateMessageAsync(content, chatId, candidateId.User.Id);
-    //
-    //     return RedirectToAction("ChatDetails", new { candidateUsername = "candidate", employerUsername = "employer" });
-    // }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "employer")]
+    public async Task<IActionResult> CreateChatRoom(string chatName, string userId)
+    {
+        var currentUserId = GetUserId();
+        var createChatResult = await _unitOfWork.ChatRepository.CreateChatRoomAsync(chatName, currentUserId, userId);
 
-    // [HttpPost]
-    // [Authorize]
-    // public async Task<IActionResult> SendMessage(string content, string candidateUsername,
-    //     [FromServices] IHubContext<ChatHub> chat)
-    // {
-    //     var senderUsername = User.Identity?.Name!;
-    //     var senderUsernameDto = new UsernameDto {Username = senderUsername};
-    //     var userData = await _unitOfWork.UserRepository.GetUserDataAsync(senderUsernameDto);
-    //     var senderId = userData.User.EmployerUser.EmployerUserId;
-    //
-    //     candidateUsername = "candidate";
-    //
-    //     var candidate = new UsernameDto {Username = candidateUsername};
-    //     var candidateId = await _unitOfWork.UserRepository.GetUserDataAsync(candidate);
-    //     var t = candidateId.User.CandidateUser.CandidateUserId;
-    //     
-    //     var chatId = await _unitOfWork.ChatRepository.GetChatDataAsync(t, senderId);
-    //     
-    //     var messageResult = await _unitOfWork.ChatRepository
-    //         .CreateMessageAsync(content, chatId.ChatRoom.ChatRoomId, userData.User.Id);
-    //
-    //     await chat.Clients.Group(senderUsername).SendAsync("ReceiveMessage", new
-    //     {
-    //         Content = messageResult.ChatMessage.Content
-    //     });
-    //
-    //     return Ok();
-    // }
+        if (!createChatResult.IsSuccessfully)
+            return RedirectToAction("AllCandidates", "EmployerAccount");
+
+        return RedirectToAction(nameof(ChatDetails), new {id = createChatResult.ChatRoom?.ChatRoomId});
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "employer")]
+    public async Task<IActionResult> RemoveChatRoom(int chatId)
+    {
+        var removeChatResult = await _unitOfWork.ChatRepository
+            .RemoveChatRoomAsync(chatId);
+
+        if (!removeChatResult.IsSuccessfully)
+            return RedirectToAction(nameof(AllChats));
+
+        return RedirectToAction(nameof(AllChats));
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> AllChats()
+    {
+        var currentUserId = GetUserId();
+        ChatResponse allChatsResult;
+        
+        if (User.IsInRole(EmployerRole))
+            allChatsResult = await _unitOfWork.ChatRepository.GetAllUserChatsAsync(currentUserId, EmployerRole);
+        else 
+            allChatsResult = await _unitOfWork.ChatRepository.GetAllUserChatsAsync(currentUserId, CandidateRole);
+
+        if (!allChatsResult.IsSuccessfully)
+            return RedirectToAction("Index", "Main");
+
+        return View(allChatsResult.ChatRooms);
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> SendMessage(string message, int roomId)
+    {
+        var currentUsername = GetUsername();
+        var createMessageResult = await _unitOfWork.ChatRepository
+            .CreateChatMessageAsync(message, currentUsername, roomId);
+
+        await _hubContext.Clients.Group(roomId.ToString()).SendAsync("ReceiveMessage", new
+        {
+            createMessageResult.ChatMessage!.Content,
+            createMessageResult.ChatMessage.Name,
+            Timestamp = createMessageResult.ChatMessage.SendTime.ToString("MM/dd/yyyy hh:mm:ss"),
+        });
+        
+        return Ok();
+    }
 }

@@ -25,7 +25,7 @@ public class UnitOfWork : IUnitOfWork
     public IChatRepository ChatRepository { get; }
 
     public UnitOfWork(WorkForYouDbContext context, ILoggerFactory loggerFactory, 
-        IMapper mapper, IFileService fileService)
+        IMapper mapper, IFileService fileService, IChatService chatService)
     {
         var logger = loggerFactory.CreateLogger("logs");
         
@@ -41,7 +41,7 @@ public class UnitOfWork : IUnitOfWork
         TypeOfCompanyRepository = new TypeOfCompanyRepository(context, logger);
         CommunicationLanguageRepository = new CommunicationLanguageRepository(context, logger);
         RespondedListRepository = new RespondedListRepository(context, logger);
-        ChatRepository = new ChatRepository(context, logger);
+        ChatRepository = new ChatRepository(context, logger, chatService);
     }
 
     public async Task SaveAsync()

@@ -12,7 +12,7 @@ using WorkForYou.WebUI.ViewModels.Forms;
 namespace WorkForYou.WebUI.Controllers;
 
 [Authorize(Roles = "employer")]
-public class EmployerAccountController : Controller
+public class EmployerAccountController : BaseController
 {
     private readonly IStringLocalizer<EmployerAccountController> _stringLocalization;
     private readonly INotificationService _notificationService;
@@ -33,7 +33,7 @@ public class EmployerAccountController : Controller
     [HttpGet]
     public async Task<IActionResult> AllVacancies(QueryParameters queryParameters)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
 
         var vacancies =
             await _unitOfWork.VacancyRepository.GetAllEmployerVacanciesAsync(new UsernameDto {Username = username},
@@ -93,7 +93,7 @@ public class EmployerAccountController : Controller
         var candidatesResult =
             await _unitOfWork.UserRepository.GetAllCandidatesAsync(queryParameters);
 
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = username});
 
         var workCategories = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
@@ -112,7 +112,7 @@ public class EmployerAccountController : Controller
             VacancyCount = candidatesResult.VacancyCount,
             ApplicationUsers = candidatesResult.ApplicationUsers,
             Pages = candidatesResult.Pages,
-            Username = User.Identity?.Name!,
+            Username = GetUsername(),
             WorkCategories = workCategories.WorkCategories,
             EnglishLevels = englishLevels.EnglishLevels,
             CommunicationLanguages = communicationLanguages.CommunicationLanguages
@@ -154,7 +154,7 @@ public class EmployerAccountController : Controller
     [HttpGet]
     public async Task<IActionResult> RefreshEmployerInfo()
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = username});
 
         if (!userData.IsSuccessfully)
@@ -172,7 +172,7 @@ public class EmployerAccountController : Controller
     [HttpPost]
     public async Task<IActionResult> RefreshEmployerInfo(RefreshEmployerInfoViewModel refreshEmployerInfoViewModel)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
 
         refreshEmployerInfoViewModel.Username = username;
 
@@ -198,7 +198,7 @@ public class EmployerAccountController : Controller
     [HttpGet]
     public async Task<IActionResult> AddToFavouriteList(int id, string? returnUrl)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
 
         var addToFavouriteResult = await _userService
             .AddCandidateToFavouriteListAsync(new() {Username = username}, id);
@@ -217,7 +217,7 @@ public class EmployerAccountController : Controller
     [HttpGet]
     public async Task<IActionResult> FavouriteList(QueryParameters queryParameters)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = username});
         var candidates = await _unitOfWork.UserRepository
             .ShowFavouriteCandidatesListAsync(new() {Username = username}, queryParameters);

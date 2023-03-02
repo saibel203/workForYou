@@ -11,7 +11,7 @@ using WorkForYou.WebUI.ViewModels.Forms;
 namespace WorkForYou.WebUI.Controllers;
 
 [Authorize]
-public class AccountController : Controller
+public class AccountController : BaseController
 {
     private readonly INotificationService _notificationService;
     private readonly IStringLocalizer<AccountController> _stringLocalization;
@@ -32,7 +32,9 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> ChangePassword()
     {
-        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+        var currentUsername = GetUsername();
+        var currentUser = await _unitOfWork.UserRepository
+            .GetUserDataAsync(new() {Username = currentUsername});
 
         if (!currentUser.IsSuccessfully)
             _notificationService.CustomErrorMessage(_stringLocalization["UserNotFound"]);
@@ -45,7 +47,9 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
     {
-        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+        var currentUsername = GetUsername();
+        var currentUser = await _unitOfWork.UserRepository
+            .GetUserDataAsync(new() {Username = currentUsername});
         ViewData["CurrentEmail"] = currentUser.User.Email;
 
         if (!ModelState.IsValid)
@@ -88,19 +92,16 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Profile(string username)
     {
-        const string employerRole = "employer";
-        const string candidateRole = "candidate";
-
         UserResponse userData;
         var test = await _authService.IsUserCandidate(new() {Username = username});
 
         if (test.IsUserCandidate)
         {
             userData = await _unitOfWork.UserRepository
-                .GetUserDataAsync(new() {Username = username, UserRole = candidateRole});
+                .GetUserDataAsync(new() {Username = username, UserRole = CandidateRole});
 
             if (!HttpContext.Session.Keys.Contains($"IsShowCandidate{userData.User.CandidateUser!.CandidateUserId}")
-                && HttpContext.User.IsInRole(employerRole))
+                && HttpContext.User.IsInRole(EmployerRole))
             {
                 HttpContext.Session.SetString($"IsShowCandidate{userData.User.CandidateUser!.CandidateUserId}", "1");
 
@@ -113,7 +114,7 @@ public class AccountController : Controller
         }
         else
             userData = await _unitOfWork.UserRepository
-                .GetUserDataAsync(new() {Username = username, UserRole = employerRole});
+                .GetUserDataAsync(new() {Username = username, UserRole = EmployerRole});
 
         if (!userData.IsSuccessfully)
         {
@@ -127,9 +128,9 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> ProfileUploadImage(IFormFile userFile)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var imageResult = await _unitOfWork.UserRepository.UploadUserImageAsync(userFile,
-            new UsernameDto {Username = User.Identity?.Name!});
+            new UsernameDto {Username = username});
 
         if (!imageResult.IsSuccessfully)
             _notificationService.CustomErrorMessage(_stringLocalization["UploadImageError"]);
@@ -141,7 +142,7 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> RefreshGeneralProfileInfo()
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new UsernameDto {Username = username});
 
         if (!userData.IsSuccessfully)
@@ -165,7 +166,7 @@ public class AccountController : Controller
             return View(refreshGeneralProfileInfoViewModel);
         }
 
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var refreshGeneralDto = _mapper.Map<RefreshGeneralUserDto>(refreshGeneralProfileInfoViewModel);
         var refreshGeneralInfoResult = await _unitOfWork.UserRepository
             .RefreshGeneralInfoAsync(refreshGeneralDto);
@@ -184,7 +185,7 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> RemoveUser()
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var removeUserResult = await _unitOfWork.UserRepository.RemoveUserAsync(new() {Username = username});
 
         if (!removeUserResult.IsSuccessfully)

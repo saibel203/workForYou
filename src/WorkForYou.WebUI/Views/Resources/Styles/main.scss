@@ -56,7 +56,7 @@ body {
   font-weight: 600;
   margin-top: 14px;
   transition: all .2s ease;
-  
+
   &:hover {
     background-color: rgba(105, 90, 166, .5);
   }
@@ -362,7 +362,7 @@ body {
     flex-direction: column;
     height: 100%;
     flex-shrink: 0;
-    
+
     .search-buttons {
       font-size: 14px;
       margin-top: 20px;
@@ -378,7 +378,7 @@ body {
     &-category-title {
       padding-bottom: 10px;
       font-weight: 500;
-      
+
       &:not(:first-child) {
         margin-top: 20px;
       }
@@ -712,14 +712,13 @@ body {
       margin-top: 4px;
 
       &-header {
+        min-width: 50%;
         margin-top: 20px;
+        display: flex;
+        align-items: center;
       }
 
-      a:first-child {
-        width: 33%;
-      }
-
-      button, a {
+      button, a, input[type='submit'] {
         font-size: 15px;
       }
     }
@@ -1007,7 +1006,7 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
         opacity: .8;
       }
     }
-    
+
     button a {
       display: block;
       width: 100%;
@@ -1221,7 +1220,7 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
     h1 {
       margin-bottom: 30px;
     }
-    
+
     a {
       margin: 15px 15px 15px 0;
       font-size: 14px;
@@ -1785,50 +1784,76 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
   &__body {
     display: flex;
     flex-direction: column;
-    min-width: 100%;
-    
+
     &-message {
-      margin: 15px 0;
       display: flex;
+      flex-direction: column;
+      margin: 15px 0;
       max-width: 500px;
+      min-width: 100px;
+      width: 100%;
       
+      p > span {
+        display: flex;
+        justify-content: end;
+      }
+
+      span {
+        font-size: .8em;
+      }
+
       &.message-own {
         position: relative;
         display: flex;
         margin-left: auto;
-        
+
+        span {
+          display: flex;
+          justify-content: end;
+        }
+
         p {
           color: #fff;
           font-size: 14px;
           line-height: 1.5;
           font-weight: 400;
-          padding: 15px;
+          padding: 10px;
           background: #4b7bec;
           display: inline-block;
           border-top-left-radius: 10px;
           border-top-right-radius: 10px;
           border-bottom-left-radius: 10px;
           margin-bottom: 0;
+          
+          > span {
+            color: #fff;
+            opacity: .8;
+          }
         }
       }
-      
+
       &.message-not-my {
         display: flex;
         position: relative;
         width: 100%;
-        
+
         p {
           color: #000;
           font-size: 14px;
           line-height: 1.5;
           font-weight: 400;
-          padding: 15px;
+          padding: 10px;
           background: #f5f5f5;
           display: inline-block;
           border-bottom-left-radius: 10px;
           border-top-right-radius: 10px;
           border-bottom-right-radius: 10px;
           margin-bottom: 0;
+          
+          > span {
+            color: #000;
+            opacity: .8;
+          }
         }
       }
     }
@@ -1867,7 +1892,7 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
       background-color: var(--theme-bg-color);
     }
 
-    button {
+    input[type='submit'] {
       width: 25%;
       background-color: #3867d6;
       color: #fff;
@@ -1907,13 +1932,21 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
   &__inner {
     margin-top: 30px !important;
   }
-  
+
+  form {
+    display: flex;
+
+    input[type='submit'] {
+      font-size: 1em;
+    }
+  }
+
   &.show {
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
     visibility: visible;
   }
-  
+
   &__title {
     display: flex;
     justify-content: center;
@@ -1923,11 +1956,11 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
     min-height: inherit;
     text-align: center;
   }
-  
-  a {
+
+  a, input {
     margin-top: 10px;
   }
-  
+
   &__backdrop {
     position: fixed;
     top: 0;
@@ -1936,7 +1969,7 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
     height: 100%;
     background-color: rgba(#000, .6);
     z-index: 10;
-    
+
     &.hidden {
       display: none;
     }
@@ -1976,7 +2009,7 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
       align-items: center;
       padding: 10px 20px;
       transition: all .2s ease;
-      
+
       &:hover {
         background-color: rgba(203, 203, 203, 0.3);
       }
@@ -1991,6 +2024,8 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
         height: 50px;
         border-radius: 50%;
         transition: all .2s ease;
+        border: none;
+        cursor: pointer;
 
         i {
           color: #fff;

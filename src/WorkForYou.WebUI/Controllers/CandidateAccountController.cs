@@ -12,16 +12,14 @@ using WorkForYou.WebUI.ViewModels.Forms;
 namespace WorkForYou.WebUI.Controllers;
 
 [Authorize(Roles = "candidate")]
-public class CandidateAccountController : Controller
+public class CandidateAccountController : BaseController
 {
     private readonly IStringLocalizer<CandidateAccountController> _stringLocalization;
     private readonly INotificationService _notificationService;
     private readonly IVacancyService _vacancyService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-
-    private const string CandidateRole = "candidate";
-
+    
     public CandidateAccountController(IUnitOfWork unitOfWork, INotificationService notificationService, IMapper mapper,
         IVacancyService vacancyService, IStringLocalizer<CandidateAccountController> stringLocalization)
     {
@@ -36,7 +34,7 @@ public class CandidateAccountController : Controller
     public async Task<IActionResult> AllVacancies(QueryParameters queryParameters)
     {
         var vacancies = await _unitOfWork.VacancyRepository.GetAllVacanciesAsync(queryParameters);
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var userData = await _unitOfWork.UserRepository
             .GetUserDataAsync(new() {Username = username, UserRole = CandidateRole});
 
@@ -100,7 +98,7 @@ public class CandidateAccountController : Controller
     [HttpGet]
     public async Task<IActionResult> FavouriteList(QueryParameters queryParameters)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = username});
         var favouriteVacancies =
             await _unitOfWork.UserRepository
@@ -166,7 +164,7 @@ public class CandidateAccountController : Controller
     [HttpGet]
     public async Task<IActionResult> RespondedList(QueryParameters queryParameters)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var usernameDto = new UsernameDto {Username = username, UserRole = CandidateRole};
 
         var userData = await _unitOfWork.UserRepository.GetUserDataAsync(usernameDto);
@@ -233,7 +231,7 @@ public class CandidateAccountController : Controller
     [HttpGet]
     public async Task<IActionResult> AddToFavouriteList(int id, string? returnUrl)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
 
         var addToFavouriteResult = await _vacancyService
             .AddVacancyToFavouriteListAsync(new() {Username = username, UserRole = CandidateRole}, id);
@@ -252,7 +250,7 @@ public class CandidateAccountController : Controller
     [HttpGet]
     public async Task<IActionResult> RefreshCandidateInfo()
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
         var userData =
             await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = username, UserRole = CandidateRole});
 
@@ -280,7 +278,7 @@ public class CandidateAccountController : Controller
     [HttpPost]
     public async Task<IActionResult> RefreshCandidateInfo(RefreshCandidateInfoViewModel refreshCandidateInfoViewModel)
     {
-        var username = User.Identity?.Name!;
+        var username = GetUsername();
 
         var englishLevelResponse = await _unitOfWork.EnglishLevelRepository.GetAllEnglishLevelsAsync();
         var workCategoryResponse = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
