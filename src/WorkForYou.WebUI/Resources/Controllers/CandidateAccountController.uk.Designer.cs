@@ -60,15 +60,6 @@ namespace WorkForYou.WebUI.Resources.Controllers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to При добавленні вакансії у список виникла помилка.
-        /// </summary>
-        internal static string AddToFavouriteError {
-            get {
-                return ResourceManager.GetString("AddToFavouriteError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Вакансій за запитом не знайдено.
         /// </summary>
         internal static string NotFoundError {

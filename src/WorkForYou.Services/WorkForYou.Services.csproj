@@ -28,21 +28,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AuthService.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VacancyService.en.resx">
+    <EmbeddedResource Update="Resources\FavouriteListService.uk.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>VacancyService.en.Designer.cs</LastGenOutput>
+      <LastGenOutput>FavouriteListService.uk.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VacancyService.uk.resx">
+    <EmbeddedResource Update="Resources\FavouriteListService.en.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>VacancyService.uk.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UserService.uk.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UserService.uk.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UserService.en.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UserService.en.Designer.cs</LastGenOutput>
+      <LastGenOutput>FavouriteListService.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -57,25 +49,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AuthService.en.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\VacancyService.en.Designer.cs">
+    <Compile Update="Resources\FavouriteListService.uk.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>VacancyService.en.resx</DependentUpon>
+      <DependentUpon>FavouriteListService.uk.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\VacancyService.uk.Designer.cs">
+    <Compile Update="Resources\FavouriteListService.en.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>VacancyService.uk.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\UserService.uk.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UserService.uk.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\UserService.en.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UserService.en.resx</DependentUpon>
+      <DependentUpon>FavouriteListService.en.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 

@@ -31,9 +31,12 @@
                 <div class="all-employer-vacancies__vacancy-main">
                     <a asp-controller="Vacancy" asp-action="EditVacancy" asp-route-id="@vacancy.VacancyId">@ViewLocalization["Edit"]</a>
                     <span>·</span>
-                    <a asp-controller="Vacancy" asp-action="AllVacancyResponses" asp-route-vacancyId="@vacancy.VacancyId">@ViewLocalization["Candidates"]</a>
+                    <a asp-controller="Responded" asp-action="AllVacancyResponses" asp-route-vacancyId="@vacancy.VacancyId">@ViewLocalization["Candidates"]</a>
                     <span>·</span>
-                    <a asp-controller="Vacancy" asp-action="RemoveVacancy" asp-route-id="@vacancy.VacancyId">@ViewLocalization["Delete"]</a>
+                    <form method="post" asp-controller="Vacancy" asp-action="RemoveVacancy" asp-antiforgery="true">
+                        <input type="hidden" name="Id" value="@vacancy.VacancyId">
+                        <button type="submit" class="">@ViewLocalization["Delete"]</button>
+                    </form>
                 </div>
             </div>
         }
@@ -46,4 +49,4 @@
         <script src="~/js/custom-select.js"></script>
     }
 
-</div>
+</div> 

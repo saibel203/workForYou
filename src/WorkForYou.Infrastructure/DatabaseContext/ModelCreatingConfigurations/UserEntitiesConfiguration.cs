@@ -11,10 +11,12 @@ public class UserEntitiesConfiguration : IEntityTypeConfiguration<ApplicationUse
     {
         builder.HasOne(x => x.CandidateUser)
             .WithOne(x => x.ApplicationUser)
-            .HasForeignKey<CandidateUser>(x => x.ApplicationUserId);
+            .HasForeignKey<CandidateUser>(x => x.ApplicationUserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.EmployerUser)
             .WithOne(x => x.ApplicationUser)
-            .HasForeignKey<EmployerUser>(x => x.ApplicationUserId);
+            .HasForeignKey<EmployerUser>(x => x.ApplicationUserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

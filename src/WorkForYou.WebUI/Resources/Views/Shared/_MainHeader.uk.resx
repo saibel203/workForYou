@@ -42,4 +42,13 @@
     <data name="HeaderAllCandidates" xml:space="preserve">
         <value>Кандидати</value>
     </data>
+    <data name="Hello" xml:space="preserve">
+        <value>Вітаємо, </value>
+    </data>
+    <data name="Chat" xml:space="preserve">
+        <value>Чат</value>
+    </data>
+    <data name="Reviews" xml:space="preserve">
+        <value>Мої відгуки</value>
+    </data>
 </root>

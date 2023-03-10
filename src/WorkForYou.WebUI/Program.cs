@@ -38,6 +38,8 @@ app.UseRequestLocalization(localizationOptions);
 
 app.UseSession();
 
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
 app.UseAuthentication();
 app.UseAuthorization();
 

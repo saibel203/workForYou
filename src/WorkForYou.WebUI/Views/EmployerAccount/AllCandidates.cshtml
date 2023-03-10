@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Mvc.Localization
 @using WorkForYou.Core.ServiceInterfaces
-@using WorkForYou.WebUI.ViewModels.AdditionalViewModels
+@using WorkForYou.Shared.ViewModels.AdditionalViewModels
 @model CandidatesViewModel
 
 @inject IChatService ChatService
@@ -97,7 +97,8 @@
                             </a>
                             @if (isChatExists.IsChatExists)
                             {
-                                <a class="search-buttons card-buttons" asp-controller="Chat" asp-action="ChatDetails" asp-route-id="">@ViewLocalization["Write"]</a>
+                                <a class="search-buttons card-buttons" asp-controller="Chat" asp-action="ChatDetailsByName"
+                                   asp-route-chatName="@chatName">@ViewLocalization["Write"]</a>
                             }
                             else
                             {
@@ -105,15 +106,15 @@
                                       asp-antiforgery="true">
                                     <input type="hidden" name="chatName" value="@chatName">
                                     <input type="hidden" name="userId" value="@user.Id">
-                                    <input type="submit" value="Написати" class="search-buttons card-buttons">
+                                    <input type="submit" value="@ViewLocalization["Write"]" class="search-buttons card-buttons">
                                 </form>
                             }
                         </div>
 
                         @await Html.PartialAsync("_LikeButton", new SettingsViewModel
                                {
-                                   CurrentVacancyId = user.CandidateUser.CandidateUserId, ReturnUrl = currentPath,
-                                   CurrentController = Model.CurrentController
+                                   CurrentVacancyId = user.CandidateUser.CandidateUserId,
+                                   CurrentController = Model.CurrentController, ReturnUrl = currentPath
                                })
                     </div>
                 </div>
@@ -127,6 +128,7 @@
     @section Scripts
     {
         <script src="~/js/custom-select.js"></script>
+        <script type="module" src="~/js/favourite-list.js"></script>
     }
 
 </div>

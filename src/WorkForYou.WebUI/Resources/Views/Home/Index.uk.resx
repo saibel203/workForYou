@@ -51,4 +51,22 @@
     <data name="FormSend" xml:space="preserve">
         <value>Відправити</value>
     </data>
+    <data name="PM" xml:space="preserve">
+        <value>PM.</value>
+    </data>
+    <data name="Designers" xml:space="preserve">
+        <value>UX/UI дизайнерів.</value>
+    </data>
+    <data name="DevOps" xml:space="preserve">
+        <value>DevOps.</value>
+    </data>
+    <data name="Testers" xml:space="preserve">
+        <value>тестувальників.</value>
+    </data>
+    <data name="Programmers" xml:space="preserve">
+        <value>програмістів.</value>
+    </data>
+    <data name="All" xml:space="preserve">
+        <value>вcix, хто працює в IT.</value>
+    </data>
 </root>

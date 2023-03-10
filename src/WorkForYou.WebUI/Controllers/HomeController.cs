@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.WebUI.Attributes;
-using WorkForYou.WebUI.ViewModels.Forms;
+using WorkForYou.Shared.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Controllers;
 

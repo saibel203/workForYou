@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using WorkForYou.Core.RepositoryInterfaces;
 using WorkForYou.Infrastructure.DatabaseContext;
-using WorkForYou.Core.ServiceInterfaces;
 
 namespace WorkForYou.Data.Repositories;
 
@@ -25,13 +24,13 @@ public class UnitOfWork : IUnitOfWork
     public IChatRepository ChatRepository { get; }
 
     public UnitOfWork(WorkForYouDbContext context, ILoggerFactory loggerFactory, 
-        IMapper mapper, IFileService fileService, IChatService chatService)
+        IMapper mapper)
     {
         var logger = loggerFactory.CreateLogger("logs");
         
         _context = context;
         VacancyRepository = new VacancyRepository(context, logger, mapper);
-        UserRepository = new UserRepository(context, logger, fileService);
+        UserRepository = new UserRepository(context, logger);
         VacancyDomainRepository = new VacancyDomainRepository(context, logger);
         WorkCategoryRepository = new WorkCategoryRepository(context, logger);
         HowToWorkRepository = new HowToWorkRepository(context, logger);
@@ -41,7 +40,7 @@ public class UnitOfWork : IUnitOfWork
         TypeOfCompanyRepository = new TypeOfCompanyRepository(context, logger);
         CommunicationLanguageRepository = new CommunicationLanguageRepository(context, logger);
         RespondedListRepository = new RespondedListRepository(context, logger);
-        ChatRepository = new ChatRepository(context, logger, chatService);
+        ChatRepository = new ChatRepository(context, logger);
     }
 
     public async Task SaveAsync()

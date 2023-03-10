@@ -4,5 +4,5 @@ public class CommunicationLanguage
 {
     public int CommunicationLanguageId { get; set; }
     public string? CommunicationLanguageName { get; set; } = string.Empty;
-    public IEnumerable<CandidateUser>? CandidateUsers { get; set; }
+    public ICollection<CandidateUser>? CandidateUsers { get; set; }
 }

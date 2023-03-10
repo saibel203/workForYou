@@ -19,7 +19,7 @@ public class WorkForYouDbContext : IdentityDbContext<ApplicationUser, Applicatio
     public DbSet<WorkCategory> WorkCategories => Set<WorkCategory>();
     public DbSet<HowToWork> HowToWorks => Set<HowToWork>();
     public DbSet<Relocate> Relocates => Set<Relocate>();
-    public DbSet<CandidateRegion> CandidateRegions => Set<CandidateRegion>();
+    public virtual DbSet<CandidateRegion> CandidateRegions => Set<CandidateRegion>();
     public DbSet<TypesOfCompany> TypesOfCompany => Set<TypesOfCompany>();
     public DbSet<VacancyDomain> VacancyDomains => Set<VacancyDomain>();
     public DbSet<Vacancy> Vacancies => Set<Vacancy>();

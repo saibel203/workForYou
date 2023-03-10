@@ -13,11 +13,11 @@ public class FavouriteCandidateEntitiesConfiguration : IEntityTypeConfiguration<
         builder.HasOne(x => x.EmployerUser)
             .WithMany(x => x.FavouriteCandidates)
             .HasForeignKey(x => x.EmployerUserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(x => x.CandidateUser)
             .WithMany(x => x.FavouriteCandidates)
             .HasForeignKey(x => x.CandidateUserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

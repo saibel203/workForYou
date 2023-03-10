@@ -24,4 +24,7 @@
     <data name="GeneralInfo" xml:space="preserve">
         <value>Змінити загальну інформацію</value>
     </data>
+    <data name="Button" xml:space="preserve">
+        <value>Редагувати</value>
+    </data>
 </root>

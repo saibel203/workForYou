@@ -15,6 +15,7 @@
     <ItemGroup>
         <ProjectReference Include="..\WorkForYou.Infrastructure\WorkForYou.Infrastructure.csproj" />
         <ProjectReference Include="..\WorkForYou.Services\WorkForYou.Services.csproj" />
+        <ProjectReference Include="..\WorkForYou.Shared\WorkForYou.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,9 +37,18 @@
     </ItemGroup>
 
     <ItemGroup>
+        <TypeScriptCompile Include="Views\Resources\Scripts\environments\environment.ts" />
+        <TypeScriptCompile Include="Views\Resources\Scripts\favourite-list.ts" />
         <TypeScriptCompile Include="Views\Resources\Scripts\home-password.ts" />
         <TypeScriptCompile Include="Views\Resources\Scripts\home.ts" />
+        <TypeScriptCompile Include="Views\Resources\Scripts\login.ts" />
+        <TypeScriptCompile Include="Views\Resources\Scripts\logout.ts" />
         <TypeScriptCompile Include="Views\Resources\Scripts\main.ts" />
+        <TypeScriptCompile Include="Views\Resources\Scripts\respond-vacancy.ts" />
+        <TypeScriptCompile Include="Views\Resources\Scripts\services\auth-service.ts" />
+        <TypeScriptCompile Include="Views\Resources\Scripts\services\chat-service.ts" />
+        <TypeScriptCompile Include="Views\Resources\Scripts\services\favourite-service.ts" />
+        <TypeScriptCompile Include="Views\Resources\Scripts\services\responded-service.ts" />
     </ItemGroup>
 
     <ItemGroup>
@@ -222,14 +232,6 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AllVacancies.uk.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\CandidateAccount\FavouriteList.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>FavouriteList.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\CandidateAccount\FavouriteList.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>FavouriteList.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
       <EmbeddedResource Update="Resources\Views\CandidateAccount\RefreshCandidateInfo.en.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>RefreshCandidateInfo.en.Designer.cs</LastGenOutput>
@@ -293,14 +295,6 @@
       <EmbeddedResource Update="Resources\Views\EmployerAccount\AllVacancies.en.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AllVacancies.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\EmployerAccount\FavouriteList.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>FavouriteList.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\EmployerAccount\FavouriteList.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>FavouriteList.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Resources\Views\EmployerAccount\RefreshEmployerInfo.uk.resx">
         <Generator>ResXFileCodeGenerator</Generator>
@@ -381,6 +375,106 @@
       <EmbeddedResource Update="Resources\Views\Error\AccessDenied.en.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AccessDenied.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\RespondedController.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RespondedController.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\RespondedController.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RespondedController.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\FavouriteController.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteController.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\FavouriteController.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteController.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Attributes\CheckModelSalaryAttribute.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>CheckModelSalaryAttribute.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Attributes\CheckModelSalaryAttribute.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>CheckModelSalaryAttribute.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_Filtering.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_Filtering.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\_Filtering.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_Filtering.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Responded\AllVacancyResponses.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllVacancyResponses.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Responded\AllVacancyResponses.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllVacancyResponses.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Responded\RespondedList.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RespondedList.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Responded\RespondedList.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RespondedList.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Main\Index.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Index.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Main\Index.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Index.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Favourite\FavouriteCandidateList.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteCandidateList.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Favourite\FavouriteCandidateList.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteCandidateList.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Favourite\FavouriteEmployerList.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteEmployerList.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Favourite\FavouriteEmployerList.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>FavouriteEmployerList.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Chat\AllChats.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllChats.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Chat\AllChats.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AllChats.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Chat\ChatDetails.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ChatDetails.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Chat\ChatDetails.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ChatDetails.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\ChatController.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ChatController.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Controllers\ChatController.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ChatController.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\IdentityErrors.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>IdentityErrors.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -610,16 +704,6 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>AllVacancies.uk.resx</DependentUpon>
       </Compile>
-      <Compile Update="Resources\Views\CandidateAccount\FavouriteList.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>FavouriteList.uk.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Views\CandidateAccount\FavouriteList.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>FavouriteList.en.resx</DependentUpon>
-      </Compile>
       <Compile Update="Resources\Views\CandidateAccount\RefreshCandidateInfo.en.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -699,16 +783,6 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>AllVacancies.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Views\EmployerAccount\FavouriteList.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>FavouriteList.uk.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Views\EmployerAccount\FavouriteList.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>FavouriteList.en.resx</DependentUpon>
       </Compile>
       <Compile Update="Resources\Views\EmployerAccount\RefreshEmployerInfo.uk.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -810,6 +884,136 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>AccessDenied.en.resx</DependentUpon>
       </Compile>
+      <Compile Update="Resources\Controllers\RespondedController.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RespondedController.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\RespondedController.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RespondedController.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\FavouriteController.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteController.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\FavouriteController.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteController.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Attributes\CheckModelSalaryAttribute.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>CheckModelSalaryAttribute.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Attributes\CheckModelSalaryAttribute.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>CheckModelSalaryAttribute.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_Filtering.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_Filtering.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\_Filtering.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_Filtering.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Responded\AllVacancyResponses.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllVacancyResponses.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Responded\AllVacancyResponses.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllVacancyResponses.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Responded\RespondedList.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RespondedList.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Responded\RespondedList.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RespondedList.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Main\Index.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Index.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Main\Index.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Index.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Favourite\FavouriteCandidateList.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteEmployerList.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Favourite\FavouriteCandidateList.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteEmployerList.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Favourite\FavouriteEmployerList.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteList.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Favourite\FavouriteEmployerList.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>FavouriteList.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Chat\AllChats.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllChats.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Chat\AllChats.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllChats.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Chat\ChatDetails.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ChatDetails.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Chat\ChatDetails.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ChatDetails.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\ChatController.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ChatController.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Controllers\ChatController.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ChatController.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\IdentityErrors.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>IdentityErrors.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\js\environments\environment.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\environments\environment.js.map" />
     </ItemGroup>
 
     <Target Name="Install NPM modules" BeforeTargets="Build" Inputs="package-lock.json" Outputs="node_modules/.install-stamp">

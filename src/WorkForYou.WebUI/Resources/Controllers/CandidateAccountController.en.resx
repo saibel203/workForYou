@@ -24,9 +24,6 @@
     <data name="NotFoundFavourite" xml:space="preserve">
         <value>No jobs were found for your request or no jobs were added to the list</value>
     </data>
-    <data name="AddToFavouriteError" xml:space="preserve">
-        <value>An error occurred while adding a job to the list</value>
-    </data>
     <data name="UserNotFoundError" xml:space="preserve">
         <value>User not found or an error occurred</value>
     </data>

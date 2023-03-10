@@ -10,6 +10,7 @@ using WorkForYou.Core.Models.IdentityInheritance;
 using WorkForYou.Data.Repositories;
 using WorkForYou.Infrastructure.DatabaseContext;
 using WorkForYou.Services;
+using WorkForYou.Shared.Mapping;
 
 namespace WorkForYou.WebUI;
 
@@ -31,7 +32,7 @@ public static class ConfigureServices
                 options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedEmail = true;
             })
-            //.AddErrorDescriber<MultiLanguageIdentityErrorDescriber>()
+            .AddErrorDescriber<MultiLanguageIdentityErrorDescriber>()
             .AddEntityFrameworkStores<WorkForYouDbContext>()
             .AddDefaultTokenProviders();
 
@@ -44,10 +45,11 @@ public static class ConfigureServices
             options.AccessDeniedPath = "/Error/AccessDenied";
         });
 
-        services.AddAutoMapper(typeof(Program));
+        services.AddAutoMapper(typeof(AutomapperProfile));
 
         services.Configure<SendGridOptions>(configuration.GetSection("SendGridOptions"));
         services.Configure<WebUiOptions>(configuration.GetSection("WebUIOptions"));
+        services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
 
         services.AddDistributedMemoryCache();
         services.AddSession(options => { options.IdleTimeout = TimeSpan.FromDays(1); });
@@ -60,12 +62,12 @@ public static class ConfigureServices
         
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IFileService, FileService>();
-        services.AddTransient<INotificationService, NotificationService>();
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IMailService, MailService>();
-        services.AddTransient<IVacancyService, VacancyService>();
-        services.AddTransient<IUserService, UserService>();
         services.AddTransient<IChatService, ChatService>();
+        services.AddTransient<IViewCounterService, ViewCounterService>();
+        services.AddTransient<INotificationService, NotificationService>();
+        services.AddTransient<IFavouriteListService, FavouriteListService>();
 
         services.AddLocalization(options => options.ResourcesPath = "Resources");
 

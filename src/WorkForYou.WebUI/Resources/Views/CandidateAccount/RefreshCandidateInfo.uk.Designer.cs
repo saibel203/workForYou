@@ -60,6 +60,15 @@ namespace WorkForYou.WebUI.Resources.Views.CandidateAccount {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Редагувати.
+        /// </summary>
+        internal static string Button {
+            get {
+                return ResourceManager.GetString("Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Змінити детальну інформацію.
         /// </summary>
         internal static string ChangeDetails {

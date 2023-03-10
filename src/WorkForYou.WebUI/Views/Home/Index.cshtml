@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model WorkForYou.WebUI.ViewModels.Forms.ContactUsViewModel
+@model WorkForYou.Shared.ViewModels.Forms.ContactUsViewModel
 
 @inject IViewLocalizer ViewLocalization
 
@@ -66,6 +66,25 @@
 
 @section Scripts
 {
-    <script src="~/libs/js/typed.js"></script>
-    <script src="~/js/home-typed.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script>
+        const designers = '@ViewLocalization["Designers"]';
+        const devOps = '@ViewLocalization["DevOps"]';
+        const testers = '@ViewLocalization["Testers"]';
+        const pm = '@ViewLocalization["PM"]';
+        const all = '@ViewLocalization["All"]';
+        
+        const typedStrings = [
+            designers, devOps, testers, pm, all          
+        ];
+        
+        const speed = 100;
+        
+        let typed = new Typed(".auto-type", {
+            strings: typedStrings,
+            typeSpeed: speed,
+            backSpeed: speed - 30,
+            loop: true
+        });
+    </script>
 }

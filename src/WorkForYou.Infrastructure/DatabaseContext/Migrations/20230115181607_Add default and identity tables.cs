@@ -459,7 +459,7 @@ namespace WorkForYou.Infrastructure.DatabaseContext.Migrations
                 {
                     table.PrimaryKey("PK_FavouriteCandidates", x => new { x.EmployerUserId, x.CandidateUserId });
                     table.ForeignKey(
-                        name: "FK_FavouriteCandidates_EmployerUsers_EmployerUserId", // Ws
+                        name: "FK_FavouriteCandidates_EmployerUsers_EmployerUserId", 
                         column: x => x.EmployerUserId,
                         principalTable: "EmployerUsers",
                         principalColumn: "EmployerUserId",
@@ -469,7 +469,7 @@ namespace WorkForYou.Infrastructure.DatabaseContext.Migrations
                         column: x => x.CandidateUserId,
                         principalTable: "CandidateUsers",
                         principalColumn: "CandidateUserId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
             
             migrationBuilder.CreateTable(
@@ -606,6 +606,11 @@ namespace WorkForYou.Infrastructure.DatabaseContext.Migrations
                 table: "EmployerUsers",
                 column: "ApplicationUserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FavouriteCandidates_EmployerUserId",
+                table: "EmployerUsers",
+                column: "EmployerUserId");
         }
 
         /// <inheritdoc />

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Localization;
 using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.WebUI.Attributes;
-using WorkForYou.WebUI.ViewModels.Forms;
+using WorkForYou.Shared.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Controllers;
 
@@ -73,6 +73,8 @@ public class AuthController : Controller
     public async Task<IActionResult> Login(LoginViewModel loginViewModel, string? returnUrl)
     {
         returnUrl ??= Url.Content("~/");
+        
+        
     
         if (!ModelState.IsValid)
         {
@@ -91,7 +93,7 @@ public class AuthController : Controller
         }
     
         _notificationService.CustomSuccessMessage(_stringLocalization["LoginSuccess"]);
-    
+
         return RedirectToLocal(returnUrl);
     }
 

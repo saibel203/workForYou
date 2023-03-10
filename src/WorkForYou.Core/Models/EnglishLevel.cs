@@ -6,6 +6,6 @@ public class EnglishLevel
     public string NameLevel { get; set; } = string.Empty;
     public string DescriptionLevel { get; set; } = string.Empty;
 
-    public IEnumerable<CandidateUser>? CandidateUsers { get; set; }
+    public ICollection<CandidateUser>? CandidateUsers { get; set; }
     public IEnumerable<Vacancy>? Vacancies { get; set; }
 }

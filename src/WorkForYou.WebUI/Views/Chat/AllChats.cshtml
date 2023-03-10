@@ -1,13 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using WorkForYou.WebUI.Extensions
+@using Microsoft.AspNetCore.Mvc.Localization
 @model IEnumerable<WorkForYou.Core.Models.ChatRoom>
 
+@inject IViewLocalizer ViewLocalization
+
 @{
-    ViewData["Title"] = "Мої чати";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 <div class="chat-wrapper">
-    <h1>Мої чати</h1>
+    <h1>@ViewLocalization["Title"]</h1>
 
     <div class="chat-wrapper__chats">
         @foreach (var chat in Model)

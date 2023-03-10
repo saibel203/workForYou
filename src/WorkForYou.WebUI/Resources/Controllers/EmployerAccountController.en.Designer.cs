@@ -60,15 +60,6 @@ namespace WorkForYou.WebUI.Resources.Controllers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occurred while adding a candidate to the list.
-        /// </summary>
-        internal static string AddToFavouriteError {
-            get {
-                return ResourceManager.GetString("AddToFavouriteError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No candidates were found for your request.
         /// </summary>
         internal static string CandidatesNotFoundError {
@@ -92,15 +83,6 @@ namespace WorkForYou.WebUI.Resources.Controllers {
         internal static string RefreshAccountSuccess {
             get {
                 return ResourceManager.GetString("RefreshAccountSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No users were found for your request or the save list is empty.
-        /// </summary>
-        internal static string ShowFavouriteListError {
-            get {
-                return ResourceManager.GetString("ShowFavouriteListError", resourceCulture);
             }
         }
         

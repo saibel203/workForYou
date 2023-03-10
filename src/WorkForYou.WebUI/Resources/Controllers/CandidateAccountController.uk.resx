@@ -24,9 +24,6 @@
     <data name="NotFoundFavourite" xml:space="preserve">
         <value>Вакансій за запитом не знайдено або до списку не було додано жодної вакансії</value>
     </data>
-    <data name="AddToFavouriteError" xml:space="preserve">
-        <value>При добавленні вакансії у список виникла помилка</value>
-    </data>
     <data name="UserNotFoundError" xml:space="preserve">
         <value>Користувача не знайдено або виникла помилка</value>
     </data>

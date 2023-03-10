@@ -34,10 +34,4 @@
     <data name="RefreshAccountSuccess" xml:space="preserve">
         <value>Деталі про ваш аккаунт успішно змінено</value>
     </data>
-    <data name="AddToFavouriteError" xml:space="preserve">
-        <value>При добавленні кандидата у список виникла помилка</value>
-    </data>
-    <data name="ShowFavouriteListError" xml:space="preserve">
-        <value>Користувачів за вашим запитом не знайдено або список збережь є порожнім</value>
-    </data>
 </root>

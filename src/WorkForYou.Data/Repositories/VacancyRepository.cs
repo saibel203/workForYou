@@ -313,37 +313,4 @@ public class VacancyRepository : GenericRepository<Vacancy>, IVacancyRepository
             };
         }
     }
-
-    public async Task<VacancyResponse> UpdateViewNumberOfCountAsync(int vacancyId)
-    {
-        try
-        {
-            var vacancyResult = await GetVacancyByIdAsync(vacancyId);
-
-            if (!vacancyResult.IsSuccessfully || vacancyResult.Vacancy is null)
-                return new()
-                {
-                    Message = "An error occurred when receiving a vacancy",
-                    IsSuccessfully = false
-                };
-
-            vacancyResult.Vacancy.ViewCount++;
-            await Context.SaveChangesAsync();
-
-            return new()
-            {
-                Message = "Job view counter has been updated successfully",
-                IsSuccessfully = true
-            };
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "An error occurred while trying to update the job view counter");
-            return new()
-            {
-                Message = "An error occurred while trying to update the job view counter",
-                IsSuccessfully = false
-            };
-        }
-    }
 }

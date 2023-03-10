@@ -33,10 +33,4 @@
     <data name="RefreshAccountSuccess" xml:space="preserve">
         <value>Your account details have been successfully changed</value>
     </data>
-    <data name="AddToFavouriteError" xml:space="preserve">
-        <value>An error occurred while adding a candidate to the list</value>
-    </data>
-    <data name="ShowFavouriteListError" xml:space="preserve">
-        <value>No users were found for your request or the save list is empty</value>
-    </data>
 </root>

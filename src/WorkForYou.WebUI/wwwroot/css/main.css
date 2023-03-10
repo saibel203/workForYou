@@ -707,6 +707,7 @@ body {
   border-radius: 5px;
   min-width: 100%;
   display: flex;
+  justify-content: space-between;
   overflow-x: hidden;
 }
 .card-details__language p {
@@ -835,6 +836,9 @@ body {
 .card-details p {
   margin: 10px 0;
 }
+.card-details__main {
+  width: 100%;
+}
 .card-details__company {
   margin: 20px 0;
 }
@@ -847,14 +851,23 @@ body {
 }
 .card-details__buttons {
   margin-top: 20px;
+  display: flex;
+  min-width: 50%;
 }
-.card-details__buttons button, .card-details__buttons a {
-  width: 40%;
+.card-details__buttons form {
+  width: 100%;
+}
+.card-details__buttons button, .card-details__buttons a, .card-details__buttons input[type=submit] {
+  width: 100%;
   font-size: 14px;
   transition: opacity 0.2s ease;
+  text-align: center;
 }
-.card-details__buttons button:hover, .card-details__buttons a:hover {
+.card-details__buttons button:hover, .card-details__buttons a:hover, .card-details__buttons input[type=submit]:hover {
   opacity: 0.8;
+}
+.card-details__buttons button {
+  width: 100%;
 }
 .card-details__buttons button a {
   display: block;
@@ -1004,12 +1017,17 @@ body {
   border-radius: 5px;
   background-color: var(--theme-bg-color);
 }
-.all-employer-vacancies__vacancy a {
+.all-employer-vacancies__vacancy a, .all-employer-vacancies__vacancy button {
   color: var(--active-color);
   transition: all 0.2s ease;
 }
-.all-employer-vacancies__vacancy a:hover {
+.all-employer-vacancies__vacancy a:hover, .all-employer-vacancies__vacancy button:hover {
   color: rgba(105, 90, 166, 0.68);
+}
+.all-employer-vacancies__vacancy button {
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
 }
 .all-employer-vacancies__vacancy-main {
   margin-top: 3px;

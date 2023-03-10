@@ -18,14 +18,14 @@
             <div class="card-details__header">
                 <h1>
                     @Model.CandidateUser.CompanyPosition
-                    @if (Model.FirstName is not null && Model.LastName is not null)
+                    @if (!string.IsNullOrEmpty(Model.FirstName) && !string.IsNullOrEmpty(Model.LastName))
                     {
                         @: (@Model.LastName @Model.FirstName)
                     }
                 </h1>
             </div>
         }
-        @if (Model.CandidateUser.ExperienceWorkDescription is not null)
+        @if (!string.IsNullOrEmpty(Model.CandidateUser.ExperienceWorkDescription))
         {
             <div class="card-details__body">
                 <h3>@ViewLocalization["Experience"]</h3>
@@ -44,7 +44,7 @@
                 <p>@Model.CandidateUser.ExperienceWorkDescription</p>
             </div>
         }
-        @if (Model.CandidateUser.KeyWords is not null)
+        @if (!string.IsNullOrEmpty(Model.CandidateUser.KeyWords))
         {
             var keyWords = Model.CandidateUser.KeyWords.Split(", ", StringSplitOptions.RemoveEmptyEntries);
 
@@ -68,7 +68,9 @@
         {
             <div class="card-details__buttons">
                 <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
-                <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RemoveUser">@ViewLocalization["Delete"]</a>
+                <form method="post" asp-controller="Account" asp-action="RemoveUser">
+                    <input type="submit" value="@ViewLocalization["Delete"]" class="search-buttons card-buttons detail-danger">
+                </form>
             </div>
         }
     </div>
@@ -94,12 +96,12 @@
             <i class="fa-regular fa-eye"></i> @Model.CandidateUser.ViewCount
             @ViewLocalization["View"]@(ViewHelpers.GetLastStringLetters(Model.CandidateUser.ViewCount))
         </p>
-        @if (Model.CandidateUser.Country is not null)
+        @if (!string.IsNullOrEmpty(Model.CandidateUser.Country))
         {
             <p>
                 <i class="fa-solid fa-earth-americas"></i>
                 @Model.CandidateUser.Country
-                @if (Model.CandidateUser.City is not null)
+                @if (!string.IsNullOrEmpty(Model.CandidateUser.City))
                 {
                     @Model.CandidateUser.City
                 }
@@ -202,14 +204,14 @@
                 {
                     @Model.EmployerUser.CompanyPosition
                 }
-                @if (Model.EmployerUser.CompanyName is not null)
+                @if (!string.IsNullOrEmpty(Model.EmployerUser.CompanyName))
                 {
                     @: @ViewLocalization["InCompany"] 
                     @Model.EmployerUser.CompanyName
                 }
             </h2>
         </div>
-        @if (Model.EmployerUser.AboutCompany is not null)
+        @if (!string.IsNullOrEmpty(Model.EmployerUser.AboutCompany))
         {
             <div class="card-details__body">
                 <h3>@ViewLocalization["AboutCompany"]</h3>
@@ -250,7 +252,7 @@
         @*         } *@
         @*     </div> *@
         @* } *@
-        @if (Model.EmployerUser.CompanySiteLink is not null)
+        @if (!string.IsNullOrEmpty(Model.EmployerUser.CompanySiteLink))
         {
             <div class="card-details__language">
                 <h3>@ViewLocalization["CompanySite"]</h3>
@@ -259,7 +261,7 @@
                 </p>
             </div>
         }
-        @if (Model.EmployerUser.DoyCompanyLink is not null)
+        @if (!string.IsNullOrEmpty(Model.EmployerUser.DoyCompanyLink))
         {
             <div class="card-details__language">
                 <h3>@ViewLocalization["DOYReference"]</h3>
@@ -273,7 +275,9 @@
         {
             <div class="card-details__buttons">
                 <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
-                <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RemoveUser">@ViewLocalization["Delete"]</a>
+                <form method="post" asp-controller="Account" asp-action="RemoveUser">
+                    <button type="submit" class="search-buttons card-buttons detail-danger">@ViewLocalization["Delete"]</button>
+                </form>
             </div>
         }
     </div>

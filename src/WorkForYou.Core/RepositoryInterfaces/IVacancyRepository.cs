@@ -14,5 +14,4 @@ public interface IVacancyRepository : IGenericRepository<Vacancy>
     Task<VacancyResponse> UpdateVacancyAsync(ActionVacancyDto? actionVacancyDto);
     Task<VacancyResponse> RemoveVacancyAsync(int vacancyId);
     Task<VacancyResponse> GetAllEmployerVacanciesAsync(UsernameDto? usernameDto, QueryParameters queryParameters);
-    Task<VacancyResponse> UpdateViewNumberOfCountAsync(int vacancyId);
 }

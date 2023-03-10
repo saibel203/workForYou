@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
-@model WorkForYou.WebUI.ViewModels.Forms.RefreshCandidateInfoViewModel
+@model WorkForYou.Shared.ViewModels.Forms.RefreshCandidateInfoViewModel
 
 @inject IViewLocalizer ViewLocalization
 
@@ -109,7 +109,7 @@
             <span asp-validation-for="CommunicationLanguageId"></span>
         </div>
         <div class="vacancies-cards__card-buttons">
-            <input type="submit" class="search-buttons card-buttons" value="Редагувати">
+            <input type="submit" class="search-buttons card-buttons" value="@ViewLocalization["Button"]">
         </div>
     </form>
 

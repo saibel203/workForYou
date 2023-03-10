@@ -4,5 +4,5 @@ namespace WorkForYou.Core.Responses.Repositories;
 
 public class VacancyDomainResponse : BaseResponse
 {
-    public IReadOnlyList<VacancyDomain>? VacancyDomains { get; set; }
+    public IReadOnlyList<VacancyDomain> VacancyDomains { get; set; } = new List<VacancyDomain>();
 }

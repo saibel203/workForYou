@@ -9,5 +9,5 @@ public class EmployerUser : BaseUser
     public string? DoyCompanyLink { get; set; } = string.Empty;
     public string? AboutCompany { get; set; } = string.Empty;
     public IEnumerable<Vacancy>? Vacancies { get; set; } = new List<Vacancy>();
-    public IEnumerable<FavouriteCandidate>? FavouriteCandidates { get; set; }
+    public ICollection<FavouriteCandidate>? FavouriteCandidates { get; set; }
 }

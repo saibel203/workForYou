@@ -1,4 +1,4 @@
-﻿@model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
+﻿@model WorkForYou.Shared.ViewModels.AdditionalViewModels.SettingsViewModel
 
 @{
     var workCategoryQueryString = Context.Request.Query["WorkCategory"].ToString().Split(",");
@@ -13,7 +13,7 @@
     <div class="vacancies-pagination">
         <ul class="pagination">
             <li>
-                <a href="@Url.Page("", new {WorkCategory = workCategoryQueryString, EnglishLevel = englishLevelQueryString, CompanyType = companyTypeQueryString, HowToWork = howToWorkQueryString, CandidateRegion = candidateRegionQueryString, PageNumber = Model.QueryParameters.PageNumber - 1, Model.QueryParameters.SearchString, Model.Username, Model.QueryParameters.SortBy, VacancyId = Model.CurrentVacancyId})" class="next">Prev</a>
+                <a href="@Url.Page("", new {WorkCategory = workCategoryQueryString, EnglishLevel = englishLevelQueryString, CompanyType = companyTypeQueryString, HowToWork = howToWorkQueryString, CandidateRegion = candidateRegionQueryString, PageNumber = Model.QueryParameters.PageNumber - 1, Model.QueryParameters.SearchString, Model.Username, Model.QueryParameters.SortBy, VacancyId = Model.CurrentVacancyId})" class="next"><i class="fa-solid fa-backward"></i></a>
             </li>
 
             @foreach (var i in Model.Pages)
@@ -32,7 +32,7 @@
                 }
             }
             <li>
-                <a href="@Url.Page("", new {WorkCategory = workCategoryQueryString, EnglishLevel = englishLevelQueryString, CompanyType = companyTypeQueryString, HowToWork = howToWorkQueryString, CandidateRegion = candidateRegionQueryString, PageNumber = Model.QueryParameters.PageNumber + 1, Model.QueryParameters.SearchString, Model.Username, Model.QueryParameters.SortBy, VacancyId = Model.CurrentVacancyId})" class="next">Next</a>
+                <a href="@Url.Page("", new {WorkCategory = workCategoryQueryString, EnglishLevel = englishLevelQueryString, CompanyType = companyTypeQueryString, HowToWork = howToWorkQueryString, CandidateRegion = candidateRegionQueryString, PageNumber = Model.QueryParameters.PageNumber + 1, Model.QueryParameters.SearchString, Model.Username, Model.QueryParameters.SortBy, VacancyId = Model.CurrentVacancyId})" class="next"><i class="fa-solid fa-forward"></i></a>
             </li>
         </ul>
     </div>

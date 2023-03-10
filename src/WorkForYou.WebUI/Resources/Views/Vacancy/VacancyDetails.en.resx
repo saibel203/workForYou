@@ -66,4 +66,7 @@
     <data name="Ukraine" xml:space="preserve">
         <value>Only candidates from Ukraine</value>
     </data>
+    <data name="CancelRespond" xml:space="preserve">
+        <value>Cancel respond</value>
+    </data>
 </root>

@@ -41,7 +41,7 @@
         <span class="header__settings-button">
             @* <img class="header__settings-profile" src="~/img/userImages/default-user-image.png" alt="Default user image"> *@
             <div class="header__settings-name">
-                Hello, @User.Identity?.Name
+                @ViewLocalization["Hello"] @User.Identity?.Name
 
                 <div class="profile-dropdown">
                     <a asp-controller="Account" asp-action="Profile" asp-route-username="@User.Identity?.Name">
@@ -61,29 +61,26 @@
                     </form>
                     @if (User.IsInRole("candidate"))
                     {
-                        <a asp-controller="CandidateAccount" asp-action="FavouriteList">
+                        <a asp-controller="Favourite" asp-action="FavouriteCandidateList">
                             <i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]
                         </a>
-                        <a asp-controller="CandidateAccount" asp-action="RespondedList">
-                            <i class="fa-solid fa-reply"></i> Мої відгуки
-                        </a>
-                        <a asp-controller="Chat" asp-action="AllChats">
-                            <i class="fa-solid fa-comments"></i> Чат
+                        <a asp-controller="Responded" asp-action="RespondedList">
+                            <i class="fa-solid fa-reply"></i> @ViewLocalization["Reviews"]
                         </a>
                     }
                     @if (User.IsInRole("employer"))
                     {
-                        <a asp-controller="EmployerAccount" asp-action="FavouriteList">
+                        <a asp-controller="Favourite" asp-action="FavouriteEmployerList">
                             <i class="fa-solid fa-star"></i> @ViewLocalization["HeaderSaved"]
                         </a>
-                        <a asp-controller="Chat" asp-action="AllChats">
-                            <i class="fa-solid fa-comments"></i> Чат
-                        </a>
                     }
+                    <a asp-controller="Chat" asp-action="AllChats">
+                        <i class="fa-solid fa-comments"></i> @ViewLocalization["Chat"]
+                    </a>
                     <a asp-controller="Account" asp-action="ChangePassword">
                         <i class="fa-solid fa-key"></i> @ViewLocalization["HeaderChangePassword"]
                     </a>
-                    <a asp-controller="Account" asp-action="Logout">
+                    <a asp-controller="Account" asp-action="Logout" id="header-logout-button">
                         <i class="fa-solid fa-right-from-bracket"></i> @ViewLocalization["HeaderLogout"]
                     </a>
                 </div>
@@ -91,3 +88,5 @@
         </span>
     </div>
 </header>
+
+<script src="~/js/logout.js"></script>

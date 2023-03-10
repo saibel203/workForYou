@@ -1,23 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using WorkForYou.Core.AdditionalModels;
+using WorkForYou.Core.DTOModels.ChatDTOs;
 using WorkForYou.Core.Enums;
 using WorkForYou.Core.Models;
 using WorkForYou.Core.RepositoryInterfaces;
 using WorkForYou.Core.Responses.Repositories;
-using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Infrastructure.DatabaseContext;
 
 namespace WorkForYou.Data.Repositories;
 
 public class ChatRepository : GenericRepository<ChatRoom>, IChatRepository
 {
-    private const string EmployerRole = "employer";
-
-    private readonly IChatService _chatService;
-    
-    public ChatRepository(WorkForYouDbContext context, ILogger logger, IChatService chatService) : base(context, logger)
+    public ChatRepository(WorkForYouDbContext context, ILogger logger) : base(context, logger)
     {
-        _chatService = chatService;
     }
 
     public async Task<ChatResponse> CreateChatRoomAsync(string chatName, string currentUserId, string converseUserId)
@@ -105,7 +101,7 @@ public class ChatRepository : GenericRepository<ChatRoom>, IChatRepository
         {
             ChatRoom? chatDetails;
             
-            if (userRole == EmployerRole)
+            if (userRole == ApplicationRoles.EmployerRole)
                 chatDetails = await Context.ChatUsers
                     .Include(chatUserData => chatUserData.ChatRoom)
                     .ThenInclude(chatUserData => chatUserData!.ChatUsers)
@@ -134,13 +130,22 @@ public class ChatRepository : GenericRepository<ChatRoom>, IChatRepository
                     Message = "Error retrieving chat data",
                     IsSuccessfully = false
                 };
+            
+            var opponentData = await Context.ChatUsers
+                .FirstOrDefaultAsync(chatUserData => chatUserData.ChatRoomId == chatId 
+                                                     && chatUserData.ApplicationUserId != currentUserId);
 
-            var opponentResult = await _chatService.OpponentNameAsync(chatId, currentUserId);
-
+            if (opponentData is null)
+                return new()
+                {
+                    Message = "Error getting the opposite user",
+                    IsSuccessfully = false
+                };
+            
             var isThisUsers = chatDetails.ChatUsers
                 .Any(chatData => chatData.ChatRoomId == chatId && chatData.ApplicationUserId == currentUserId);
             var isOpponentUser = chatDetails.ChatUsers
-                .Any(chatData => chatData.ChatRoomId == chatId && chatData.ApplicationUserId == opponentResult.OpponentUserId);
+                .Any(chatData => chatData.ChatRoomId == chatId && chatData.ApplicationUserId == opponentData.ApplicationUserId);
 
             if (!isThisUsers || !isOpponentUser)
                 return new()
@@ -167,13 +172,45 @@ public class ChatRepository : GenericRepository<ChatRoom>, IChatRepository
         }
     }
 
+    public async Task<ChatResponse> GetChatDetailsByChatNameAsync(string chatName)
+    {
+        try
+        {
+            var chatDetails = await DbSet
+                .FirstOrDefaultAsync(chatData => chatData.Name == chatName);
+
+            if (chatDetails is null)
+                return new()
+                {
+                    Message = "Chat with given name not found",
+                    IsSuccessfully = false
+                };
+
+            return new()
+            {
+                Message = "Chat received successfully",
+                IsSuccessfully = true,
+                ChatRoom = chatDetails
+            };
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "An error occurred while receiving the chat");
+            return new()
+            {
+                Message = "An error occurred while receiving the chat",
+                IsSuccessfully = false
+            };
+        }
+    }
+
     public async Task<ChatResponse> GetAllUserChatsAsync(string userId, string userRole)
     {
         try
         {
             List<ChatRoom?> chats;
 
-            if (userRole == EmployerRole)
+            if (userRole == ApplicationRoles.EmployerRole)
                 chats = await Context.ChatUsers
                     .Include(chatUserData => chatUserData.ChatRoom)
                     .ThenInclude(chatUserData => chatUserData!.ChatUsers)
@@ -212,15 +249,22 @@ public class ChatRepository : GenericRepository<ChatRoom>, IChatRepository
         }
     }
 
-    public async Task<ChatResponse> CreateChatMessageAsync(string messageContent, string currentUsername,
-        int roomId)
+    public async Task<ChatResponse> CreateChatMessageAsync(CreateMessageDto? createMessageDto, 
+        string currentUsername)
     {
         try
         {
+            if (createMessageDto is null)
+                return new()
+                {
+                    Message = "An error occurred when receiving data about a new message",
+                    IsSuccessfully = false
+                };
+            
             var chatMessage = new ChatMessage
             {
-                ChatRoomId = roomId,
-                Content = messageContent,
+                ChatRoomId = createMessageDto.RoomId,
+                Content = createMessageDto.MessageContent,
                 Name = currentUsername,
                 SendTime = DateTime.Now
             };

@@ -1,9 +1,9 @@
 'use strict';
 
 const connection = new signalR
-                    .HubConnectionBuilder()
-                    .withUrl('/hubs/chatHub')
-                    .build();
+    .HubConnectionBuilder()
+    .withUrl('/hubs/chatHub')
+    .build();
 
 const sendMessageForm = document.getElementById('send-message-form');
 const messageInput = document.getElementById('message-input');
@@ -17,7 +17,7 @@ connection.on('ReceiveMessage', data => {
     let containerElement = document.getElementById('message-list');
 
     let containerInnerElement = document.createElement('div');
-    
+
     if (currentUsername === data.name)
         containerInnerElement.setAttribute('class', ownClassName);
     else
@@ -35,7 +35,7 @@ connection.on('ReceiveMessage', data => {
 
     containerInnerElement.appendChild(containerText);
     containerInnerElement.appendChild(containerSendTime);
-    
+
     containerElement.appendChild(containerInnerElement);
 });
 

@@ -12,7 +12,7 @@ namespace WorkForYou.Data.Repositories;
 
 public class RespondedListRepository : GenericRepository<RespondedList>, IRespondedListRepository
 {
-    private const int PageSize = 3;
+    private const int PageSize = 7;
     
     public RespondedListRepository(WorkForYouDbContext context, ILogger logger) : base(context, logger)
     {

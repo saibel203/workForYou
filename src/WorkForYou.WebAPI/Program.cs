@@ -11,6 +11,7 @@ builder.Services.AddWebApiServices(builder.Configuration);
 var app = builder.Build();
 var environment = app.Environment;
 var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+const string webUiCorsOptions = "WebUICorsPolicy";
 
 app.UseExceptionMiddlewareHandler(environment);
 
@@ -19,6 +20,8 @@ app.UseHsts();
 app.UseRouting();
 
 app.UseRequestLocalization(localizationOptions);
+
+app.UseCors(webUiCorsOptions);
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -815,6 +815,7 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
   border-radius: 5px;
   min-width: 100%;
   display: flex;
+  justify-content: space-between;
   overflow-x: hidden;
 
   &__language {
@@ -980,6 +981,10 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
   p {
     margin: 10px 0;
   }
+  
+  &__main {
+    width: 100%;
+  }
 
   &__company {
     margin: 20px 0;
@@ -996,15 +1001,26 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
 
   &__buttons {
     margin-top: 20px;
+    display: flex;
+    min-width: 50%;
 
-    button, a {
-      width: 40%;
+    form {
+      width: 100%;
+    }
+
+    button, a, input[type='submit'] {
+      width: 100%;
       font-size: 14px;
       transition: opacity .2s ease;
+      text-align: center;
 
       &:hover {
         opacity: .8;
       }
+    }
+
+    button {
+      width: 100%;
     }
 
     button a {
@@ -1183,13 +1199,19 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
     border-radius: 5px;
     background-color: var(--theme-bg-color);
 
-    a {
+    a, button {
       color: var(--active-color);
       transition: all .2s ease;
 
       &:hover {
         color: rgba(105, 90, 166, 0.68);
       }
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
     }
 
     &-main {
@@ -1792,7 +1814,7 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
       max-width: 500px;
       min-width: 100px;
       width: 100%;
-      
+
       p > span {
         display: flex;
         justify-content: end;
@@ -1824,7 +1846,7 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
           border-top-right-radius: 10px;
           border-bottom-left-radius: 10px;
           margin-bottom: 0;
-          
+
           > span {
             color: #fff;
             opacity: .8;
@@ -1849,7 +1871,7 @@ $transition-ease-elastic: cubic-bezier(.77, -0.19, .33, 1.12);
           border-top-right-radius: 10px;
           border-bottom-right-radius: 10px;
           margin-bottom: 0;
-          
+
           > span {
             color: #000;
             opacity: .8;

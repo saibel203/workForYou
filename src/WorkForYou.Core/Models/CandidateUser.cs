@@ -26,5 +26,5 @@ public class CandidateUser : BaseUser
     public WorkCategory? CategoryWork { get; set; }
     
     public IEnumerable<FavouriteVacancy>? FavouriteVacancyCollection { get; set; }
-    public IEnumerable<FavouriteCandidate>? FavouriteCandidates { get; set; }
+    public ICollection<FavouriteCandidate>? FavouriteCandidates { get; set; }
 }

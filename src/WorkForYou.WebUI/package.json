@@ -21,6 +21,6 @@
   "license": "MIT",
   "description": "",
   "dependencies": {
-    
+    "@microsoft/signalr": "^8.0.0-preview.1.23112.2"
   }
 }

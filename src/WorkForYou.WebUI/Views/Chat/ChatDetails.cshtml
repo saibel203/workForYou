@@ -1,9 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using WorkForYou.WebUI.Extensions
+@using Microsoft.AspNetCore.Mvc.Localization
 @model WorkForYou.Core.Models.ChatRoom
 
+@inject IViewLocalizer ViewLocalization
+
 @{
-    ViewData["Title"] = "Чат";
+    ViewData["Title"] = ViewLocalization["Title"];
     const string ownClassName = "chat-details-wrapper__body-message message-own";
     const string notOwnClassName = "chat-details-wrapper__body-message message-not-my";
 
@@ -63,8 +66,8 @@
             <input type="hidden" name="roomId" value="@Model.ChatRoomId" id="message-id-input">
             <input type="hidden" name="roomName" value="@Model.Name">
             <input type="hidden" name="currentUsername" value="@User.Identity?.Name" id="current-username">
-            <input type="text" name="message" id="message-input" placeholder="Введіть повідомлення...">
-            <input type="submit" value="Відправити">
+            <input type="text" name="message" id="message-input" placeholder="@ViewLocalization["InputPlaceholder"]">
+            <input type="submit" value="@ViewLocalization["Button"]">
         </form>
     </div>
 </div>

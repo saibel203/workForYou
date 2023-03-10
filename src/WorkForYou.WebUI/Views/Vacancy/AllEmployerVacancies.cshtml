@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using WorkForYou.WebUI.Helpers
 @using Microsoft.AspNetCore.Mvc.Localization
-@using WorkForYou.WebUI.ViewModels.AdditionalViewModels
+@using WorkForYou.Shared.ViewModels.AdditionalViewModels
 @model VacanciesViewModel
 
 @inject IViewLocalizer ViewLocalization
@@ -106,7 +106,10 @@
                 <div class="vacancies-cards__card-buttons">
                     <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId" class="search-buttons card-buttons">@ViewLocalization["ReadAll"]</a>
                     @await Html.PartialAsync("_LikeButton", new SettingsViewModel
-                           {CurrentVacancyId = vacancy.VacancyId, ReturnUrl = currentPath})
+                           {
+                               CurrentVacancyId = vacancy.VacancyId, ReturnUrl = currentPath,
+                               CurrentAction = Model.CurrentAction
+                           })
                 </div>
             </div>
         }
@@ -120,5 +123,6 @@
     @section Scripts
     {
         <script src="~/js/custom-select.js"></script>
+        @* <script type="module" src="~/js/favourite-list.js"></script> *@
     }
 </div>

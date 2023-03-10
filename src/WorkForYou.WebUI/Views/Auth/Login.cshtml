@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model WorkForYou.WebUI.ViewModels.Forms.LoginViewModel
+@model WorkForYou.Shared.ViewModels.Forms.LoginViewModel
 
 @inject IViewLocalizer ViewLocalization
 
@@ -17,13 +17,14 @@
     <div class="container text-center">
         <h2 class="section-title mb-5">@ViewLocalization["Title"]</h2>
         <form method="post" asp-controller="Auth" asp-action="Login" asp-antiforgery="true"
-              asp-route-returnUrl="@ViewData["ReturnUrl"]" autocomplete="off" class="contact-form">
+              asp-route-returnUrl="@ViewData["ReturnUrl"]" autocomplete="off" class="contact-form"
+              id="login-form">
             <div asp-validation-summary="All"></div>
             <div class="contact-form__input">
-                <input asp-for="Email" placeholder="Email" class="contact-form__input-item">
+                <input asp-for="Email" placeholder="Email" class="contact-form__input-item" id="user-email">
             </div>
             <div class="contact-form__input">
-                <input asp-for="Password" placeholder="Password" class="contact-form__input-item">
+                <input asp-for="Password" placeholder="Password" class="contact-form__input-item" id="user-password">
                 <span>
                     <i class="fa-solid fa-eye"></i>
                 </span>
@@ -37,7 +38,7 @@
                 </div>
             </div>
             <div class="contact-form__btn">
-                <button class="button button-primary text-center">
+                <button class="button button-primary text-center" type="submit" id="login-form-button">
                     <i class="fa-solid fa-right-to-bracket"></i>
                     @ViewLocalization["Title"]
                 </button>
@@ -50,4 +51,5 @@
 {
     <script src="~/libs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="~/js/home-password.js"></script>
+    @* <script type="module" src="~/js/login.js"></script> *@
 }

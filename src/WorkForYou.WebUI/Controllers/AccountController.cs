@@ -2,39 +2,48 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using WorkForYou.Core.AdditionalModels;
 using WorkForYou.Core.RepositoryInterfaces;
 using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.Core.Responses.Repositories;
-using WorkForYou.WebUI.ViewModels.Forms;
+using WorkForYou.Shared.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Controllers;
 
 [Authorize]
 public class AccountController : BaseController
 {
-    private readonly INotificationService _notificationService;
     private readonly IStringLocalizer<AccountController> _stringLocalization;
+    private readonly INotificationService _notificationService;
+    private readonly IViewCounterService _viewCounterService;
+    private readonly IFileService _fileService;
     private readonly IAuthService _authService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public AccountController(IAuthService authService, IMapper mapper, IUnitOfWork unitOfWork,
-        INotificationService notificationService, IStringLocalizer<AccountController> stringLocalization)
+        INotificationService notificationService, IStringLocalizer<AccountController> stringLocalization,
+        IFileService fileService, IViewCounterService viewCounterService)
     {
         _authService = authService;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _notificationService = notificationService;
         _stringLocalization = stringLocalization;
+        _fileService = fileService;
+        _viewCounterService = viewCounterService;
     }
 
     [HttpGet]
     public async Task<IActionResult> ChangePassword()
     {
         var currentUsername = GetUsername();
+        var currentRole = GetUserRole();
+        var usernameDto = new UsernameDto {Username = currentUsername, UserRole = currentRole};
+        
         var currentUser = await _unitOfWork.UserRepository
-            .GetUserDataAsync(new() {Username = currentUsername});
+            .GetUserDataAsync(usernameDto);
 
         if (!currentUser.IsSuccessfully)
             _notificationService.CustomErrorMessage(_stringLocalization["UserNotFound"]);
@@ -92,21 +101,28 @@ public class AccountController : BaseController
     [HttpGet]
     public async Task<IActionResult> Profile(string username)
     {
+        var userRole = GetUserRole();
+        
         UserResponse userData;
-        var test = await _authService.IsUserCandidate(new() {Username = username});
+        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
+        var usernameCandidateDto = new UsernameDto {Username = username, UserRole = ApplicationRoles.CandidateRole};
+        var usernameEmployerDto = new UsernameDto {Username = username, UserRole = ApplicationRoles.EmployerRole};
+        var isUserResult = await _authService.IsUserCandidate(usernameDto);
 
-        if (test.IsUserCandidate)
+        if (isUserResult.IsUserCandidate)
         {
             userData = await _unitOfWork.UserRepository
-                .GetUserDataAsync(new() {Username = username, UserRole = CandidateRole});
+                .GetUserDataAsync(usernameCandidateDto);
 
-            if (!HttpContext.Session.Keys.Contains($"IsShowCandidate{userData.User.CandidateUser!.CandidateUserId}")
-                && HttpContext.User.IsInRole(EmployerRole))
+            const string sessionNameTemplate = "IsShowCandidate";
+
+            if (!HttpContext.Session.Keys.Contains(sessionNameTemplate + userData.User.CandidateUser!.CandidateUserId)
+                && HttpContext.User.IsInRole(ApplicationRoles.EmployerRole))
             {
-                HttpContext.Session.SetString($"IsShowCandidate{userData.User.CandidateUser!.CandidateUserId}", "1");
+                HttpContext.Session.SetString(sessionNameTemplate + userData.User.CandidateUser!.CandidateUserId, "1");
 
-                var addViewCountResult = await _unitOfWork.UserRepository
-                    .UpdateCandidateViewNumberIfCountAsync(new() {Username = username});
+                var addViewCountResult = await _viewCounterService
+                    .UpdateCandidateViewNumberCountAsync(usernameDto);
 
                 if (!addViewCountResult.IsSuccessfully)
                     return RedirectToAction("Index", "Main");
@@ -114,7 +130,7 @@ public class AccountController : BaseController
         }
         else
             userData = await _unitOfWork.UserRepository
-                .GetUserDataAsync(new() {Username = username, UserRole = EmployerRole});
+                .GetUserDataAsync(usernameEmployerDto);
 
         if (!userData.IsSuccessfully)
         {
@@ -126,13 +142,16 @@ public class AccountController : BaseController
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ProfileUploadImage(IFormFile userFile)
     {
         var username = GetUsername();
-        var imageResult = await _unitOfWork.UserRepository.UploadUserImageAsync(userFile,
-            new UsernameDto {Username = username});
+        var userRole = GetUserRole();
+        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
 
-        if (!imageResult.IsSuccessfully)
+        var uploadImageResult = await _fileService.UploadUserImageAsync(userFile, usernameDto);
+
+        if (!uploadImageResult.IsSuccessfully)
             _notificationService.CustomErrorMessage(_stringLocalization["UploadImageError"]);
 
         _notificationService.CustomSuccessMessage(_stringLocalization["UploadImageSuccess"]);
@@ -143,7 +162,11 @@ public class AccountController : BaseController
     public async Task<IActionResult> RefreshGeneralProfileInfo()
     {
         var username = GetUsername();
-        var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new UsernameDto {Username = username});
+        var userRole = GetUserRole();
+        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
+
+        var userData = await _unitOfWork.UserRepository
+            .GetUserDataAsync(usernameDto);
 
         if (!userData.IsSuccessfully)
         {
@@ -157,6 +180,7 @@ public class AccountController : BaseController
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> RefreshGeneralProfileInfo(
         RefreshGeneralProfileInfoViewModel refreshGeneralProfileInfoViewModel)
     {
@@ -167,6 +191,10 @@ public class AccountController : BaseController
         }
 
         var username = GetUsername();
+        var userRole = GetUserRole();
+
+        refreshGeneralProfileInfoViewModel.UserRole = userRole;
+
         var refreshGeneralDto = _mapper.Map<RefreshGeneralUserDto>(refreshGeneralProfileInfoViewModel);
         var refreshGeneralInfoResult = await _unitOfWork.UserRepository
             .RefreshGeneralInfoAsync(refreshGeneralDto);
@@ -182,11 +210,15 @@ public class AccountController : BaseController
         return RedirectToAction(nameof(Profile), new {username});
     }
 
-    [HttpGet]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> RemoveUser()
     {
         var username = GetUsername();
-        var removeUserResult = await _unitOfWork.UserRepository.RemoveUserAsync(new() {Username = username});
+        var userRole = GetUserRole();
+        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
+        var removeUserResult = await _unitOfWork.UserRepository
+            .RemoveUserAsync(usernameDto);
 
         if (!removeUserResult.IsSuccessfully)
         {

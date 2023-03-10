@@ -24,4 +24,7 @@
     <data name="GeneralInfo" xml:space="preserve">
         <value>General info</value>
     </data>
+    <data name="Button" xml:space="preserve">
+        <value>Refresh</value>
+    </data>
 </root>

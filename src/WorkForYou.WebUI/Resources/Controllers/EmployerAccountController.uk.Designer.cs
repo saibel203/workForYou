@@ -60,15 +60,6 @@ namespace WorkForYou.WebUI.Resources.Controllers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to При добавленні кандидата у список виникла помилка.
-        /// </summary>
-        internal static string AddToFavouriteError {
-            get {
-                return ResourceManager.GetString("AddToFavouriteError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Кандидатів за вашим запитом не знайдено.
         /// </summary>
         internal static string CandidatesNotFoundError {
@@ -93,15 +84,6 @@ namespace WorkForYou.WebUI.Resources.Controllers {
         internal static string RefreshAccountSuccess {
             get {
                 return ResourceManager.GetString("RefreshAccountSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Користувачів за вашим запитом не знайдено або список збережь є порожнім.
-        /// </summary>
-        internal static string ShowFavouriteListError {
-            get {
-                return ResourceManager.GetString("ShowFavouriteListError", resourceCulture);
             }
         }
         

@@ -42,4 +42,13 @@
     <data name="HeaderAllCandidates" xml:space="preserve">
         <value>Candidates</value>
     </data>
+    <data name="Hello" xml:space="preserve">
+        <value>Hello,</value>
+    </data>
+    <data name="Chat" xml:space="preserve">
+        <value>Chat</value>
+    </data>
+    <data name="Reviews" xml:space="preserve">
+        <value>My reviews</value>
+    </data>
 </root>

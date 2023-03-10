@@ -78,6 +78,15 @@ namespace WorkForYou.WebUI.Resources.Views.Vacancy {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel respond.
+        /// </summary>
+        internal static string CancelRespond {
+            get {
+                return ResourceManager.GetString("CancelRespond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Category.
         /// </summary>
         internal static string Category {

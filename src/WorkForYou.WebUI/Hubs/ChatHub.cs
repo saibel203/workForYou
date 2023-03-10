@@ -6,8 +6,6 @@ namespace WorkForYou.WebUI.Hubs;
 [Authorize]
 public class ChatHub : Hub
 {
-    public string GetConnectionId() => Context.ConnectionId;
-
     public Task JoinToRoom(string roomId)
     {
         return Groups.AddToGroupAsync(Context.ConnectionId, roomId);

@@ -60,15 +60,6 @@ namespace WorkForYou.WebUI.Resources.Controllers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occurred while adding a job to the list.
-        /// </summary>
-        internal static string AddToFavouriteError {
-            get {
-                return ResourceManager.GetString("AddToFavouriteError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No vacancies were found by request.
         /// </summary>
         internal static string NotFoundError {

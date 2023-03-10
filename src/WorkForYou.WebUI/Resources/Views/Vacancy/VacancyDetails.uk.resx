@@ -66,4 +66,7 @@
     <data name="AllWorld" xml:space="preserve">
         <value>Кандидати з усього світу</value>
     </data>
+    <data name="CancelRespond" xml:space="preserve">
+        <value>Відмінити відгук</value>
+    </data>
 </root>

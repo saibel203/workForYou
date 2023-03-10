@@ -1,4 +1,7 @@
-﻿@model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model WorkForYou.Shared.ViewModels.AdditionalViewModels.SettingsViewModel
+
+@inject IViewLocalizer ViewLocalization
 
 @{
     var workCategoryQueryString = Context.Request.Query["WorkCategory"].ToString().Split(",");
@@ -9,6 +12,8 @@
 
     const string employerController = "EmployerAccount";
     const string vacancyController = "Vacancy";
+    const string employerVacancies = "AllEmployerVacancies";
+    const string allVacancyResponses = "AllVacancyResponses";
 }
 
 <div class="main__search-category">
@@ -18,12 +23,15 @@
         <input type="hidden" name="SortBy" value="@Model.QueryParameters.SortBy">
         <input type="hidden" name="Username" value="@Model.Username">
         <input type="hidden" name="VacancyId" value="@Model.CurrentVacancyId">
-        <div class="main__search-category-title">Категорії</div>
+        <div class="main__search-category-title">@ViewLocalization["Category"]</div>
         <div class="main__search-category-wrapper">
             @foreach (var category in Model.WorkCategories)
             {
-                var elementsCount = Model.CurrentController == employerController || Model.CurrentController == vacancyController
-                    ? category.CandidateUsers?.Count()
+                var elementsCount = Model.CurrentController == employerController 
+                                    || Model.CurrentController == vacancyController
+                                    || Model.CurrentAction == allVacancyResponses
+                                    && Model.CurrentAction != employerVacancies
+                    ? category.CandidateUsers?.Count
                     : category.Vacancies?.Count();
 
                 <div class="main__search-category-container">
@@ -42,12 +50,15 @@
                 </div>
             }
         </div>
-        <div class="main__search-category-title">Рівень англійської</div>
+        <div class="main__search-category-title">@ViewLocalization["EnglishLevel"]</div>
         <div class="main__search-category-wrapper">
             @foreach (var englishLevel in Model.EnglishLevels)
             {
-                var elementsCount = Model.CurrentController == employerController || Model.CurrentController == vacancyController
-                    ? englishLevel.CandidateUsers?.Count()
+                var elementsCount = Model.CurrentController == employerController 
+                                    || Model.CurrentController == vacancyController
+                                    || Model.CurrentAction == allVacancyResponses
+                                    && Model.CurrentAction != employerVacancies
+                    ? englishLevel.CandidateUsers?.Count
                     : englishLevel.Vacancies?.Count();
 
                 <div class="main__search-category-container">
@@ -66,9 +77,10 @@
                 </div>
             }
         </div>
-        @if (Model.CurrentController != employerController && Model.CurrentController != vacancyController)
+        @if (Model.CurrentController != employerController && (Model.CurrentController != vacancyController 
+            || Model.CurrentAction == employerVacancies) && Model.CurrentAction != allVacancyResponses)
         {
-            <div class="main__search-category-title">Тип компанії</div>
+            <div class="main__search-category-title">@ViewLocalization["CompanyType"]</div>
             <div class="main__search-category-wrapper">
                 @foreach (var companyType in Model.TypesOfCompanies)
                 {
@@ -88,7 +100,7 @@
                     </div>
                 }
             </div>
-            <div class="main__search-category-title">Зайнятість</div>
+            <div class="main__search-category-title">@ViewLocalization["Employment"]</div>
             <div class="main__search-category-wrapper">
                 @foreach (var howToWork in Model.HowToWorks)
                 {
@@ -108,7 +120,7 @@
                     </div>
                 }
             </div>
-            <div class="main__search-category-title">Регіон</div>
+            <div class="main__search-category-title">@ViewLocalization["Region"]</div>
             <div class="main__search-category-wrapper">
                 @foreach (var region in Model.CandidateRegions)
                 {
@@ -131,7 +143,7 @@
         }
         else
         {
-            <div class="main__search-category-title">Мова спілкування</div>
+            <div class="main__search-category-title">@ViewLocalization["CommunicationLanguage"]</div>
             <div class="main__search-category-wrapper">
                 @foreach (var language in Model.CommunicationLanguages)
                 {
@@ -152,6 +164,6 @@
                 }
             </div>
         }
-        <button type="submit" class="search-buttons card-buttons">Шукати</button>
+        <button type="submit" class="search-buttons card-buttons">@ViewLocalization["Button"]</button>
     </form>
 </div>
