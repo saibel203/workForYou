@@ -1,113 +1,163 @@
 ﻿@using WorkForYou.WebUI.Helpers
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@model VacancyViewModel
+
+@inject IViewLocalizer ViewLocalization
 
 @{
-    ViewData["Title"] = "Деталі вакансії";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 <div class="card-details">
     <div class="card-details__main">
         <div class="card-details__header">
-            <h1>@Model.VacancyTitle</h1>
-            <span>$@Model.FromSalary-@Model.ToSalary</span>
+            <h1>@Model.Vacancy?.VacancyTitle</h1>
+            <span>$@Model.Vacancy?.FromSalary-@Model.Vacancy?.ToSalary</span>
         </div>
         <div class="card-details__body">
-            <p>@Html.Raw(Model.LongDescription)</p>
+            <p>@Html.Raw(Model.Vacancy?.LongDescription)</p>
         </div>
-        @if (Model.EmployerUser is not null)
+        @if (Model.Vacancy?.EmployerUser is not null)
         {
-            @if (!string.IsNullOrEmpty(Model.EmployerUser.CompanyName)
-                 && !string.IsNullOrEmpty(Model.EmployerUser.AboutCompany))
+            @if (!string.IsNullOrEmpty(Model.Vacancy?.EmployerUser.CompanyName)
+                 && !string.IsNullOrEmpty(Model.Vacancy?.EmployerUser.AboutCompany))
             {
                 <div class="card-details__company">
-                    <h3>Про компанію @Model.EmployerUser.CompanyName</h3>
-                    <p>@Model.EmployerUser.AboutCompany</p>
+                    <h3>@ViewLocalization["AboutCompany"] @Model.Vacancy?.EmployerUser.CompanyName</h3>
+                    <p>@Model.Vacancy?.EmployerUser.AboutCompany</p>
                 </div>
             }
-            @if (!string.IsNullOrEmpty(Model.EmployerUser.DoyCompanyLink))
+            @if (!string.IsNullOrEmpty(Model.Vacancy?.EmployerUser.DoyCompanyLink))
             {
-                <h4>Сайт Компанії:</h4>
-                <a href="@Model.EmployerUser.DoyCompanyLink" target="_blank">@Model.EmployerUser.DoyCompanyLink</a>
+                <h4>@ViewLocalization["AboutCompany"]:</h4>
+                <a href="@Model.Vacancy?.EmployerUser.DoyCompanyLink" target="_blank">@Model.Vacancy?.EmployerUser.DoyCompanyLink</a>
             }
         }
         <div class="card-details__footer">
             <div>
                 <i class="fa-solid fa-calendar-days"></i>
-                <span>Вакансія опублікована @Model.CreatedDate.ToString("d MMMM yyyy")</span>
+                <span>@ViewLocalization["CompanyPublished"] @Model.Vacancy?.CreatedDate.ToString("d MMMM yyyy")</span>
             </div>
             <div>
                 <i class="fa-regular fa-eye"></i>
                 <span>
-                    @Model.ViewCount
-                    перегляд@(ViewHelpers.GetLastStringLetters(Model.ViewCount))
+                    @Model.Vacancy?.ViewCount
+                    @ViewLocalization["VacancyView"]@(ViewHelpers.GetLastStringLetters(Model.Vacancy!.ViewCount))
                 </span>
                 <i class="fa-solid fa-user-group" style="padding-left: 5px;"></i>
                 <span>
-                    5
-                    відгук@(ViewHelpers.GetLastStringLetters(5))
+                    @Model.Vacancy.ReviewsCount
+                    @ViewLocalization["Review"]@(ViewHelpers.GetLastStringLetters(Model.Vacancy.ReviewsCount))
                 </span>
             </div>
         </div>
         @if (User.IsInRole("candidate"))
         {
+            @* var removeRespondStyles = !Model.IsVacancyInRespondedList *@
+            @*     ? "display: none;" *@
+            @*     : "display: block;"; *@
+            @* *@
+            @* var respondStyles = !Model.IsVacancyInRespondedList *@
+            @*     ? "display: block;" *@
+            @*     : "display: none;"; *@
+            @* *@
+            @* *@
+            @* <div class="card-details__buttons"> *@
+            @*     <form id="respond-vacancy-form"> *@
+            @*         <input type="hidden" name="VacancyId" value="@Model.Vacancy.VacancyId" id="respond-vacancy-id"> *@
+            @*         <button style="@removeRespondStyles" type="button" class="search-buttons card-buttons" id="respond-vacancy-button"> *@
+            @*             @ViewLocalization["Respond"] *@
+            @*         </button> *@
+            @*         <button style="@respondStyles" type="button" class="search-buttons card-buttons detail-danger" *@
+            @*                 id="remove-respond-vacancy-button"> *@
+            @*             @ViewLocalization["CancelRespond"] *@
+            @*         </button> *@
+            @*     </form> *@
+            @* </div> *@
             <div class="card-details__buttons">
-                <button class="search-buttons card-buttons">Відгукнутися</button>
+                @if (!Model.IsVacancyInRespondedList)
+                {
+                    <form method="post" asp-controller="Responded" asp-action="RespondedVacancy" asp-antiforgery="true">
+                        <input type="hidden" name="VacancyId" value="@Model.Vacancy.VacancyId">
+                        <button type="submit" class="search-buttons card-buttons">
+                            @ViewLocalization["Respond"]
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <form method="post" asp-controller="Responded" asp-action="RemoveRespondVacancy" asp-antiforgery="true">
+                        <input type="hidden" name="VacancyId" value="@Model.Vacancy.VacancyId">
+                        <button type="submit" class="search-buttons card-buttons detail-danger">
+                            Cancel respond
+                        </button>
+                    </form>
+                }
             </div>
         }
     </div>
     <div class="card-details__info">
-        @if (Model.WorkCategory is not null)
+        @if (Model.Vacancy?.WorkCategory is not null)
         {
-            <p><i class="fa-regular fa-clipboard"></i> Категорія: @Model.WorkCategory.CategoryName</p>
+            <p><i class="fa-regular fa-clipboard"></i> @ViewLocalization["Category"]: @Model.Vacancy?.WorkCategory.CategoryName</p>
         }
-        @if (Model.EnglishLevel is not null)
+        @if (Model.Vacancy?.EnglishLevel is not null)
         {
-            <p><i class="fa-solid fa-book"></i> Англійська: @Model.EnglishLevel.NameLevel</p>
+            <p><i class="fa-solid fa-book"></i> @ViewLocalization["English"]: @Model.Vacancy?.EnglishLevel.NameLevel</p>
         }
-        @if (Model.EnglishLevel is not null)
+        @if (Model.Vacancy?.EnglishLevel is not null)
         {
-            @if (Model.ExperienceWork == 0)
+            @if (Model.Vacancy?.ExperienceWork == 0)
             {
-                <p><i class="fa-solid fa-graduation-cap"></i> Без досвіду</p>
+                <p>
+                    <i class="fa-solid fa-graduation-cap"></i> @ViewLocalization["NoExperience"]
+                </p>
             }
             else
             {
                 <p>
-                    <i class="fa-solid fa-graduation-cap"></i> Досвід: @Model.ExperienceWork
-                    @ViewHelpers.GetLastStringLetters(Model.ExperienceWork, true)
+                    <i class="fa-solid fa-graduation-cap"></i> @ViewLocalization["Experience"]: @Model.Vacancy?.ExperienceWork
+                    @ViewHelpers.GetLastStringLetters(Model.Vacancy!.ExperienceWork, true)
                 </p>
             }
         }
-        @if (Model.VacancyDomain is not null)
+        @if (Model.Vacancy?.VacancyDomain is not null)
         {
-            <p><i class="fa-solid fa-lines-leaning"></i> Домен: @Model.VacancyDomain.VacancyDomainName</p>
+            <p><i class="fa-solid fa-lines-leaning"></i> @ViewLocalization["Domain"]: @Model.Vacancy?.VacancyDomain.VacancyDomainName</p>
         }
-        @if (Model.HowToWork is not null)
+        @if (Model.Vacancy?.HowToWork is not null)
         {
             <p>
-                <i class="fa-solid fa-briefcase"></i> @Model.HowToWork.HowToWorkName
+                <i class="fa-solid fa-briefcase"></i> @Model.Vacancy?.HowToWork.HowToWorkName
             </p>
         }
-        @if (Model.CandidateRegion is not null)
+        @if (Model.Vacancy?.CandidateRegion is not null)
         {
             <p>
                 <i class="fa-solid fa-earth-americas"></i>
-                @if (Model.CandidateRegion.CandidateRegionName == "Весь світ")
+                @if (Model.Vacancy?.CandidateRegion.CandidateRegionName == "Весь світ")
                 {
-                    <span>Кандидат з усього світу</span>
+                    <span>@ViewLocalization["AllWorld"]</span>
                 }
-                else if (Model.CandidateRegion.CandidateRegionName == "Україна + Європа")
+                else if (Model.Vacancy?.CandidateRegion.CandidateRegionName == "Україна + Європа")
                 {
-                    <span>Лише кандидати з України та Європи</span>
+                    <span>@ViewLocalization["UkraineEurope"]</span>
                 }
-                else if (Model.CandidateRegion.CandidateRegionName == "Лише Європа")
+                else if (Model.Vacancy?.CandidateRegion.CandidateRegionName == "Лише Європа")
                 {
-                    <span>Лише кандидати з Європи</span>
+                    <span>@ViewLocalization["Europe"]</span>
                 }
-                else if (Model.CandidateRegion.CandidateRegionName == "Лише Україна")
+                else if (Model.Vacancy?.CandidateRegion.CandidateRegionName == "Лише Україна")
                 {
-                    <span>Лише кандидати з України</span>
+                    <span>@ViewLocalization["Ukraine"]</span>
                 }
             </p>
         }
     </div>
 </div>
+
+@* @section Scripts *@
+@* { *@
+@*     <script type="module" src="~/js/respond-vacancy.js"></script> *@
+@* } *@

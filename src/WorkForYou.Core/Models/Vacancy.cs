@@ -12,6 +12,7 @@ public class Vacancy
     public string KeyWords { get; set; } = string.Empty;
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public int ViewCount { get; set; }
+    public int ReviewsCount { get; set; }
 
     public int WorkCategoryId { get; set; }
     public WorkCategory? WorkCategory { get; set; }
@@ -36,5 +37,6 @@ public class Vacancy
 
     public EmployerUser? EmployerUser { get; set; }
     
-    public ICollection<FavouriteVacancy>? FavouriteVacancyCollection { get; set; } = new List<FavouriteVacancy>();
+    public IEnumerable<FavouriteVacancy>? FavouriteVacancyCollection { get; set; }
+    public IEnumerable<RespondedList>? RespondedList { get; set; }
 }

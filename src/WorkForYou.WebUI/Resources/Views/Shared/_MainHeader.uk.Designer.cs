@@ -60,6 +60,15 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Чат.
+        /// </summary>
+        internal static string Chat {
+            get {
+                return ResourceManager.GetString("Chat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Кандидати.
         /// </summary>
         internal static string HeaderAllCandidates {
@@ -128,6 +137,24 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         internal static string HeaderVacancies {
             get {
                 return ResourceManager.GetString("HeaderVacancies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вітаємо, .
+        /// </summary>
+        internal static string Hello {
+            get {
+                return ResourceManager.GetString("Hello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Мої відгуки.
+        /// </summary>
+        internal static string Reviews {
+            get {
+                return ResourceManager.GetString("Reviews", resourceCulture);
             }
         }
     }

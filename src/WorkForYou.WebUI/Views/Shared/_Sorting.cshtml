@@ -1,22 +1,69 @@
-﻿@model WorkForYou.WebUI.ViewModels.AdditionalViewModels.SettingsViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model WorkForYou.Shared.ViewModels.AdditionalViewModels.SettingsViewModel
+
+@inject IViewLocalizer ViewLocalization
+
+@{
+    const string employerController = "EmployerAccount";
+    const string vacancyController = "Vacancy";
+}
 
 <div class="vacancies__searched-bar-sort">
-    <span class="vacancies__searched-bar-sort-text">Sort by:</span>
-    <form method="get" asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction">
+    <span class="vacancies__searched-bar-sort-text">@ViewLocalization["SortTitle"]:</span>
+    <form method="get" asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction" asp-antiforgery="true">
         <input type="hidden" name="PageNumber" value="@Model.QueryParameters.PageNumber">
         <input type="hidden" name="SearchString" value="@Model.QueryParameters.SearchString">
         <input type="hidden" name="Username" value="@Model.Username">
+        <input type="hidden" name="VacancyId" value="@Model.CurrentVacancyId">
+        @if (Model.QueryParameters.WorkCategory is not null)
+        {
+            @foreach (var workCategory in Model.QueryParameters.WorkCategory)
+            {
+                <input type="hidden" name="WorkCategory" value="@workCategory">
+            }
+        }
+        @if (Model.QueryParameters.EnglishLevel is not null)
+        {
+            @foreach (var englishLevel in Model.QueryParameters.EnglishLevel)
+            {
+                <input type="hidden" name="EnglishLevel" value="@englishLevel">
+            }
+        }
+        @if (Model.QueryParameters.CompanyType is not null)
+        {
+            @foreach (var companyType in Model.QueryParameters.CompanyType)
+            {
+                <input type="hidden" name="CompanyType" value="@companyType">
+            }
+        }
+        @if (Model.QueryParameters.HowToWork is not null)
+        {
+            @foreach (var howToWork in Model.QueryParameters.HowToWork)
+            {
+                <input type="hidden" name="HowToWork" value="@howToWork">
+            }
+        }
+        @if (Model.QueryParameters.CandidateRegion is not null)
+        {
+            @foreach (var candidateRegion in Model.QueryParameters.CandidateRegion)
+            {
+                <input type="hidden" name="CandidateRegion" value="@candidateRegion">
+            }
+        }
         <select class="vacancies__searched-bar-sort-select" name="SortBy" asp-for="@Model.QueryParameters.SortBy">
-            <option value="start-publication-date">+ За датою публікації</option>
-            <option value="publication-date">- За датою публікації</option>
-            <option value="from-salary">+ За зарплатою</option>
-            <option value="to-salary">- За зарплатою</option>
-            <option value="from-experience">+ За досвідом роботи</option>
-            <option value="to-experience">- За досвідом роботи</option>
-            @* <option value="from-view-count">+ За кількістю відгуків</option> *@
-            @* <option value="to-view-count">- За кількістю відгуків</option> *@
-            <option value="from-reviews-count">+ За кількістю переглядів</option>
-            <option value="to-reviews-count">- За кількістю переглядів</option>
+            <option value="start-publication-date">+ @ViewLocalization["ByDate"]</option>
+            <option value="publication-date">- @ViewLocalization["ByDate"]</option>
+            <option value="from-salary">+ @ViewLocalization["BySalary"]</option>
+            <option value="to-salary">- @ViewLocalization["BySalary"]</option>
+            <option value="from-experience">+ @ViewLocalization["ByExperience"]</option>
+            <option value="to-experience">- @ViewLocalization["ByExperience"]</option>
+            <option value="from-view-count">+ @ViewLocalization["ByViews"]</option>
+            <option value="to-view-count">- @ViewLocalization["ByViews"]</option>
+            @if (Model.CurrentController != employerController && Model.CurrentController != vacancyController)
+            {
+                <option value="from-respond-count">+ @ViewLocalization["ByReviews"]</option>
+                <option value="to-respond-count">- @ViewLocalization["ByReviews"]</option>
+            }
         </select>
     </form>
 </div>

@@ -1,29 +1,81 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WorkForYou.Core.AdditionalModels;
 using WorkForYou.Core.DTOModels.UserDTOs;
-using WorkForYou.Core.IRepositories;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.RepositoryInterfaces;
 using WorkForYou.Core.Models.IdentityInheritance;
 using WorkForYou.Core.Responses.Repositories;
-using WorkForYou.Data.DatabaseContext;
+using WorkForYou.Data.Helpers;
+using WorkForYou.Infrastructure.DatabaseContext;
 
 namespace WorkForYou.Data.Repositories;
 
 public class UserRepository : GenericRepository<ApplicationUser>, IUserRepository
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IFileService _fileService;
-    private readonly IAuthService _authService;
+    private const int PageSize = 7;
 
-    public UserRepository(WorkForYouDbContext context, ILogger logger, IHttpContextAccessor httpContextAccessor,
-        IFileService fileService, IAuthService authService)
+    public UserRepository(WorkForYouDbContext context, ILogger logger)
         : base(context, logger)
     {
-        _httpContextAccessor = httpContextAccessor;
-        _fileService = fileService;
-        _authService = authService;
+    }
+
+    public async Task<UserResponse> GetAllCandidatesAsync(QueryParameters queryParameters)
+    {
+        try
+        {
+            var skipAmount = PageSize * (queryParameters.PageNumber - 1);
+
+            IReadOnlyList<ApplicationUser> users;
+
+            if (!string.IsNullOrEmpty(queryParameters.SearchString))
+                users = await DbSet
+                    .Where(x => x.CandidateUser != null && x.CandidateUser.IsProfileComplete)
+                    .Include(x => x.CandidateUser!.CategoryWork)
+                    .Include(x => x.CandidateUser!.LevelEnglish)
+                    .Include(x => x.CandidateUser!.CommunicationLanguage)
+                    .Where(x => EF.Functions.Like(x.CandidateUser!.CompanyPosition!,
+                                    $"%{queryParameters.SearchString}%")
+                                || EF.Functions.Like(x.CandidateUser!.KeyWords!, $"%{queryParameters.SearchString}%"))
+                    .ToListAsync();
+            else
+                users = await DbSet
+                    .Where(x => x.CandidateUser != null && x.CandidateUser.IsProfileComplete)
+                    .Include(x => x.CandidateUser!.CategoryWork)
+                    .Include(x => x.CandidateUser!.LevelEnglish)
+                    .Include(x => x.CandidateUser!.CommunicationLanguage)
+                    .ToListAsync();
+
+            users = ListSortingHelper.ListUserSort(queryParameters, users);
+            users = FilteringHelper.CandidateFiltering(queryParameters, users);
+
+            var vacanciesCount = users.Count;
+            var pageCount = (int) Math.Ceiling((double) vacanciesCount / PageSize);
+
+            return new()
+            {
+                Message = "Candidates successfully received",
+                IsSuccessfully = true,
+                ApplicationUsers = users
+                    .Reverse()
+                    .Skip(skipAmount)
+                    .Take(PageSize)
+                    .ToList(),
+                PageCount = pageCount,
+                VacancyCount = vacanciesCount,
+                SearchString = queryParameters.SearchString,
+                SortBy = queryParameters.SortBy,
+                Pages = PaginationHelper.PageNumbers(queryParameters.PageNumber, pageCount)
+            };
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error receiving candidates");
+            return new()
+            {
+                Message = "Error receiving candidates",
+                IsSuccessfully = false
+            };
+        }
     }
 
     public async Task<UserResponse> GetUserDataAsync(UsernameDto? usernameDto)
@@ -44,27 +96,18 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
             if (user is null)
                 return new()
                 {
-                    Message = "No user with this ID was found",
+                    Message = "No user with this username",
                     IsSuccessfully = false
                 };
 
-            var userRole = await _authService.IsUserCandidate(usernameDto);
-
-            if (!userRole.IsSuccessfully)
-                return new()
-                {
-                    Message = "Error defining user role",
-                    IsSuccessfully = false
-                };
-
-            if (userRole.IsUserCandidate)
+            if (usernameDto.UserRole == ApplicationRoles.CandidateRole)
             {
                 var candidateUser = await DbSet
-                    .Include(x => x.CandidateUser)
-                    .Include(x => x.CandidateUser!.CategoryWork)
-                    .Include(x => x.CandidateUser!.CommunicationLanguage)
-                    .Include(x => x.CandidateUser!.LevelEnglish)
-                    .FirstOrDefaultAsync(x => x.UserName == usernameDto.Username);
+                    .Include(userData => userData.CandidateUser)
+                    .Include(userData => userData.CandidateUser!.CategoryWork)
+                    .Include(userData => userData.CandidateUser!.CommunicationLanguage)
+                    .Include(userData => userData.CandidateUser!.LevelEnglish)
+                    .FirstOrDefaultAsync(userData => userData.UserName == usernameDto.Username);
 
                 if (candidateUser is null)
                     return new()
@@ -72,16 +115,6 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
                         Message = "Error getting candidate",
                         IsSuccessfully = false
                     };
-
-                if (!_httpContextAccessor.HttpContext.Session.Keys.Contains(
-                        $"IsShowVacancy{candidateUser.CandidateUser!.CandidateUserId}")
-                    && _httpContextAccessor.HttpContext.User.IsInRole("employer"))
-                {
-                    _httpContextAccessor.HttpContext.Session.SetString(
-                        $"IsShowVacancy{candidateUser.CandidateUser!.CandidateUserId}", "1");
-                    candidateUser.CandidateUser!.ViewCount++;
-                    await Context.SaveChangesAsync();
-                }
 
                 return new()
                 {
@@ -91,230 +124,44 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
                 };
             }
 
-            var employerUser = await DbSet
-                .Include(x => x.EmployerUser)
-                .FirstOrDefaultAsync(x => x.UserName == usernameDto.Username);
-
-            if (employerUser is null)
-                return new()
-                {
-                    Message = "Error getting employer",
-                    IsSuccessfully = false
-                };
-
-            return new()
+            if (usernameDto.UserRole == ApplicationRoles.EmployerRole)
             {
-                Message = "The employer was successfully received",
-                IsSuccessfully = true,
-                User = employerUser
-            };
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Data transfer error");
-            return new()
-            {
-                Message = "Data transfer error",
-                IsSuccessfully = false
-            };
-        }
-    }
+                var employerUser = await DbSet
+                    .Include(x => x.EmployerUser)
+                    .FirstOrDefaultAsync(x => x.UserName == usernameDto.Username);
 
-    public async Task<UserResponse> ShowFavouriteListAsync(UsernameDto? usernameDto)
-    {
-        try
-        {
-            if (usernameDto is null)
-                return new()
-                {
-                    Message = "Data transfer error",
-                    IsSuccessfully = false
-                };
-
-            var user = await DbSet.Include(x => x.CandidateUser)
-                .FirstOrDefaultAsync(x => x.UserName == usernameDto.Username);
-
-            if (user is null || user.CandidateUser is null)
-                return new()
-                {
-                    Message = "An error occurred while retrieving the user, or the user is not a candidate",
-                    IsSuccessfully = false
-                };
-
-            var favouriteProperties = await Context.FavouriteVacancies
-                .Include(x => x.CandidateUser)
-                .Where(x => x.CandidateId == user.CandidateUser.CandidateUserId)
-                .Select(x => x.Vacancy).ToListAsync();
-
-            return new()
-            {
-                Message = "FavouriteList successfully received",
-                IsSuccessfully = true,
-                FavouriteList = favouriteProperties!
-            };
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Data transfer error");
-            return new()
-            {
-                Message = "Data transfer error",
-                IsSuccessfully = false
-            };
-        }
-    }
-
-    public async Task<UserResponse> GetAllCandidatesAsync(QueryParameters queryParameters)
-    {
-        try
-        {
-            const int pageSize = 6;
-            int skipAmount = pageSize * (queryParameters.PageNumber - 1);
-
-            IEnumerable<ApplicationUser> users;
-
-            if (!string.IsNullOrEmpty(queryParameters.SearchString))
-                users = await DbSet
-                    .Where(x => x.CandidateUser != null && x.CandidateUser.IsProfileComplete)
-                    .Include(x => x.CandidateUser!.CategoryWork)
-                    .Include(x => x.CandidateUser!.LevelEnglish)
-                    .Include(x => x.CandidateUser!.CommunicationLanguage)
-                    .Where(x => EF.Functions.Like(x.CandidateUser!.CompanyPosition!, $"%{queryParameters.SearchString}%")
-                                || EF.Functions.Like(x.CandidateUser!.KeyWords!, $"%{queryParameters.SearchString}%"))
-                    .ToListAsync();
-            else
-                users = await DbSet
-                    .Where(x => x.CandidateUser != null && x.CandidateUser.IsProfileComplete)
-                    .Include(x => x.CandidateUser!.CategoryWork)
-                    .Include(x => x.CandidateUser!.LevelEnglish)
-                    .Include(x => x.CandidateUser!.CommunicationLanguage)
-                    .ToListAsync();
-            
-            switch (queryParameters.SortBy)
-            {
-                case "publication-date":
-                    users = users.OrderByDescending(x => x.CandidateUser!.CreatedDate).ToList();
-                    break;
-                case "from-salary":
-                    users = users.OrderBy(x => x.CandidateUser!.ExpectedSalary).ToList();
-                    break;
-                case "to-salary":
-                    users = users.OrderByDescending(x => x.CandidateUser!.ExpectedSalary).ToList();
-                    break;
-                case "from-experience":
-                    users = users.OrderBy(x => x.CandidateUser!.ExperienceWorkTime).ToList();
-                    break;
-                case "to-experience":
-                    users = users.OrderByDescending(x => x.CandidateUser!.ExperienceWorkTime).ToList();
-                    break;
-                case "from-view-count":
-                    users = users.OrderBy(x => x.CandidateUser!.ViewCount).ToList();
-                    break;
-                case "to-view-count":
-                    users = users.OrderByDescending(x => x.CandidateUser!.ViewCount).ToList();
-                    break;
-                // case "from-reviews-count":
-                //     vacancies = vacancies.OrderBy(x => x.FromSalary).ToList();
-                //     break;
-                // case "to-reviews-count":
-                //     vacancies = vacancies.OrderByDescending(x => x.FromSalary).ToList();
-                //     break;
-                default:
-                    users = users.OrderBy(x => x.CandidateUser!.CreatedDate).ToList();
-                    break;
-            }
-
-            int vacanciesCount = users.Count();
-            int pageCount = (int) Math.Ceiling((double) vacanciesCount / pageSize);
-
-            return new()
-            {
-                Message = "Candidates successfully received",
-                IsSuccessfully = true,
-                ApplicationUsers = users
-                    .Reverse()
-                    .Skip(skipAmount)
-                    .Take(pageSize),
-                PageCount = pageCount,
-                VacancyCount = vacanciesCount,
-                SearchString = queryParameters.SearchString,
-                SortBy = queryParameters.SortBy,
-                Pages = PageNumbers(queryParameters.PageNumber, pageCount)
-            };
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "");
-            return new()
-            {
-                Message = "",
-                IsSuccessfully = false
-            };
-        }
-    }
-
-    public async Task<UserResponse> UploadUserImageAsync(IFormFile image, UsernameDto? usernameDto)
-    {
-        try
-        {
-            var imageResult = await _fileService.UploadUserImageAsync(image);
-
-            if (!imageResult.IsSuccessfully)
-                return new()
-                {
-                    Message = "Error uploading image",
-                    IsSuccessfully = false
-                };
-
-            if (usernameDto is null)
-                return new()
-                {
-                    Message = "Error uploading image",
-                    IsSuccessfully = false
-                };
-
-            var user = await GetUserDataAsync(usernameDto);
-
-            if (string.IsNullOrEmpty(user.User.ImagePath))
-            {
-                user.User.ImagePath = imageResult.FilePath;
-
-                DbSet.Update(user.User);
-                await Context.SaveChangesAsync();
-            }
-            else
-            {
-                var removeOldUserImage = _fileService.RemoveUserImageAsync(user.User.ImagePath);
-
-                if (!removeOldUserImage.IsSuccessfully)
+                if (employerUser is null)
                     return new()
                     {
-                        Message = "Error uploading image while remove old image",
+                        Message = "Error getting employer",
                         IsSuccessfully = false
                     };
 
-                user.User.ImagePath = imageResult.FilePath;
-                DbSet.Update(user.User);
-                await Context.SaveChangesAsync();
+                return new()
+                {
+                    Message = "The employer was successfully received",
+                    IsSuccessfully = true,
+                    User = employerUser
+                };
             }
 
             return new()
             {
-                Message = "Image uploaded successfully",
-                IsSuccessfully = true
+                Message = "Error defining user role",
+                IsSuccessfully = false
             };
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error uploading image");
+            Logger.LogError(ex, "Data transfer error");
             return new()
             {
-                Message = "Error uploading image",
+                Message = "Data transfer error",
                 IsSuccessfully = false
             };
         }
     }
-
+    
     public async Task<UserResponse> RefreshGeneralInfoAsync(RefreshGeneralUserDto? refreshGeneralUserDto)
     {
         try
@@ -326,7 +173,13 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
                     IsSuccessfully = false
                 };
 
-            var userResult = await GetUserDataAsync(new() {Username = refreshGeneralUserDto.UserName});
+            var usernameDto = new UsernameDto
+            {
+                Username = refreshGeneralUserDto.UserName,
+                UserRole = refreshGeneralUserDto.UserRole
+            };
+
+            var userResult = await GetUserDataAsync(usernameDto);
             var user = userResult.User;
 
             user.FirstName = refreshGeneralUserDto.FirstName;
@@ -367,21 +220,37 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
                     IsSuccessfully = false
                 };
 
-            var userResult = await GetUserDataAsync(new() {Username = refreshCandidateDto.Username});
+            var userResult = await GetUserDataAsync(new()
+                {Username = refreshCandidateDto.Username, UserRole = ApplicationRoles.CandidateRole});
             var user = userResult.User;
-            user.CandidateUser!.CompanyPosition = refreshCandidateDto.CompanyPosition;
-            user.CandidateUser!.ExpectedSalary = refreshCandidateDto.ExpectedSalary;
-            user.CandidateUser!.HourlyRate = refreshCandidateDto.HourlyRate;
-            user.CandidateUser!.ExperienceWorkTime = refreshCandidateDto.ExperienceWorkTime;
-            user.CandidateUser!.ExperienceWorkDescription = refreshCandidateDto.ExperienceWorkDescription;
-            user.CandidateUser!.Country = refreshCandidateDto.Country;
-            user.CandidateUser!.City = refreshCandidateDto.City;
-            user.CandidateUser!.EmploymentOptions = refreshCandidateDto.EmploymentOptions;
-            user.CandidateUser!.KeyWords = refreshCandidateDto.KeyWords;
-            user.CandidateUser!.CommunicationLanguageId = refreshCandidateDto.CommunicationLanguageId;
-            user.CandidateUser!.EnglishLevelId = refreshCandidateDto.EnglishLevelId;
-            user.CandidateUser!.WorkCategoryId = refreshCandidateDto.WorkCategoryId;
-            user.CandidateUser!.IsProfileComplete = true;
+
+            if (user.CandidateUser is null)
+                return new()
+                {
+                    Message = "An error occurred while trying to update user data",
+                    IsSuccessfully = false
+                };
+
+            user.CandidateUser.CompanyPosition = refreshCandidateDto.CompanyPosition;
+            user.CandidateUser.ExpectedSalary = refreshCandidateDto.ExpectedSalary;
+            user.CandidateUser.HourlyRate = refreshCandidateDto.HourlyRate;
+            user.CandidateUser.ExperienceWorkTime = refreshCandidateDto.ExperienceWorkTime;
+            user.CandidateUser.ExperienceWorkDescription = refreshCandidateDto.ExperienceWorkDescription;
+            user.CandidateUser.Country = refreshCandidateDto.Country;
+            user.CandidateUser.City = refreshCandidateDto.City;
+            user.CandidateUser.EmploymentOptions = refreshCandidateDto.EmploymentOptions;
+            user.CandidateUser.KeyWords = refreshCandidateDto.KeyWords;
+            user.CandidateUser.CommunicationLanguageId = refreshCandidateDto.CommunicationLanguageId;
+            user.CandidateUser.EnglishLevelId = refreshCandidateDto.EnglishLevelId;
+            user.CandidateUser.WorkCategoryId = refreshCandidateDto.WorkCategoryId;
+
+            if (!string.IsNullOrEmpty(user.CandidateUser.CompanyPosition)
+                && user.CandidateUser.ExpectedSalary != 0
+                && !string.IsNullOrEmpty(user.CandidateUser.ExperienceWorkDescription)
+                && user.CandidateUser.EnglishLevelId != null)
+                user.CandidateUser.IsProfileComplete = true;
+            else
+                user.CandidateUser.IsProfileComplete = false;
 
             DbSet.Update(user);
             await Context.SaveChangesAsync();
@@ -414,14 +283,25 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
                     IsSuccessfully = false
                 };
 
-            var userData = await GetUserDataAsync(new() {Username = refreshEmployerDto.Username});
+            const string userRole = ApplicationRoles.EmployerRole;
+            var username = refreshEmployerDto.Username;
+            var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
+
+            var userData = await GetUserDataAsync(usernameDto);
             var user = userData.User;
 
-            user.EmployerUser!.CompanyPosition = refreshEmployerDto.CompanyPosition;
-            user.EmployerUser!.CompanyName = refreshEmployerDto.CompanyName;
-            user.EmployerUser!.CompanySiteLink = refreshEmployerDto.CompanySiteLink;
-            user.EmployerUser!.DoyCompanyLink = refreshEmployerDto.DoyCompanyLink;
-            user.EmployerUser!.AboutCompany = refreshEmployerDto.AboutCompany;
+            if (user.EmployerUser is null)
+                return new()
+                {
+                    Message = "An error occurred while trying to update user data",
+                    IsSuccessfully = false
+                };
+
+            user.EmployerUser.CompanyPosition = refreshEmployerDto.CompanyPosition;
+            user.EmployerUser.CompanyName = refreshEmployerDto.CompanyName;
+            user.EmployerUser.CompanySiteLink = refreshEmployerDto.CompanySiteLink;
+            user.EmployerUser.DoyCompanyLink = refreshEmployerDto.DoyCompanyLink;
+            user.EmployerUser.AboutCompany = refreshEmployerDto.AboutCompany;
 
             DbSet.Update(user);
             await Context.SaveChangesAsync();
@@ -443,43 +323,43 @@ public class UserRepository : GenericRepository<ApplicationUser>, IUserRepositor
         }
     }
 
-    private IEnumerable<int> PageNumbers(int pageNumber, int pageCount)
+    public async Task<UserResponse> RemoveUserAsync(UsernameDto? usernameDto)
     {
-        if (pageCount <= 5)
+        try
         {
-            for (int i = 1; i <= pageCount; i++)
+            if (usernameDto is null)
+                return new()
+                {
+                    Message = "Error getting user",
+                    IsSuccessfully = false
+                };
+
+            var userResult = await GetUserDataAsync(usernameDto);
+
+            if (!userResult.IsSuccessfully)
+                return new()
+                {
+                    Message = "Error getting user",
+                    IsSuccessfully = false
+                };
+
+            DbSet.Remove(userResult.User);
+            await Context.SaveChangesAsync();
+
+            return new()
             {
-                yield return i;
-            }
+                Message = "User deleted successfully",
+                IsSuccessfully = true
+            };
         }
-        else
+        catch (Exception ex)
         {
-            int midPoint = pageNumber < 3 ? 3
-                : pageNumber > pageCount - 2 ? pageCount - 2
-                : pageNumber;
-
-            int lowerBound = midPoint - 2;
-            int upperBound = midPoint + 2;
-
-            if (lowerBound != 1)
+            Logger.LogError(ex, "Error getting user");
+            return new()
             {
-                yield return 1;
-                if (lowerBound - 1 > 1)
-                    yield return -1;
-            }
-
-            for (int i = midPoint - 2; i <= upperBound; i++)
-                yield return i;
-
-
-            if (upperBound != pageCount)
-            {
-                if (pageCount - upperBound > 1)
-                    yield return -1;
-
-
-                yield return pageCount;
-            }
+                Message = "Error getting user",
+                IsSuccessfully = false
+            };
         }
     }
 }

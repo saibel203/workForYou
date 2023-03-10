@@ -82,7 +82,9 @@ public class NpmWatchHosted : IHostedService, IDisposable
             _process?.Dispose();
             _process = null;
 
-            _logger.LogWarning("npm watch exited, restarting in 1 second.");
+            const string message = "npm watch exited, restarting in 1 second.";
+
+            _logger.LogWarning(message);
 
             await Task.Delay(1000);
             StartProcess();

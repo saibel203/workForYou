@@ -1,9 +1,12 @@
 ﻿@using WorkForYou.WebUI.Helpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
 @model WorkForYou.Core.Models.IdentityInheritance.ApplicationUser;
 
+@inject IViewLocalizer ViewLocalization
+
 @{
-    ViewData["Title"] = "Профайл";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 <div class="card-details">
@@ -15,17 +18,17 @@
             <div class="card-details__header">
                 <h1>
                     @Model.CandidateUser.CompanyPosition
-                    @if (Model.FirstName is not null && Model.LastName is not null)
+                    @if (!string.IsNullOrEmpty(Model.FirstName) && !string.IsNullOrEmpty(Model.LastName))
                     {
                         @: (@Model.LastName @Model.FirstName)
                     }
                 </h1>
             </div>
         }
-        @if (Model.CandidateUser.ExperienceWorkDescription is not null)
+        @if (!string.IsNullOrEmpty(Model.CandidateUser.ExperienceWorkDescription))
         {
             <div class="card-details__body">
-                <h3>Досвід роботи</h3>
+                <h3>@ViewLocalization["Experience"]</h3>
                 @if (string.IsNullOrEmpty(Model.ImagePath))
                 {
                     <div class="card-details__body-profile-image">
@@ -41,12 +44,12 @@
                 <p>@Model.CandidateUser.ExperienceWorkDescription</p>
             </div>
         }
-        @if (Model.CandidateUser.KeyWords is not null)
+        @if (!string.IsNullOrEmpty(Model.CandidateUser.KeyWords))
         {
             var keyWords = Model.CandidateUser.KeyWords.Split(", ", StringSplitOptions.RemoveEmptyEntries);
 
             <div class="card-details__tags profile-tags">
-                <h3>Ключові слова / Навички</h3>
+                <h3>@ViewLocalization["Keywords"]</h3>
                 @foreach (var tag in keyWords)
                 {
                     <button class="search-buttons detail-button">@tag</button>
@@ -56,24 +59,29 @@
         @if (Model.CandidateUser.CommunicationLanguage is not null)
         {
             <div class="card-details__language">
-                <h3>Мова спілкування</h3>
+                <h3>@ViewLocalization["Language"]</h3>
                 <p>@Model.CandidateUser.CommunicationLanguage.CommunicationLanguageName</p>
             </div>
         }
 
-        <div class="card-details__buttons">
-            <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">Редагувати</a>
-            <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">Видалити</a>
-        </div>
+        @if (Model.UserName == User.Identity?.Name!)
+        {
+            <div class="card-details__buttons">
+                <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
+                <form method="post" asp-controller="Account" asp-action="RemoveUser">
+                    <input type="submit" value="@ViewLocalization["Delete"]" class="search-buttons card-buttons detail-danger">
+                </form>
+            </div>
+        }
     </div>
     <div class="card-details__info">
         @if (Model.CandidateUser.ExpectedSalary != 0)
         {
             <h2>
-                @Model.CandidateUser.ExpectedSalary$ / місяць
+                @Model.CandidateUser.ExpectedSalary$ / @ViewLocalization["Month"]
                 @if (Model.CandidateUser.HourlyRate != 0)
                 {
-                    @: (@Model.CandidateUser.HourlyRate$ / годину)
+                    @: (@Model.CandidateUser.HourlyRate$ / @ViewLocalization["Hour"])
                 }
             </h2>
         }
@@ -86,14 +94,14 @@
         }
         <p>
             <i class="fa-regular fa-eye"></i> @Model.CandidateUser.ViewCount
-            перегляд@(ViewHelpers.GetLastStringLetters(Model.CandidateUser.ViewCount))
+            @ViewLocalization["View"]@(ViewHelpers.GetLastStringLetters(Model.CandidateUser.ViewCount))
         </p>
-        @if (Model.CandidateUser.Country is not null)
+        @if (!string.IsNullOrEmpty(Model.CandidateUser.Country))
         {
             <p>
                 <i class="fa-solid fa-earth-americas"></i>
                 @Model.CandidateUser.Country
-                @if (Model.CandidateUser.City is not null)
+                @if (!string.IsNullOrEmpty(Model.CandidateUser.City))
                 {
                     @Model.CandidateUser.City
                 }
@@ -103,7 +111,7 @@
         {
             <p>
                 <i class="fa-solid fa-graduation-cap"></i>
-                Без досвіду
+                @ViewLocalization["NoExperience"]
             </p>
         }
         else
@@ -112,7 +120,7 @@
                 <i class="fa-solid fa-graduation-cap"></i>
                 @Model.CandidateUser.ExperienceWorkTime
                 @ViewHelpers.GetLastStringLetters(Model.CandidateUser.ExperienceWorkTime, true)
-                досвіду
+                @ViewLocalization["Experience"]
             </p>
         }
         @if (Model.CandidateUser.LevelEnglish is not null)
@@ -124,20 +132,20 @@
         }
         <p>
             <i class="fa-regular fa-clock"></i>
-            На сайті з @Model.CandidateUser.CreatedDate.ToString("dd MMMM yyyy") року
+            @ViewLocalization["TimeOnSite"] @Model.CandidateUser.CreatedDate.ToString("dd MMMM yyyy") @ViewLocalization["Years"]
         </p>
         @if (!Model.CandidateUser.IsProfileComplete)
         {
             <p class="close">
                 <i class="fa-regular fa-rectangle-xmark"></i>
-                Профіль не заповнений
+                @ViewLocalization["NoFill"]
             </p>
         }
         else
         {
             <p class="ok">
                 <i class="fa-regular fa-square-check"></i>
-                Профіль заповнений
+                @ViewLocalization["Fill"]
             </p>
         }
         <ul class="footer__social-links mb-0">
@@ -196,19 +204,17 @@
                 {
                     @Model.EmployerUser.CompanyPosition
                 }
-                @if (Model.EmployerUser.CompanyName is not null)
+                @if (!string.IsNullOrEmpty(Model.EmployerUser.CompanyName))
                 {
-                    @:в компанії 
-                    <a asp-controller="Vacancy" asp-action="AllEmployerVacancies" asp-route-username="@Model.UserName">
-                        @Model.EmployerUser.CompanyName
-                    </a>
+                    @: @ViewLocalization["InCompany"] 
+                    @Model.EmployerUser.CompanyName
                 }
             </h2>
         </div>
-        @if (Model.EmployerUser.AboutCompany is not null)
+        @if (!string.IsNullOrEmpty(Model.EmployerUser.AboutCompany))
         {
             <div class="card-details__body">
-                <h3>Про компанію</h3>
+                <h3>@ViewLocalization["AboutCompany"]</h3>
                 @if (string.IsNullOrEmpty(Model.ImagePath))
                 {
                     <div class="card-details__body-profile-image">
@@ -227,7 +233,7 @@
         @* @if (Model.EmployerUser.Vacancies is not null) *@
         @* { *@
         @*     <div class="card-details__vacancies"> *@
-        @*         <h3>Вакансії</h3> *@
+        @*         <h3>@ViewLocalization["Vacancies"]</h3> *@
         @*         <ul> *@
         @*             @foreach (var vacancy in Model.EmployerUser.Vacancies.Take(6)) *@
         @*             { *@
@@ -241,34 +247,39 @@
         @*         @if (Model.EmployerUser.Vacancies.Count > 6) *@
         @*         { *@
         @*             <div> *@
-        @*                 <a href="" class="search-buttons card-buttons">Всі вакансії</a> *@
+        @*                 <a href="" class="search-buttons card-buttons">@ViewLocalization["AllVacancies"]</a> *@
         @*             </div> *@
         @*         } *@
         @*     </div> *@
         @* } *@
-        @if (Model.EmployerUser.CompanySiteLink is not null)
+        @if (!string.IsNullOrEmpty(Model.EmployerUser.CompanySiteLink))
         {
             <div class="card-details__language">
-                <h3>Сайт компанії</h3>
+                <h3>@ViewLocalization["CompanySite"]</h3>
                 <p>
                     <a href="@Model.EmployerUser.CompanySiteLink" target="_blank">@Model.EmployerUser.CompanySiteLink</a>
                 </p>
             </div>
         }
-        @if (Model.EmployerUser.DoyCompanyLink is not null)
+        @if (!string.IsNullOrEmpty(Model.EmployerUser.DoyCompanyLink))
         {
             <div class="card-details__language">
-                <h3>DOY посилання</h3>
+                <h3>@ViewLocalization["DOYReference"]</h3>
                 <p>
                     <a href="@Model.EmployerUser.DoyCompanyLink" target="_blank">@Model.EmployerUser.DoyCompanyLink</a>
                 </p>
             </div>
         }
 
-        <div class="card-details__buttons">
-            <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">Редагувати</a>
-            <a class="search-buttons card-buttons detail-danger" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">Видалити</a>
-        </div>
+        @if (Model.UserName == User.Identity?.Name!)
+        {
+            <div class="card-details__buttons">
+                <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
+                <form method="post" asp-controller="Account" asp-action="RemoveUser">
+                    <button type="submit" class="search-buttons card-buttons detail-danger">@ViewLocalization["Delete"]</button>
+                </form>
+            </div>
+        }
     </div>
     <div class="card-details__info">
         <ul class="footer__social-links mb-0">

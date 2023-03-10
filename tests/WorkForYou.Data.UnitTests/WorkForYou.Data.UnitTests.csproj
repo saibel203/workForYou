@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.18.0" />
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.18.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.18.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0-preview.1.23111.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="Moq" Version="4.18.4" />
+    <PackageReference Include="xunit" Version="2.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\WorkForYou.Core\WorkForYou.Core.csproj" />
+    <ProjectReference Include="..\..\src\WorkForYou.Data\WorkForYou.Data.csproj" />
+    <ProjectReference Include="..\WorkForYou.SharedForTests\WorkForYou.SharedForTests.csproj" />
+  </ItemGroup>
+
+</Project>

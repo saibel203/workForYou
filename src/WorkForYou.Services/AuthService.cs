@@ -2,13 +2,14 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using WorkForYou.Core.IOptions;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.Models.IdentityInheritance;
 using WorkForYou.Core.DTOModels.UserDTOs;
-using WorkForYou.Data.DatabaseContext;
 using WorkForYou.Core.Responses.Services;
+using WorkForYou.Infrastructure.DatabaseContext;
 
 namespace WorkForYou.Services;
 
@@ -16,18 +17,20 @@ public class AuthService : IAuthService
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IStringLocalizer<AuthService> _stringLocalization;
     private readonly WorkForYouDbContext _context;
     private readonly WebUiOptions _webUiOptions;
     private readonly IMailService _mailService;
     private readonly IMapper _mapper;
 
-    public AuthService(UserManager<ApplicationUser> userManager, IMapper mapper, WorkForYouDbContext context, SignInManager<ApplicationUser> signInManager, IMailService mailService, IOptions<WebUiOptions> webUiOptions)
+    public AuthService(UserManager<ApplicationUser> userManager, IMapper mapper, WorkForYouDbContext context, SignInManager<ApplicationUser> signInManager, IMailService mailService, IOptions<WebUiOptions> webUiOptions, IStringLocalizer<AuthService> stringLocalization)
     {
         _userManager = userManager;
         _mapper = mapper;
         _context = context;
         _signInManager = signInManager;
         _mailService = mailService;
+        _stringLocalization = stringLocalization;
         _webUiOptions = webUiOptions.Value;
     }
 
@@ -58,12 +61,9 @@ public class AuthService : IAuthService
         var encodedEmailToken = Encoding.UTF8.GetBytes(confirmEmailToken);
         var validEmailToken = WebEncoders.Base64UrlEncode(encodedEmailToken);
 
-        string url = $"{_webUiOptions.ApplicationUrl}/auth/confirmEmailResult" +
+        string url = $"{_webUiOptions.WebUIApplicationUrl}/auth/confirmEmailResult" +
                      $"?userId={user.Id}&token={validEmailToken}";
-
-        // await _mailService.SendEmailAsync(user.Email!, "Confirm email", $"For confirm, <a href='{url}' " +
-        //                                                                 $"target='_blank'>CLICK</a>");
-
+        
         await _mailService.SendEmailAsync(user.Email!, "Підтвердження email", 
             "Підтвердження email на сайті WorkForYou. Якщо ви не реєструвались, проігноруйте цей лист.", 
             url, "Натисніть для підтвердження");
@@ -107,7 +107,7 @@ public class AuthService : IAuthService
         if (user is null)
             return new()
             {
-                Message = "Користувача з таким Email не знайдено",
+                Message = _stringLocalization["UserNotFound"],
                 IsSuccessfully = false
             };
 
@@ -119,13 +119,13 @@ public class AuthService : IAuthService
             if (!user.EmailConfirmed)
                 return new()
                 {
-                    Message = "Спочатку підтвердіть електронну пошту",
+                    Message = _stringLocalization["ConfirmEmail"],
                     IsSuccessfully = false
                 };
             
             return new()
             {
-                Message = "Не вірний пароль",
+                Message = _stringLocalization["PasswordError"],
                 IsSuccessfully = false
             };
             
@@ -145,7 +145,7 @@ public class AuthService : IAuthService
         if (user is null)
             return new()
             {
-                Message = "Користувача з заданим ідентифікатором не знайдено",
+                Message = _stringLocalization["UserNotFoundById"],
                 IsSuccessfully = false
             };
 
@@ -157,7 +157,7 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
             return new()
             {
-                Message = "Помилка підтвердження",
+                Message = _stringLocalization["ConfirmError"],
                 IsSuccessfully = false,
                 Errors = result.Errors
             };
@@ -174,7 +174,7 @@ public class AuthService : IAuthService
         if (forgetPasswordDto is null)
             return new()
             {
-                Message = "Помилка заповнення форми",
+                Message = _stringLocalization["FormFillError"],
                 IsSuccessfully = false
             };
         
@@ -183,7 +183,7 @@ public class AuthService : IAuthService
         if (user is null)
             return new()
             {
-                Message = "Користувача з таким Email не знайдено",
+                Message = _stringLocalization["UserNotFound"],
                 IsSuccessfully = false
             };
 
@@ -191,18 +191,15 @@ public class AuthService : IAuthService
         var encodedToken = Encoding.UTF8.GetBytes(defaultToken);
         var currentToken = WebEncoders.Base64UrlEncode(encodedToken);
 
-        var url = $"{_webUiOptions.ApplicationUrl}/Auth/ResetPassword?email={forgetPasswordDto.Email}&token={currentToken}";
-
-        // await _mailService.SendEmailAsync(forgetPasswordDto.Email, "Reset password", "For reset password" +
-        //                                                                $"<a href='{url}' target='_blank'>Click here</a>");
-
+        var url = $"{_webUiOptions.WebUIApplicationUrl}/Auth/ResetPassword?email={forgetPasswordDto.Email}&token={currentToken}";
+        
         await _mailService.SendEmailAsync(forgetPasswordDto.Email, "Відновлення паролю",
             "Відновлення паролю на сайті WorkForYou. Якщо ви нічого не змінювали, проігноруйте це повідомлення.",
             url, "Відновлення паролю");
         
         return new()
         {
-            Message = "URL для відновлення пароля відправлено на вашу почту",
+            Message = _stringLocalization["SuccessSend"],
             IsSuccessfully = true
         };
     }
@@ -212,7 +209,7 @@ public class AuthService : IAuthService
         if (resetPasswordDto is null)
             return new()
             {
-                Message = "Помилка заповнення форми",
+                Message = _stringLocalization["FormFillError"],
                 IsSuccessfully = false
             };
         
@@ -221,14 +218,14 @@ public class AuthService : IAuthService
         if (user is null)
             return new()
             {
-                Message = "Користувача з заданим Email не знайдено",
+                Message = _stringLocalization["UserNotFound"],
                 IsSuccessfully = false
             };
 
         if (resetPasswordDto.NewPassword != resetPasswordDto.ConfirmNewPassword)
             return new()
             {
-                Message = "Паролі не співпадають",
+                Message = _stringLocalization["PasswordsNotMatch"],
                 IsSuccessfully = false
             };
 
@@ -240,7 +237,7 @@ public class AuthService : IAuthService
         if (!resetPasswordResult.Succeeded)
             return new()
             {
-                Message = "Присутні помилки",
+                Message = _stringLocalization["SomeErrors"],
                 IsSuccessfully = false,
                 Errors = resetPasswordResult.Errors
             };
@@ -251,7 +248,7 @@ public class AuthService : IAuthService
 
         return new()
         {
-            Message = "Пароль успішно змінено",
+            Message = _stringLocalization["ChangePasswordSuccess"],
             IsSuccessfully = true
         };
     }
@@ -261,7 +258,7 @@ public class AuthService : IAuthService
         if (changePasswordDto is null)
             return new()
             {
-                Message = "Помилка заповнення форми",
+                Message = _stringLocalization["FormFillError"],
                 IsSuccessfully = false
             };
 
@@ -270,14 +267,14 @@ public class AuthService : IAuthService
         if (currentUser is null)
             return new()
             {
-                Message = "Користувача з таким Email не знайдено",
+                Message = _stringLocalization["UserNotFound"],
                 IsSuccessfully = false
             };
 
         if (changePasswordDto.NewPassword != changePasswordDto.ConfirmNewPassword)
             return new()
             {
-                Message = "Паролі не співпадають",
+                Message = _stringLocalization["PasswordsNotMatch"],
                 IsSuccessfully = false
             };
         
@@ -286,7 +283,7 @@ public class AuthService : IAuthService
         if (!changePasswordResult.Succeeded)
             return new()
             {
-                Message = "Помилка зміни пароля",
+                Message = _stringLocalization["ChangePasswordError"],
                 IsSuccessfully = false,
                 Errors = changePasswordResult.Errors
             };
@@ -297,7 +294,7 @@ public class AuthService : IAuthService
 
         return new()
         {
-            Message = "Парль успішно змінений",
+            Message = _stringLocalization["ChangePasswordSuccess"],
             IsSuccessfully = true
         };
     }

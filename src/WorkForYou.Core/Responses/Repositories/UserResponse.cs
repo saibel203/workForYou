@@ -8,4 +8,5 @@ public class UserResponse : ListBaseResponse
     public ApplicationUser User { get; set; } = new();
     public IEnumerable<Vacancy> FavouriteList { get; set; } = new List<Vacancy>();
     public IEnumerable<ApplicationUser> ApplicationUsers { get; set; } = new List<ApplicationUser>();
+    public IEnumerable<CandidateUser>? FavouriteCandidates { get; set; } = new List<CandidateUser>();
 }

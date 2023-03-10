@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CreateVacancyError" xml:space="preserve">
+        <value>Помилка при спробі створити вакансію</value>
+    </data>
+    <data name="CreateVacancySuccess" xml:space="preserve">
+        <value>Вакансія успішно створена</value>
+    </data>
+    <data name="EditVacancyError" xml:space="preserve">
+        <value>Помилка при спробі редагувати вакансію</value>
+    </data>
+    <data name="EditVacancySuccess" xml:space="preserve">
+        <value>Вакансію успішно обновлено</value>
+    </data>
+    <data name="VacancyNotFoundError" xml:space="preserve">
+        <value>Вакансію не знайдено або виникла помилка</value>
+    </data>
+    <data name="NotOwnerError" xml:space="preserve">
+        <value>Ви не є власником вакансії</value>
+    </data>
+    <data name="RemoveVacancyError" xml:space="preserve">
+        <value>Помилка при спробі видалення вакансії</value>
+    </data>
+    <data name="RemoveVacancySuccess" xml:space="preserve">
+        <value>Вакансія успішно видалена</value>
+    </data>
+    <data name="VacanciesNotFoundError" xml:space="preserve">
+        <value>Вакансій за запитом не знайдено</value>
+    </data>
+</root>

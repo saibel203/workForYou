@@ -1,0 +1,20 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Username '{0}' is already taken" xml:space="preserve">
+        <value>Username '{0}' вже зайнятий</value>
+    </data>
+    <data name="Email '{0}' is already taken" xml:space="preserve">
+        <value>Email '{0}' вже зайнятий</value>
+    </data>
+</root>

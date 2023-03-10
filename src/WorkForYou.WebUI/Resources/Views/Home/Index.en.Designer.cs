@@ -87,6 +87,15 @@ namespace WorkForYou.WebUI.Resources.Views.Home {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to everyone who works in IT..
+        /// </summary>
+        internal static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         internal static string ButtonToRegister {
@@ -105,6 +114,24 @@ namespace WorkForYou.WebUI.Resources.Views.Home {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UX/UI designers..
+        /// </summary>
+        internal static string Designers {
+            get {
+                return ResourceManager.GetString("Designers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DevOps..
+        /// </summary>
+        internal static string DevOps {
+            get {
+                return ResourceManager.GetString("DevOps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to for.
         /// </summary>
         internal static string ForCategories {
@@ -119,6 +146,33 @@ namespace WorkForYou.WebUI.Resources.Views.Home {
         internal static string FormSend {
             get {
                 return ResourceManager.GetString("FormSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PM..
+        /// </summary>
+        internal static string PM {
+            get {
+                return ResourceManager.GetString("PM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to programmers.
+        /// </summary>
+        internal static string Programmers {
+            get {
+                return ResourceManager.GetString("Programmers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to testers..
+        /// </summary>
+        internal static string Testers {
+            get {
+                return ResourceManager.GetString("Testers", resourceCulture);
             }
         }
         

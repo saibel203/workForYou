@@ -1,54 +1,69 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkForYou.Core.IRepositories;
-using WorkForYou.Core.IServices;
+using Microsoft.Extensions.Localization;
+using WorkForYou.Core.AdditionalModels;
+using WorkForYou.Core.RepositoryInterfaces;
+using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.DTOModels.UserDTOs;
-using WorkForYou.Core.ValueObjects;
-using WorkForYou.WebUI.ViewModels.Forms;
+using WorkForYou.Core.Responses.Repositories;
+using WorkForYou.Shared.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Controllers;
 
 [Authorize]
-public class AccountController : Controller
+public class AccountController : BaseController
 {
+    private readonly IStringLocalizer<AccountController> _stringLocalization;
     private readonly INotificationService _notificationService;
+    private readonly IViewCounterService _viewCounterService;
+    private readonly IFileService _fileService;
     private readonly IAuthService _authService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public AccountController(IAuthService authService, IMapper mapper, IUnitOfWork unitOfWork,
-        INotificationService notificationService)
+        INotificationService notificationService, IStringLocalizer<AccountController> stringLocalization,
+        IFileService fileService, IViewCounterService viewCounterService)
     {
         _authService = authService;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _notificationService = notificationService;
+        _stringLocalization = stringLocalization;
+        _fileService = fileService;
+        _viewCounterService = viewCounterService;
     }
 
     [HttpGet]
     public async Task<IActionResult> ChangePassword()
     {
-        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+        var currentUsername = GetUsername();
+        var currentRole = GetUserRole();
+        var usernameDto = new UsernameDto {Username = currentUsername, UserRole = currentRole};
+        
+        var currentUser = await _unitOfWork.UserRepository
+            .GetUserDataAsync(usernameDto);
 
         if (!currentUser.IsSuccessfully)
-            _notificationService.CustomErrorMessage(NotificationMessages.UserNotFoundError);
+            _notificationService.CustomErrorMessage(_stringLocalization["UserNotFound"]);
 
         ViewData["CurrentEmail"] = currentUser.User.Email;
         return View();
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
     {
-        var changePasswordUsernameDto = _mapper.Map<UsernameDto>(changePasswordViewModel);
-
-        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(changePasswordUsernameDto);
+        var currentUsername = GetUsername();
+        var currentUser = await _unitOfWork.UserRepository
+            .GetUserDataAsync(new() {Username = currentUsername});
         ViewData["CurrentEmail"] = currentUser.User.Email;
 
         if (!ModelState.IsValid)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі змінити пароль");
+            _notificationService.CustomErrorMessage(_stringLocalization["ChangePasswordError"]);
             return View(changePasswordViewModel);
         }
 
@@ -64,12 +79,12 @@ public class AccountController : Controller
             else
                 ModelState.AddModelError("", changePasswordResult.Message);
 
-            _notificationService.CustomErrorMessage("Помилка при спробі змінити пароль");
+            _notificationService.CustomErrorMessage(_stringLocalization["ChangePasswordError"]);
 
             return View(changePasswordViewModel);
         }
 
-        _notificationService.CustomSuccessMessage("Пароль успішно змінено");
+        _notificationService.CustomSuccessMessage(_stringLocalization["ChangePasswordSuccess"]);
 
         return RedirectToAction("Index", "Home");
     }
@@ -79,45 +94,85 @@ public class AccountController : Controller
     {
         HttpContext.Session.Clear();
         await _authService.LogoutAsync();
-        _notificationService.CustomSuccessMessage("Ви успішно вийшли");
+        _notificationService.CustomSuccessMessage(_stringLocalization["LogoutSuccess"]);
         return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
     public async Task<IActionResult> Profile(string username)
     {
-        var user = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = username});
+        var userRole = GetUserRole();
+        
+        UserResponse userData;
+        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
+        var usernameCandidateDto = new UsernameDto {Username = username, UserRole = ApplicationRoles.CandidateRole};
+        var usernameEmployerDto = new UsernameDto {Username = username, UserRole = ApplicationRoles.EmployerRole};
+        var isUserResult = await _authService.IsUserCandidate(usernameDto);
 
-        if (!user.IsSuccessfully)
+        if (isUserResult.IsUserCandidate)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.UserNotFoundError);
+            userData = await _unitOfWork.UserRepository
+                .GetUserDataAsync(usernameCandidateDto);
+
+            const string sessionNameTemplate = "IsShowCandidate";
+
+            if (!HttpContext.Session.Keys.Contains(sessionNameTemplate + userData.User.CandidateUser!.CandidateUserId)
+                && HttpContext.User.IsInRole(ApplicationRoles.EmployerRole))
+            {
+                HttpContext.Session.SetString(sessionNameTemplate + userData.User.CandidateUser!.CandidateUserId, "1");
+
+                var addViewCountResult = await _viewCounterService
+                    .UpdateCandidateViewNumberCountAsync(usernameDto);
+
+                if (!addViewCountResult.IsSuccessfully)
+                    return RedirectToAction("Index", "Main");
+            }
+        }
+        else
+            userData = await _unitOfWork.UserRepository
+                .GetUserDataAsync(usernameEmployerDto);
+
+        if (!userData.IsSuccessfully)
+        {
+            _notificationService.CustomErrorMessage(_stringLocalization["UserNotFound"]);
             return RedirectToAction("Index", "Main");
         }
 
-        return View(user.User);
+        return View(userData.User);
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ProfileUploadImage(IFormFile userFile)
     {
-        var imageResult = await _unitOfWork.UserRepository.UploadUserImageAsync(userFile,
-            new UsernameDto {Username = User.Identity?.Name!});
+        var username = GetUsername();
+        var userRole = GetUserRole();
+        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
 
-        if (!imageResult.IsSuccessfully)
-            _notificationService.CustomErrorMessage("Помилка при завантажені картинки");
-        
-        _notificationService.CustomSuccessMessage("Картинка успішно змінена");
-        return RedirectToAction("Profile", new {username = User.Identity?.Name!});
+        var uploadImageResult = await _fileService.UploadUserImageAsync(userFile, usernameDto);
+
+        if (!uploadImageResult.IsSuccessfully)
+            _notificationService.CustomErrorMessage(_stringLocalization["UploadImageError"]);
+
+        _notificationService.CustomSuccessMessage(_stringLocalization["UploadImageSuccess"]);
+        return RedirectToAction(nameof(Profile), new {username});
     }
 
     [HttpGet]
     public async Task<IActionResult> RefreshGeneralProfileInfo()
     {
-        var username = User.Identity?.Name!;
-        var userData = await _unitOfWork.UserRepository.GetUserDataAsync(new UsernameDto {Username = username});
+        var username = GetUsername();
+        var userRole = GetUserRole();
+        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
+
+        var userData = await _unitOfWork.UserRepository
+            .GetUserDataAsync(usernameDto);
 
         if (!userData.IsSuccessfully)
+        {
+            _notificationService.CustomErrorMessage(_stringLocalization["UserNotFound"]);
             return RedirectToAction("RefreshGeneralProfileInfo");
+        }
 
         var user = _mapper.Map<RefreshGeneralProfileInfoViewModel>(userData.User);
 
@@ -125,10 +180,20 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> RefreshGeneralProfileInfo(RefreshGeneralProfileInfoViewModel refreshGeneralProfileInfoViewModel)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RefreshGeneralProfileInfo(
+        RefreshGeneralProfileInfoViewModel refreshGeneralProfileInfoViewModel)
     {
         if (!ModelState.IsValid)
+        {
+            _notificationService.CustomErrorMessage(_stringLocalization["RefreshProfileError"]);
             return View(refreshGeneralProfileInfoViewModel);
+        }
+
+        var username = GetUsername();
+        var userRole = GetUserRole();
+
+        refreshGeneralProfileInfoViewModel.UserRole = userRole;
 
         var refreshGeneralDto = _mapper.Map<RefreshGeneralUserDto>(refreshGeneralProfileInfoViewModel);
         var refreshGeneralInfoResult = await _unitOfWork.UserRepository
@@ -136,10 +201,32 @@ public class AccountController : Controller
 
         if (!refreshGeneralInfoResult.IsSuccessfully)
         {
+            _notificationService.CustomErrorMessage(_stringLocalization["RefreshProfileError"]);
             ModelState.AddModelError("", refreshGeneralInfoResult.Message);
             return View(refreshGeneralProfileInfoViewModel);
         }
 
-        return RedirectToAction("Profile", new {username = User.Identity?.Name!});
+        _notificationService.CustomSuccessMessage(_stringLocalization["RefreshProfileSuccess"]);
+        return RedirectToAction(nameof(Profile), new {username});
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RemoveUser()
+    {
+        var username = GetUsername();
+        var userRole = GetUserRole();
+        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
+        var removeUserResult = await _unitOfWork.UserRepository
+            .RemoveUserAsync(usernameDto);
+
+        if (!removeUserResult.IsSuccessfully)
+        {
+            _notificationService.CustomErrorMessage(_stringLocalization["RemoveUserError"]);
+            return RedirectToAction(nameof(Profile), new {username});
+        }
+
+        _notificationService.CustomSuccessMessage(_stringLocalization["RemoveUserSuccess"]);
+        return RedirectToAction("Logout");
     }
 }

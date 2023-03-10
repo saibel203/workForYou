@@ -1,8 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model WorkForYou.WebUI.ViewModels.Forms.ActionVacancyViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@model WorkForYou.Shared.ViewModels.Forms.ActionVacancyViewModel
+
+@inject IViewLocalizer ViewLocalization
 
 @{
-    ViewData["Title"] = "Редагування вакансії";
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 @section Styles
@@ -11,7 +14,7 @@
 }
 
 <div class="create-form">
-    <h1>Редагування вакансії</h1>
+    <h1>@ViewLocalization["Title"]</h1>
     <form asp-controller="Vacancy" asp-action="EditVacancy" asp-antiforgery="true" autocomplete="off">
         <div asp-validation-summary="All"></div>
         <input type="hidden" asp-for="VacancyId">
@@ -45,7 +48,7 @@
                         <i class="fa-solid fa-xmark"></i>
                     </li>
                 }
-                <input placeholder="Ключові слова">
+                <input placeholder="@ViewLocalization["Keywords"]">
             </ul>
             <span asp-validation-for="KeyWords"></span>
         </div>
@@ -71,7 +74,7 @@
         </div>
         <div class="create-form__item">
             <fieldset>
-                <legel>Країна або регіон кандидата</legel>
+                <legel>@ViewLocalization["CountryOrRegion"]</legel>
                 <ul class="create-form__item-radio">
                     @foreach (var candidateRegion in Model.CandidateRegions!)
                     {
@@ -87,7 +90,7 @@
         </div>
         <div class="create-form__item">
             <fieldset>
-                <legel>Релокейт</legel>
+                <legel>@ViewLocalization["Relocate"]</legel>
                 <ul class="create-form__item-radio">
                     @foreach (var relocate in Model.Relocates!)
                     {
@@ -147,14 +150,13 @@
             <span asp-validation-for="ToSalary"></span>
         </div>
         <div class="vacancies-cards__card-buttons">
-            <input type="submit" class="search-buttons card-buttons" value="Редагувати">
+            <input type="submit" class="search-buttons card-buttons" value="@ViewLocalization["Edit"]">
         </div>
     </form>
 </div>
 
 @section Scripts
 {
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="~/libs/Trumbowyg-main/dist/trumbowyg.min.js"></script>
     <script src="~/js/text-editor.js"></script>
     <script src="~/js/tags.js"></script>

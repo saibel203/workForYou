@@ -1,0 +1,135 @@
+﻿@using WorkForYou.WebUI.Helpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
+@using WorkForYou.Core.ServiceInterfaces
+@using WorkForYou.Shared.ViewModels.AdditionalViewModels
+
+@model CandidatesViewModel
+
+@inject IViewLocalizer ViewLocalization
+@inject IChatService ChatService
+
+@{
+    ViewData["Title"] = ViewLocalization["Title"];
+    var currentPath = Context.Request.Path + Context.Request.QueryString;
+}
+
+<div class="main__search">
+    @await Html.PartialAsync("_SearchBar")
+    @await Html.PartialAsync("_Filtering")
+</div>
+
+<div class="vacancies">
+    <div class="vacancies__searched-bar">
+        <div class="vacancies__searched-bar-general">@Model.VacancyCount @ViewLocalization["Candidate"]@(ViewHelpers.GetLastStringLetters(Model.VacancyCount))</div>
+        <div class="vacancies__searched-bar-sort">
+            @await Html.PartialAsync("_Sorting")
+            <a asp-controller="Favourite" asp-action="FavouriteEmployerList" class="search-buttons detail-button detail-danger">@ViewLocalization["ResetFilters"]</a>
+        </div>
+    </div>
+
+    <div class="vacancies-cards">
+        @if (Model.CandidateUsers is not null)
+        {
+            @foreach (var user in Model.CandidateUsers)
+            {
+                var chatName = $"{User.Identity?.Name!} - {user.ApplicationUser?.UserName}";
+                var isChatExists = await ChatService.IsChatExistsAsync(chatName);
+                
+                <div class="vacancies-cards__card">
+                    <div class="vacancies-cards__card-title">
+                        <span>@user.CompanyPosition (@user.ApplicationUser!.UserName)</span>
+                        <div class="vacancies-cards__card-title-details">
+                            <span>@user.CreatedDate.ToString("d MMMM yyyy")</span>
+                            <i class="fa-regular fa-eye"></i>
+                            <span>@user.ViewCount</span>
+                            <i class="fa-regular fa-money-bill-1"></i>
+                            <span>@user.ExpectedSalary</span>
+                        </div>
+                    </div>
+                    <div class="vacancies-cards__card-header">
+                        <span>@user.Country</span> ·
+                        <span>@user.City</span> ·
+                        @if (user.ExperienceWorkTime == 0)
+                        {
+                            <span>@ViewLocalization["NoExperience"]</span>
+                            <span> ·</span>
+                        }
+                        else
+                        {
+                            <span>
+                                @user.ExperienceWorkTime
+                                @ViewHelpers.GetLastStringLetters(user.ExperienceWorkTime, true) @ViewLocalization["Experience"]
+                            </span>
+                            <span> ·</span>
+                        }
+                        <span>@user.LevelEnglish?.NameLevel</span>
+                    </div>
+                    <div class="vacancies-cards__card-subtitle">
+                        @if (user.ExperienceWorkDescription is not null)
+                        {
+                            @if (user.ExperienceWorkDescription.Length > 300)
+                            {
+                                @user.ExperienceWorkDescription.Substring(0, 300)
+                                <span>...</span>
+                            }
+                            else
+                            {
+                                @user.ExperienceWorkDescription
+                            }
+                        }
+                    </div>
+                    @if (user.KeyWords is not null)
+                    {
+                        var keyWords = user.KeyWords.Split(", ", StringSplitOptions.RemoveEmptyEntries);
+
+                        <div class="vacancies-cards__card-tags">
+                            @foreach (var tag in keyWords)
+                            {
+                                <button class="search-buttons detail-button">@tag</button>
+                            }
+                        </div>
+                    }
+                    <div class="vacancies-cards__card-buttons">
+                        <div class="vacancies-cards__card-buttons-header">
+                            <a asp-controller="Account" asp-action="Profile" asp-route-username="@user.ApplicationUser?.UserName"
+                               class="search-buttons card-buttons">
+                                @ViewLocalization["ReadAll"]
+                            </a>
+                            @if (isChatExists.IsChatExists)
+                            {
+                                <a class="search-buttons card-buttons" asp-controller="Chat" asp-action="ChatDetailsByName"
+                                   asp-route-chatName="@chatName">
+                                    @ViewLocalization["Write"]
+                                </a>
+                            }
+                            else
+                            {
+                                <form method="post" asp-controller="Chat" asp-action="CreateChatRoom"
+                                      asp-antiforgery="true">
+                                    <input type="hidden" name="chatName" value="@chatName">
+                                    <input type="hidden" name="userId" value="@user.ApplicationUserId">
+                                    <input type="submit" value="@ViewLocalization["Write"]" class="search-buttons card-buttons">
+                                </form>
+                            }
+                        </div>
+                        @await Html.PartialAsync("_LikeButton", new SettingsViewModel
+                               {
+                                   CurrentVacancyId = user.CandidateUserId, ReturnUrl = currentPath,
+                                   CurrentController = Model.CurrentController, CurrentAction = Model.CurrentAction
+                               })
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    @await Html.PartialAsync("_Pagination")
+
+    @section Scripts
+    {
+        <script src="~/js/custom-select.js"></script>
+        <script type="module" src="~/js/favourite-list.js"></script>
+    }
+
+</div>

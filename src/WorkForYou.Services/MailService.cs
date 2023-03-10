@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using WorkForYou.Core.IOptions;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.ServiceInterfaces;
 
 namespace WorkForYou.Services;
 

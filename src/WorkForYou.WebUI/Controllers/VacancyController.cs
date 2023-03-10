@@ -1,33 +1,37 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using WorkForYou.Core.AdditionalModels;
 using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.Core.DTOModels.VacancyDTOs;
-using WorkForYou.Core.IRepositories;
-using WorkForYou.Core.IServices;
-using WorkForYou.Core.Models;
-using WorkForYou.Core.ValueObjects;
-using WorkForYou.WebUI.ViewModels;
-using WorkForYou.WebUI.ViewModels.Forms;
+using WorkForYou.Core.RepositoryInterfaces;
+using WorkForYou.Core.ServiceInterfaces;
+using WorkForYou.Shared.ViewModels;
+using WorkForYou.Shared.ViewModels.Forms;
 
 namespace WorkForYou.WebUI.Controllers;
 
 public class VacancyController : BaseController
 {
+    private readonly IStringLocalizer<VacancyController> _stringLocalization;
     private readonly INotificationService _notificationService;
+    private readonly IViewCounterService _viewCounterService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public VacancyController(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
+    public VacancyController(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService,
+        IStringLocalizer<VacancyController> stringLocalization, IViewCounterService viewCounterService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _notificationService = notificationService;
+        _stringLocalization = stringLocalization;
+        _viewCounterService = viewCounterService;
     }
 
     [HttpGet]
-    [Authorize(Roles = "employer")]
+    [Authorize(Roles = ApplicationRoles.EmployerRole)]
     public async Task<IActionResult> CreateVacancy()
     {
         var actionVacancyViewModel = await InitActionVacancyViewModel();
@@ -35,17 +39,23 @@ public class VacancyController : BaseController
     }
 
     [HttpPost]
-    [Authorize(Roles = "employer")]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = ApplicationRoles.EmployerRole)]
     public async Task<IActionResult> CreateVacancy(ActionVacancyViewModel actionVacancyViewModel)
     {
-        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+        var currentUsername = GetUsername();
+        var currentRole = GetUserRole();
+        var usernameDto = new UsernameDto {Username = currentUsername, UserRole = currentRole};
+        
+        var currentUser = await _unitOfWork.UserRepository
+            .GetUserDataAsync(usernameDto);
 
         actionVacancyViewModel = await InitActionVacancyViewModel(actionVacancyViewModel);
         actionVacancyViewModel.EmployerUser = currentUser.User.EmployerUser;
 
         if (!ModelState.IsValid)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі створити вакансію");
+            _notificationService.CustomErrorMessage(_stringLocalization["CreateVacancyError"]);
             return View(actionVacancyViewModel);
         }
 
@@ -54,32 +64,33 @@ public class VacancyController : BaseController
 
         if (!createVacancyResult.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі створити вакансію");
+            _notificationService.CustomErrorMessage(_stringLocalization["CreateVacancyError"]);
             return View(actionVacancyViewModel);
         }
 
-        _notificationService.CustomSuccessMessage("Вакансія успішно створена");
+        _notificationService.CustomSuccessMessage(_stringLocalization["CreateVacancySuccess"]);
 
         return RedirectToAction("AllVacancies", "EmployerAccount");
     }
 
-    [HttpGet]
-    [Authorize(Roles = "employer")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = ApplicationRoles.EmployerRole)]
     public async Task<IActionResult> RemoveVacancy(int id)
     {
         var vacancyData = await _unitOfWork.VacancyRepository.GetVacancyByIdAsync(id);
 
-        if (!vacancyData.IsSuccessfully || vacancyData.Vacancy is null)
+        if (!vacancyData.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotFoundError);
+            _notificationService.CustomErrorMessage(_stringLocalization["VacancyNotFoundError"]);
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
-        var isOwnerResult = IsUserOwner(vacancyData.Vacancy);
+        var isOwnerResult = IsUserVacancyOwner(vacancyData.Vacancy);
 
         if (!isOwnerResult)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotOwnerError);
+            _notificationService.CustomErrorMessage(_stringLocalization["NotOwnerError"]);
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
@@ -87,12 +98,11 @@ public class VacancyController : BaseController
 
         if (!removeVacancyResult.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі видалення вакансії");
+            _notificationService.CustomErrorMessage(_stringLocalization["RemoveVacancyError"]);
             return RedirectToAction("VacancyDetails", id);
         }
 
-        _notificationService.CustomSuccessMessage("Вакансія успішно видалена");
-
+        _notificationService.CustomSuccessMessage(_stringLocalization["RemoveVacancySuccess"]);
         return RedirectToAction("AllVacancies", "EmployerAccount");
     }
 
@@ -101,33 +111,71 @@ public class VacancyController : BaseController
     public async Task<IActionResult> VacancyDetails(int id)
     {
         var vacancy = await _unitOfWork.VacancyRepository.GetVacancyByIdAsync(id);
+        VacancyViewModel vacancyViewModel;
 
         if (!vacancy.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotFoundError);
+            _notificationService.CustomErrorMessage(_stringLocalization["VacancyNotFoundError"]);
             return RedirectToAction("Index", "Main");
         }
 
-        return View(vacancy.Vacancy);
+        const string sessionTemplateKeyName = "IsShowVacancy";
+
+        if (!HttpContext.Session.Keys.Contains(sessionTemplateKeyName + id)
+            && HttpContext.User.IsInRole(ApplicationRoles.CandidateRole))
+        {
+            HttpContext.Session.SetString(sessionTemplateKeyName + id, "1");
+
+            var addViewCountResult = await _viewCounterService
+                .UpdateViewNumberOfCountAsync(id);
+
+            if (!addViewCountResult.IsSuccessfully)
+                return RedirectToAction("Index", "Main");
+        }
+
+        if (HttpContext.User.IsInRole(ApplicationRoles.CandidateRole))
+        {
+            var username = GetUsername();
+            var usernameDto = new UsernameDto {Username = username, UserRole = ApplicationRoles.CandidateRole};
+            var userData = await _unitOfWork.UserRepository.GetUserDataAsync(usernameDto);
+
+            var isVacancyInRespondedList = await _unitOfWork.RespondedListRepository
+                .IsVacancyInRespondedListAsync(userData.User.Id, id);
+
+            vacancyViewModel = new VacancyViewModel
+            {
+                Vacancy = vacancy.Vacancy,
+                IsVacancyInRespondedList = isVacancyInRespondedList.IsVacancyInFavouriteList
+            };
+
+            return View(vacancyViewModel);
+        }
+
+        vacancyViewModel = new VacancyViewModel
+        {
+            Vacancy = vacancy.Vacancy
+        };
+
+        return View(vacancyViewModel);
     }
 
     [HttpGet]
-    [Authorize(Roles = "employer")]
+    [Authorize(Roles = ApplicationRoles.EmployerRole)]
     public async Task<IActionResult> EditVacancy(int id)
     {
         var vacancyData = await _unitOfWork.VacancyRepository.GetVacancyByIdAsync(id);
 
-        if (!vacancyData.IsSuccessfully || vacancyData.Vacancy is null)
+        if (!vacancyData.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotFoundError);
+            _notificationService.CustomErrorMessage(_stringLocalization["VacancyNotFoundError"]);
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
-        var isOwnerResult = IsUserOwner(vacancyData.Vacancy);
+        var isOwnerResult = IsUserVacancyOwner(vacancyData.Vacancy);
 
         if (!isOwnerResult)
         {
-            _notificationService.CustomErrorMessage(NotificationMessages.VacancyNotOwnerError);
+            _notificationService.CustomErrorMessage(_stringLocalization["NotOwnerError"]);
             return RedirectToAction("AllVacancies", "EmployerAccount");
         }
 
@@ -139,17 +187,20 @@ public class VacancyController : BaseController
     }
 
     [HttpPost]
-    [Authorize(Roles = "employer")]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = ApplicationRoles.EmployerRole)]
     public async Task<IActionResult> EditVacancy(ActionVacancyViewModel actionVacancyViewModel)
     {
-        var currentUser = await _unitOfWork.UserRepository.GetUserDataAsync(new() {Username = User.Identity?.Name!});
+        var currentUsername = GetUsername();
+        var currentUser = await _unitOfWork.UserRepository
+            .GetUserDataAsync(new() {Username = currentUsername});
 
         actionVacancyViewModel = await InitActionVacancyViewModel(actionVacancyViewModel);
         actionVacancyViewModel.EmployerUser = currentUser.User.EmployerUser;
 
         if (!ModelState.IsValid)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі редагувати вакансію");
+            _notificationService.CustomErrorMessage(_stringLocalization["EditVacancyError"]);
             return View(actionVacancyViewModel);
         }
 
@@ -158,22 +209,35 @@ public class VacancyController : BaseController
 
         if (!updateVacancyResult.IsSuccessfully)
         {
-            _notificationService.CustomErrorMessage("Помилка при спробі редагувати вакансію");
+            _notificationService.CustomErrorMessage(_stringLocalization["EditVacancyError"]);
             return View(actionVacancyViewModel);
         }
 
-        _notificationService.CustomSuccessMessage("Вакансію успішно обновлено");
+        _notificationService.CustomSuccessMessage(_stringLocalization["EditVacancySuccess"]);
 
         return RedirectToAction("AllVacancies", "EmployerAccount");
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = ApplicationRoles.CandidateRole)]
     public async Task<IActionResult> AllEmployerVacancies(string username, QueryParameters queryParameters)
     {
+        var currentUsername = GetUsername();
+        var currentUsernameDto = new UsernameDto {Username = currentUsername, UserRole = ApplicationRoles.CandidateRole};
+
+        var userData = await _unitOfWork.UserRepository.GetUserDataAsync(currentUsernameDto);
+
         var vacancies =
             await _unitOfWork.VacancyRepository.GetAllEmployerVacanciesAsync(new UsernameDto {Username = username},
                 queryParameters);
+
+        var workCategories = await _unitOfWork.WorkCategoryRepository.GetAllWorkCategoriesAsync();
+        var englishLevels = await _unitOfWork.EnglishLevelRepository.GetAllEnglishLevelsAsync();
+        var typesOfCompany = await _unitOfWork.TypeOfCompanyRepository.GetAllTypesOfCompanyAsync();
+        var howToWorks = await _unitOfWork.HowToWorkRepository.GetAllHowToWorkAsync();
+        var candidateRegions = await _unitOfWork.CandidateRegionRepository.GetAllCandidateRegionsAsync();
+
+        ViewData["CandidateId"] = userData.User.CandidateUser!.CandidateUserId;
 
         var vacanciesViewModel = new VacanciesViewModel
         {
@@ -184,23 +248,29 @@ public class VacancyController : BaseController
             VacancyCount = vacancies.VacancyCount,
             Vacancies = vacancies.VacancyList,
             Pages = vacancies.Pages,
-            Username = username
+            Username = username,
+            WorkCategories = workCategories.WorkCategories,
+            EnglishLevels = englishLevels.EnglishLevels,
+            TypesOfCompanies = typesOfCompany.TypesOfCompanies,
+            HowToWorks = howToWorks.HowToWorks,
+            CandidateRegions = candidateRegions.CandidateRegions
         };
 
         if (queryParameters.PageNumber < 1)
         {
             if (queryParameters.PageNumber == 0 && !string.IsNullOrEmpty(queryParameters.SearchString))
             {
-                _notificationService.CustomErrorMessage("Кандидатів за запитом не знайдено");
+                _notificationService.CustomErrorMessage(_stringLocalization["VacanciesNotFoundError"]);
                 return View(vacanciesViewModel);
             }
-            
+
             queryParameters.PageNumber = 1;
             return RedirectToAction("AllEmployerVacancies", new
             {
                 queryParameters.PageNumber, queryParameters.SearchString,
-                queryParameters.SortBy, username
-            });   
+                queryParameters.SortBy, username, queryParameters.WorkCategory, queryParameters.EnglishLevel,
+                queryParameters.CandidateRegion, queryParameters.CompanyType, queryParameters.HowToWork
+            });
         }
 
         if (queryParameters.PageNumber > vacancies.PageCount)
@@ -209,19 +279,12 @@ public class VacancyController : BaseController
             return RedirectToAction("AllEmployerVacancies", new
             {
                 queryParameters.PageNumber, queryParameters.SearchString,
-                queryParameters.SortBy, username
-            });   
+                queryParameters.SortBy, Username = username, queryParameters.WorkCategory, queryParameters.EnglishLevel,
+                queryParameters.CandidateRegion, queryParameters.CompanyType, queryParameters.HowToWork
+            });
         }
+
         return View(vacanciesViewModel);
-    }
-
-    private bool IsUserOwner(Vacancy vacancy)
-    {
-        var currentUserId = GetUserId();
-        if (vacancy.EmployerUser?.ApplicationUser?.Id != currentUserId)
-            return false;
-
-        return true;
     }
 
     private async Task<ActionVacancyViewModel> InitActionVacancyViewModel()

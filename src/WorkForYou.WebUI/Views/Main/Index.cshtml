@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Головна сторінка";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer ViewLocalization
+
+@{
+    ViewData["Title"] = ViewLocalization["Title"];
 }
 
 <h1>This is main page for authorize users</h1>

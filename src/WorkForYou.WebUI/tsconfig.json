@@ -4,10 +4,10 @@
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
-    "module": "commonjs",
     "target": "es6",
     "sourceMap": true,
-    "outDir": "wwwroot/js"
+    "outDir": "wwwroot/js",
+    "module": "esnext"
   },
   "exclude": [
     "node_modules"

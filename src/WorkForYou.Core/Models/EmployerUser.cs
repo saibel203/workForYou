@@ -8,5 +8,6 @@ public class EmployerUser : BaseUser
     public string? CompanySiteLink { get; set; } = string.Empty;
     public string? DoyCompanyLink { get; set; } = string.Empty;
     public string? AboutCompany { get; set; } = string.Empty;
-    public ICollection<Vacancy>? Vacancies { get; set; } = new List<Vacancy>();
+    public IEnumerable<Vacancy>? Vacancies { get; set; } = new List<Vacancy>();
+    public ICollection<FavouriteCandidate>? FavouriteCandidates { get; set; }
 }

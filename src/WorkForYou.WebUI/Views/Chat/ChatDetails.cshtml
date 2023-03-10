@@ -1,0 +1,80 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using WorkForYou.WebUI.Extensions
+@using Microsoft.AspNetCore.Mvc.Localization
+@model WorkForYou.Core.Models.ChatRoom
+
+@inject IViewLocalizer ViewLocalization
+
+@{
+    ViewData["Title"] = ViewLocalization["Title"];
+    const string ownClassName = "chat-details-wrapper__body-message message-own";
+    const string notOwnClassName = "chat-details-wrapper__body-message message-not-my";
+
+    var oppositeUser = Model.ChatUsers.FirstOrDefault(chatUserData => chatUserData.ChatRoomId == Model.ChatRoomId
+                                                                      && chatUserData.ApplicationUser?.Id !=
+                                                                      User.GetUserId())?.ApplicationUser;
+}
+
+<div class="chat-details-wrapper">
+    @if (oppositeUser is not null)
+    {
+        <div class="chat-details-wrapper__header">
+            <div class="chat-details-wrapper-inner">
+                <div class="chat-details-wrapper__header-image">
+                    @if (string.IsNullOrEmpty(oppositeUser.ImagePath))
+                    {
+                        <img src="~/img/userImages/default-user-image.png" alt="User image">
+                    }
+                    else
+                    {
+                        <img src="@oppositeUser.ImagePath" alt="User image">
+                    }
+                </div>
+                <div class="chat-details-wrapper__header-info">
+                    <h3>
+                        @oppositeUser.FirstName @oppositeUser.LastName <span></span>
+                    </h3>
+                    @if (User.IsInRole("employer"))
+                    {
+                        <p>@oppositeUser.CandidateUser?.CompanyPosition</p>
+                    }
+                    else
+                    {
+                        <p>@oppositeUser.EmployerUser?.CompanyName (@oppositeUser.EmployerUser?.CompanyPosition)</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <div class="chat-details-wrapper__body" id="message-list">
+        @foreach (var message in Model.ChatMessages)
+        {
+            var className = User.Identity?.Name! == message.Name
+                ? ownClassName
+                : notOwnClassName;
+
+            <div class="@className">
+                <p>
+                    @message.Content <span>@message.Name</span>
+                </p>
+                <span>@message.SendTime</span>
+            </div>
+        }
+    </div>
+    <div class="chat-details-wrapper__footer">
+        <form id="send-message-form" autocomplete="off">
+            <input type="hidden" name="roomId" value="@Model.ChatRoomId" id="message-id-input">
+            <input type="hidden" name="roomName" value="@Model.Name">
+            <input type="hidden" name="currentUsername" value="@User.Identity?.Name" id="current-username">
+            <input type="text" name="message" id="message-input" placeholder="@ViewLocalization["InputPlaceholder"]">
+            <input type="submit" value="@ViewLocalization["Button"]">
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/chat.js"></script>
+}

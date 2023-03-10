@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Title" xml:space="preserve">
+        <value>Профайл</value>
+    </data>
+    <data name="Experience" xml:space="preserve">
+        <value>Досвід роботи</value>
+    </data>
+    <data name="Keywords" xml:space="preserve">
+        <value>Ключові слова / Навички</value>
+    </data>
+    <data name="Language" xml:space="preserve">
+        <value>Мова спілкування</value>
+    </data>
+    <data name="Refresh" xml:space="preserve">
+        <value>Редагувати</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>Видалити акаунт</value>
+    </data>
+    <data name="Hour" xml:space="preserve">
+        <value>Годину</value>
+    </data>
+    <data name="Month" xml:space="preserve">
+        <value>Місяць</value>
+    </data>
+    <data name="View" xml:space="preserve">
+        <value>перегляд</value>
+    </data>
+    <data name="NoExperience" xml:space="preserve">
+        <value>Без досвіду</value>
+    </data>
+    <data name="ExperienceTile" xml:space="preserve">
+        <value>досвіду</value>
+    </data>
+    <data name="TimeOnSite" xml:space="preserve">
+        <value>На сайті з</value>
+    </data>
+    <data name="NoFill" xml:space="preserve">
+        <value>Профіль не заповнений</value>
+    </data>
+    <data name="Fill" xml:space="preserve">
+        <value>Профіль заповнений</value>
+    </data>
+    <data name="InCompany" xml:space="preserve">
+        <value>в компанії</value>
+    </data>
+    <data name="AboutCompany" xml:space="preserve">
+        <value>Про компанію</value>
+    </data>
+    <data name="CompanySite" xml:space="preserve">
+        <value>Сайт компанії</value>
+    </data>
+    <data name="DOYReference" xml:space="preserve">
+        <value>DOY посилання</value>
+    </data>
+    <data name="Vacancies" xml:space="preserve">
+        <value>Vacancies</value>
+    </data>
+    <data name="AllVacancies" xml:space="preserve">
+        <value>Всі вакансії</value>
+    </data>
+    <data name="Years" xml:space="preserve">
+        <value>року</value>
+    </data>
+</root>

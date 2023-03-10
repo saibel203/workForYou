@@ -1,10 +1,16 @@
 ﻿using System.Globalization;
 using AspNetCoreHero.ToastNotification;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using WorkForYou.Core.IOptions;
-using WorkForYou.Core.IServices;
+using WorkForYou.Core.RepositoryInterfaces;
+using WorkForYou.Core.ServiceInterfaces;
+using WorkForYou.Core.Models.IdentityInheritance;
+using WorkForYou.Data.Repositories;
+using WorkForYou.Infrastructure.DatabaseContext;
 using WorkForYou.Services;
+using WorkForYou.Shared.Mapping;
 
 namespace WorkForYou.WebUI;
 
@@ -13,24 +19,55 @@ public static class ConfigureServices
     public static IServiceCollection AddWebUiServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
-        
-        services.AddAutoMapper(typeof(Program));
+        services.AddSignalR();
+
+        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = false;
+
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = true;
+            })
+            .AddErrorDescriber<MultiLanguageIdentityErrorDescriber>()
+            .AddEntityFrameworkStores<WorkForYouDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = new PathString("/auth/login");
+            options.SlidingExpiration = true;
+            options.ExpireTimeSpan = TimeSpan.FromHours(1);
+            options.Cookie.Name = "Identity.Cookie";
+            options.AccessDeniedPath = "/Error/AccessDenied";
+        });
+
+        services.AddAutoMapper(typeof(AutomapperProfile));
 
         services.Configure<SendGridOptions>(configuration.GetSection("SendGridOptions"));
         services.Configure<WebUiOptions>(configuration.GetSection("WebUIOptions"));
+        services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
 
         services.AddDistributedMemoryCache();
         services.AddSession(options => { options.IdleTimeout = TimeSpan.FromDays(1); });
-
-
+        
         services.AddHostedService(sp => new NpmWatchHosted(
             enabled: sp.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
             logger: sp.GetRequiredService<ILogger<NpmWatchHosted>>()));
 
+        services.AddScoped<SeedDbContext>();
+        
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IFileService, FileService>();
-        services.AddTransient<INotificationService, NotificationService>();
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IMailService, MailService>();
+        services.AddTransient<IChatService, ChatService>();
+        services.AddTransient<IViewCounterService, ViewCounterService>();
+        services.AddTransient<INotificationService, NotificationService>();
+        services.AddTransient<IFavouriteListService, FavouriteListService>();
 
         services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -48,7 +85,7 @@ public static class ConfigureServices
             options.SupportedCultures = supportedCultures;
             options.SupportedUICultures = supportedCultures;
         });
-        
+
         services.AddNotyf(options =>
         {
             options.DurationInSeconds = 10;
