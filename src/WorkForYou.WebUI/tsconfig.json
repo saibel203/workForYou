@@ -6,7 +6,8 @@
     "removeComments": false,
     "target": "es6",
     "outDir": "wwwroot/js",
-    "sourceMap": true
+    "sourceMap": true,
+    "moduleResolution":"node"
   },
   "exclude": [
     "node_modules"

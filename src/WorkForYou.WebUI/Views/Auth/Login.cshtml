@@ -8,13 +8,8 @@
     ViewData["Title"] = ViewLocalization["Title"];
 }
 
-@section Styles
-{
-    <link rel="stylesheet" href="~/css/home_pages.css">
-}
-
 <section class="section form-section login">
-    <div class="container text-center">
+    <div class="home-container text-center">
         <h2 class="section-title mb-5">@ViewLocalization["Title"]</h2>
         <form method="post" asp-controller="Auth" asp-action="Login" asp-antiforgery="true"
               asp-route-returnUrl="@ViewData["ReturnUrl"]" autocomplete="off" class="contact-form"
@@ -49,7 +44,6 @@
 
 @section Scripts
 {
-    <script src="~/libs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="~/js/home-password.js"></script>
-    @* <script type="module" src="~/js/login.js"></script> *@
+    <script src="~/js/components/home/password.component.js"></script>
+    <script type="module" src="~/js/components/auth/login.component.js"></script>
 }

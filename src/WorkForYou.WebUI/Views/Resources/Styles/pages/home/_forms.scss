@@ -1,4 +1,5 @@
 @import '../../utils/_fonts';
+@import '../../utils/_colors';
 
 .form-section {
   background-color: #f2f2f2;
@@ -8,7 +9,7 @@
 
     &__input {
       width: 100%;
-      background-color: #fff;
+      background-color: $white-color;
       border-radius: 31px;
       margin-bottom: 16px;
       position: relative;
@@ -18,7 +19,7 @@
         position: relative;
         display: block;
         width: 100%;
-        background: #fff;
+        background: $white-color;
         border-radius: 31px;
         font-family: $main-sans-font;
         font-size: 22px;
@@ -73,7 +74,7 @@
       .category {
         cursor: pointer;
         width: 48%;
-        background-color: #fff;
+        background-color: $white-color;
         border-radius: 10px;
 
         input[type='radio'] {
@@ -94,7 +95,7 @@
             right: 20px;
             top: 20px;
             border-radius: 100%;
-            border: 3px solid #fff;
+            border: 3px solid $white-color;
             box-shadow: 0 0 0 2px #0066ff;
           }
         }

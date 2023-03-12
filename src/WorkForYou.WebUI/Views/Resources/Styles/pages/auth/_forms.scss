@@ -1,0 +1,27 @@
+@import '../../utils/_colors';
+
+.login,
+.register,
+.forger-password,
+.reset-password,
+.reset-password-result,
+.forget-password-result,
+.confirm-email,
+.confirm-email-result {
+  margin-top: 75px;
+  min-height: calc(100vh - 75px - 80px);
+  padding: 50px;
+}
+
+.contact-form__input {
+  position: relative;
+  i {
+    font-size: 1.2em;
+    color: $auth-icon-color;
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    transform: translateY(-50%);
+    cursor: pointer
+  }
+}

@@ -1,3 +1,5 @@
+@import '../../utils/_colors';
+
 .container-star {
   background-image: linear-gradient(
                   to bottom,
@@ -24,7 +26,7 @@
 .star-1 {
   position: absolute;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: $white-color;
   animation: twinkle 5s infinite ease-in-out;
 
   &:after {
@@ -33,7 +35,7 @@
     transform: rotate(90deg);
     content: "";
     position: absolute;
-    background-color: #fff;
+    background-color: $white-color;
     border-radius: 50%;
   }
 
@@ -60,7 +62,7 @@
     top: $top;
     left: $left;
     width: $size;
-    height: $size/3;
+    height: calc($size / 3);
     animation-delay: random(5) + s;
 
     &:before {
@@ -74,7 +76,7 @@
 .star-2 {
   position: absolute;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: $white-color;
   animation: twinkle 5s infinite ease-in-out;
 }
 

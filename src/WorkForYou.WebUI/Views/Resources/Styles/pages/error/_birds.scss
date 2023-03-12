@@ -1,3 +1,5 @@
+@import '../../utils/_colors';
+
 .container-bird {
   perspective: 2000px;
   width: 100%;
@@ -43,13 +45,13 @@
 }
 
 .wing-left {
-  background: linear-gradient(to bottom, #a58dc4 0%, #7979a8 100%);
+  background: linear-gradient(to bottom, #a58dc4 0%, $bird-wing-left-color 100%);
   transform: translate3d(0, 0, 0) rotateX(-30deg);
   animation: wingLeft 1.3s cubic-bezier(0.45, 0, 0.50, 0.95) infinite;
 }
 
 .wing-right {
-  background: linear-gradient(to bottom, #d9d3e2 0%, #b8a5d1 100%);
+  background: linear-gradient(to bottom, #d9d3e2 0%, $bird-wing-right-color 100%);
   transform: translate3d(0, 0, 0) rotateX(-30deg);
   animation: wingRight 1.3s cubic-bezier(0.45, 0, 0.50, 0.95) infinite;
 }
@@ -65,13 +67,13 @@
 }
 
 .wing-right-top {
-  border-bottom: 20px solid #b8a5d1;
+  border-bottom: 20px solid $bird-wing-right-color;
   transform: translate3d(0, 0, 0) rotateX(60deg);
   animation: wingRightTop 1.3s cubic-bezier(0.45, 0, 0.50, 0.95) infinite;
 }
 
 .wing-left-top {
-  border-bottom: 20px solid #7979a8;
+  border-bottom: 20px solid $bird-wing-left-color;
   transform: translate3d(0, 0, 0) rotateX(-60deg);
   animation: wingLeftTop 1.3s cubic-bezier(0.45, 0, 0.50, 0.95) infinite;
 }

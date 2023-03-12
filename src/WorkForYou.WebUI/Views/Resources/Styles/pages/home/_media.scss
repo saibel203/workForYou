@@ -1,13 +1,13 @@
 @import '../../utils/_colors';
 
 @media (min-width: 576px) {
-  .container {
+  .home-container {
     max-width: 540px;
   }
 }
 
 @media (min-width: 768px) {
-  .container {
+  .home-container {
     max-width: 720px;
   }
 
@@ -58,13 +58,13 @@
 }
 
 @media (min-width: 992px) {
-  .container {
+  .home-container {
     max-width: 960px;
   }
 }
 
 @media (min-width: 1200px) {
-  .container {
+  .home-container {
     max-width: 1140px;
   }
 }

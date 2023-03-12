@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Views\Resources\Scripts" />
+        <Folder Include="Views\Resources\Scripts\model" />
         <Folder Include="wwwroot\css" />
         <Folder Include="wwwroot\js" />
         <Folder Include="wwwroot\libs" />
@@ -1024,6 +1024,7 @@
       <_ContentIncludedByDefault Remove="wwwroot\js\services\responded-service.js.map" />
       <_ContentIncludedByDefault Remove="wwwroot\js\tags.js" />
       <_ContentIncludedByDefault Remove="wwwroot\js\text-editor.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\libs\css\bootstrap.min.css" />
     </ItemGroup>
 
     <Target Name="PrepublishScriptsAndStyles" BeforeTargets="BeforeBuild">

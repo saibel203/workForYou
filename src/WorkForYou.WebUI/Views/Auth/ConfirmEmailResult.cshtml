@@ -5,11 +5,6 @@
     ViewData["Title"] = ViewLocalization["Title"];
 }
 
-@section Styles
-{
-    <link rel="stylesheet" href="~/css/home_pages.css">
-}
-
 <section class="section confirm-email-result form-section">
     @if (ViewData.ModelState.ErrorCount != 0)
     {
@@ -20,8 +15,3 @@
         <h1>@ViewLocalization["Message"]</h1>
     }
 </section>
-
-@section Scripts
-{
-    <script src="~/libs/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-}

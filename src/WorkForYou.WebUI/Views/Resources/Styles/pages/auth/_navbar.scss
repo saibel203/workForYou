@@ -1,0 +1,46 @@
+@import '../../utils/_colors';
+
+.auth-navbar {
+  &__logo {
+    color: $primary-color;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+
+  &__navigation-item a {
+    color: $text-affix-color;
+  }
+  &__navigation-item button {
+    color: $text-affix-color !important;
+  }
+
+  &.affix {
+    .auth-navbar__navigation-item a {
+      color: $text-affix-color;
+      transition: color .2s ease;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+
+    .auth-navbar__navigation-item button {
+      color: $text-affix-color;
+      transition: color .2s ease;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+
+  .auth-hamburger-inner {
+    &,
+    &::before,
+    &::after {
+      background-color: $text-affix-color !important;
+    }
+  }
+}

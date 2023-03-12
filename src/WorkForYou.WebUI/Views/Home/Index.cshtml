@@ -8,12 +8,9 @@
     ViewData["Title"] = ViewLocalization["Title"];
 }
 
-<link rel="stylesheet" href="~/css/style.css">
-<script src="~/js/test.js"></script>
-
 <header class="header" style="background-image: url('img/homePage/header.jpg')">
     <div class="header__overlay"></div>
-    <div class="header__content container text-center">
+    <div class="header__content home-container text-center">
         <h1 class="header__content-title">
             <span>@ViewLocalization["TitleStart"] <span>@ViewLocalization["TitleMiddle"]</span> @ViewLocalization["TitleEnd"]</span>
         </h1>
@@ -27,7 +24,7 @@
 </header>
 
 <section class="section about-section pt-0">
-    <div class="container text-center">
+    <div class="home-container text-center">
         <div class="about">
             <div class="about__img-holder">
                 <img src="img/homePage/about-us.png"
@@ -43,7 +40,7 @@
 </section>
 
 <section class="section form-section">
-    <div class="container text-center">
+    <div class="home-container text-center">
         <h2 class="section-title mb-5">@ViewLocalization["Contact"]</h2>
         <form method="post" asp-controller="Home" asp-action="Index" asp-antiforgery="true" autocomplete="off"
               class="contact-form">
@@ -69,25 +66,15 @@
 
 @section Scripts
 {
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://unpkg.com/typed.js@2.0.132/dist/typed.umd.js"></script>
     <script>
-        const designers = '@ViewLocalization["Designers"]';
-        const devOps = '@ViewLocalization["DevOps"]';
-        const testers = '@ViewLocalization["Testers"]';
-        const pm = '@ViewLocalization["PM"]';
-        const all = '@ViewLocalization["All"]';
-        
-        const typedStrings = [
-            designers, devOps, testers, pm, all          
-        ];
-        
-        const speed = 100;
-        
-        let typed = new Typed(".auto-type", {
-            strings: typedStrings,
-            typeSpeed: speed,
-            backSpeed: speed - 30,
-            loop: true
-        });
+        const typedTranslations = {
+            designers: '@ViewLocalization["Designers"]',
+            devOps: '@ViewLocalization["DevOps"]',
+            testers: '@ViewLocalization["Testers"]',
+            pm: '@ViewLocalization["PM"]',
+            all: '@ViewLocalization["All"]'
+        };
     </script>
+    <script src="~/js/components/home/typed.component.js"></script>
 }

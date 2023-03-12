@@ -2,6 +2,7 @@
 @import '../../utils/_fonts';
 
 .navbar {
+  background-color: rgba(255, 255, 255) !important;
   position: fixed;
   top: 0;
   left: 0;
@@ -11,9 +12,9 @@
   transition: all, 0.3s;
   font-family: $main-font;
 
-  .container {
+  .home-container {
     flex-grow: 1;
-    min-height: 100px;
+    min-height: 75px;
     display: flex;
     align-items: center;
     transition: all, 0.3s;
@@ -22,10 +23,10 @@
   &__logo {
     font-size: calc(20px + (30 - 20) * ((100vw - 300px) / (1300 - 300)));
     text-decoration: none;
-    color: #fff;
+    color: $white-color;
 
     &:hover {
-      color: #fff;
+      color: $white-color;
     }
   }
 
@@ -60,7 +61,7 @@
       }
 
       a {
-        color: #fff;
+        color: $text-affix-color;
         font-weight: 500;
         text-decoration: none;
         transition: color .2s ease;
@@ -75,7 +76,7 @@
       button {
         width: 100%;
         text-align: left;
-        color: #fff;
+        color: $white-color;
         font-weight: 500;
         text-decoration: none;
         transition: color .2s ease;
@@ -135,7 +136,7 @@
         &::after {
           content: "";
           display: block;
-          background-color: #fff;
+          background-color: $white-color;
           width: 30px;
           height: 3px;
           border-radius: 10px;
@@ -199,7 +200,7 @@
     background-color: #fff;
     border-bottom: 1px solid rgba(222, 226, 230, .34);
 
-    .container {
+    .home-container {
       min-height: 65px;
     }
 
@@ -208,7 +209,7 @@
     }
 
     .navbar__navigation-item a {
-      color: $text-affix-color;
+      color: $text-affix-color !important;
       transition: color .2s ease;
 
       &:hover {
@@ -252,12 +253,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: -webkit-linear-gradient(bottom, #fff 0%, rgba(105, 90, 166, 0.35) 99%, rgba(105, 90, 166, 0.5) 100%);
-    background-image: linear-gradient(to top, #fff 0%, rgba(105, 90, 166, 0.35) 99%, rgba(105, 90, 166, 0.5) 100%);
+    background-image: -webkit-linear-gradient(bottom, $white-color 0%, rgba(105, 90, 166, 0.35) 99%, rgba(105, 90, 166, 0.5) 100%);
+    background-image: linear-gradient(to top, $white-color 0%, rgba(105, 90, 166, 0.35) 99%, rgba(105, 90, 166, 0.5) 100%);
   }
 
   &__content {
-    &.container {
+    &.home-container {
       margin-top: 100px;
       flex-grow: 1;
       max-width: 550px;
