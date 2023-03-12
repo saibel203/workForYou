@@ -3,8 +3,9 @@
 ## Table of content
 1. :information_source: [General info about project](#project-description)
 2. :file_folder: [TODO list](#todolist)
-3. :clipboard: [Install instruction](#install-instruction)
-4. :speech_balloon: [Contact me](#contact-me)
+3. :bookmark_tabs: [Stack](#stack)
+4. :clipboard: [Install instruction](#install-instruction)
+5. :speech_balloon: [Contact me](#contact-me)
 
 ## Project description
 Project for job search and job candidates. The possibility of registering a candidate or employer account. The employer represents the company, provides detailed information about it and contact details. The candidate has the opportunity to respond to the vacancy created by the employer, who in turn can invite the candidate to the position. Basically, the general functionality is similar to djinni.co.
@@ -18,16 +19,25 @@ Project for job search and job candidates. The possibility of registering a cand
 - [x] account confirmation
 - [x] password recovery
 - [x] password change
-- [ ] authentication with google, linkedin, etc
+- [ ] authentication with google, linkedin, etc (add IdentityServer)
 - [x] profile change for candidate or employer
 - [x] CRUD operations for vacancies for the employer
 - [x] for a candidate - a list of vacancies; for an employee - a list of workers
-- [ ] make filters for searching vacancies and candidates: country, work experience, employment, company type, salary from..., English level, technical / non-technical tags, simple search
+- [x] make filters for searching vacancies and candidates: country, work experience, employment, company type, salary from..., English level, technical / non-technical tags, simple search
 - [x] possibility to save vacancies or candidates (saved list)
 - [x] mini-rating of vacancies: views, number of reviews, number of saves, etc
 - [ ] the possibility to subscribe to the company: when new vacancies appear - a letter to the mail or a message; or make them hidden
-- [ ] list of recommendations for the candidate
-- [ ] the ability to communicate via chat or write to the mail
+- [ ] list of recommendations for the candidate. When a candidate goes to the job page, they see a list of similarities with their profile
+- [x] the ability to communicate via chat
+- [ ] notification system when interacting with the chat and receiving feedback from the candidate
+- [ ] changing the user's photo on the profile page
+- [ ] redesign the profile change system
+
+## Stack
+- ASP.NET core MVC (+ Web API)
+- HTML/CSS JavaScript (TypeScript, Bootstrap)
+- T-SQL (MS SQL), EntityFrameworkCore
+- SignalR
 
 ## Install instruction
 1. Clone the repository. This can be done using one of the following steps:

@@ -9,6 +9,7 @@ using WorkForYou.Core.ServiceInterfaces;
 using WorkForYou.Core.Models.IdentityInheritance;
 using WorkForYou.Data.Repositories;
 using WorkForYou.Infrastructure.DatabaseContext;
+using WorkForYou.Infrastructure.PowerShell;
 using WorkForYou.Services;
 using WorkForYou.Shared.Mapping;
 
@@ -18,6 +19,10 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddWebUiServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var powerShell = new PowerShellTerminal();
+        powerShell.RunShellCommand("gulp watch-sass");
+        powerShell.RunShellCommand("gulp watch-typescript");
+        
         services.AddHttpContextAccessor();
         services.AddSignalR();
 
@@ -54,10 +59,6 @@ public static class ConfigureServices
         services.AddDistributedMemoryCache();
         services.AddSession(options => { options.IdleTimeout = TimeSpan.FromDays(1); });
         
-        services.AddHostedService(sp => new NpmWatchHosted(
-            enabled: sp.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
-            logger: sp.GetRequiredService<ILogger<NpmWatchHosted>>()));
-
         services.AddScoped<SeedDbContext>();
         
         services.AddTransient<IUnitOfWork, UnitOfWork>();

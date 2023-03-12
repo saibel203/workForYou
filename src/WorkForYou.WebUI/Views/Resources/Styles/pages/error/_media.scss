@@ -1,0 +1,19 @@
+@media screen and (max-width: 580px) {
+  .container-404 {
+    width: 100%;
+  }
+  .number {
+    font-size: 100px;
+  }
+  .subtitle {
+    font-size: 20px;
+    padding: 0 1em;
+  }
+  .moon {
+    width: 100px;
+    height: 100px;
+  }
+  .face {
+    transform: scale(0.7)
+  }
+}

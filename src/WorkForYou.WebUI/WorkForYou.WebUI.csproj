@@ -8,7 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Folder Include="Views\Resources\Scripts" />
         <Folder Include="wwwroot\css" />
+        <Folder Include="wwwroot\js" />
         <Folder Include="wwwroot\libs" />
     </ItemGroup>
 
@@ -30,25 +32,6 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.0.0-beta">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup>
-        <TypeScriptCompile Include="Views\Resources\Scripts\environments\environment.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\favourite-list.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\home-password.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\home.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\login.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\logout.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\main.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\respond-vacancy.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\services\auth-service.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\services\chat-service.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\services\favourite-service.ts" />
-        <TypeScriptCompile Include="Views\Resources\Scripts\services\responded-service.ts" />
     </ItemGroup>
 
     <ItemGroup>
@@ -1014,17 +997,37 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="wwwroot\js\environments\environment.js" />
       <_ContentIncludedByDefault Remove="wwwroot\js\environments\environment.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\chat.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\custom-select.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\favourite-list.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\favourite-list.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\home-password.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\home-password.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\home-typed.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\home.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\home.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\login.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\login.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\logout.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\logout.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\main.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\main.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\respond-vacancy.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\respond-vacancy.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\services\auth-service.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\services\auth-service.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\services\chat-service.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\services\chat-service.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\services\favourite-service.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\services\favourite-service.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\services\responded-service.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\services\responded-service.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\tags.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\text-editor.js" />
     </ItemGroup>
 
-    <Target Name="Install NPM modules" BeforeTargets="Build" Inputs="package-lock.json" Outputs="node_modules/.install-stamp">
-        <Exec Command="npm ci" Condition="'$(OS)' != 'Windows_NT'" />
-        <Exec Command="npm install" Condition="'$(OS)' == 'Windows_NT'" />
-        <Touch Files="node_modules/.install-stamp" AlwaysCreate="true" />
-    </Target>
-
-    <Target Name="Compile SCSS" BeforeTargets="CopyFilesToPublishDirectory">
-        <Exec Command="npm run build:css" />
-        <Copy SourceFiles="$(ProjectDir)wwwroot/css/home.css" DestinationFolder="$(PublishDir)wwwroot/css" />
+    <Target Name="PrepublishScriptsAndStyles" BeforeTargets="BeforeBuild">
+        <Exec Command="gulp" />
     </Target>
 
 </Project>

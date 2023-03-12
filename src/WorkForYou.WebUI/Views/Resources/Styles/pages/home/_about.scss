@@ -1,0 +1,31 @@
+@import '../../utils/_fonts';
+
+.about {
+  font-family: $open-sans-font;
+  display: flex;
+  align-items: center;
+  text-align: left;
+
+  &__img-holder {
+    min-width: 400px;
+    max-width: 400px;
+    margin-right: 20px;
+
+    .about-image {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }
+
+  &__content {
+    flex-grow: 1;
+
+    p {
+      font-size: calc(13px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));
+      font-weight: 100;
+      opacity: 1;
+      color: #111;
+      letter-spacing: .6px;
+    }
+  }
+}
