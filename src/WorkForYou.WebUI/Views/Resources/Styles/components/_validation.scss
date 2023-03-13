@@ -3,8 +3,17 @@
     list-style: none;
     margin-bottom: 30px;
     border: 1px solid #dedede;
-    background-color: #fff;
+    background-color: var(--theme-bg-color);
     color: var(--text-valication-color);
-    padding: 10px 0;
+    padding: 10px;
   }
+}
+
+.field-validation-error {
+  color: var(--text-valication-color);
+  margin-top: 5px;
+}
+
+.after-long-description-validation {
+  margin-top: 20px;
 }

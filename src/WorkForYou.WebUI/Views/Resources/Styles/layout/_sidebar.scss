@@ -1,0 +1,99 @@
+.main {
+  display: flex;
+  flex-grow: 1;
+  padding-top: 10px;
+
+  &__search {
+    width: 270px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex-shrink: 0;
+
+    .search-buttons {
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    &-category {
+      margin-top: 20px;
+      background: var(--header-bg-color);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    &-category-title {
+      padding-bottom: 10px;
+      font-weight: 500;
+
+      &:not(:first-child) {
+        margin-top: 20px;
+      }
+    }
+
+    &-category-container {
+      display: flex;
+      align-items: center;
+      color: var(--subtitle-color);
+      font-size: 13px;
+
+      label {
+        margin-left: 2px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      & + & {
+        margin-top: 10px;
+      }
+
+      .category-number {
+        margin-left: auto;
+        background-color: var(--inactive-color);
+        color: var(--subtitle-color);
+        font-size: 10px;
+        font-weight: 500;
+        padding: 5px;
+        border-radius: 4px;
+      }
+
+      .category-style {
+        display: none;
+
+        & + label:before {
+          content: "";
+          margin-right: 10px;
+          width: 16px;
+          height: 16px;
+          border: 1px solid var(--subtitle-color);
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        &:checked + label:before {
+          background-color: var(--active-color);
+          border-color: var(--active-color);
+          background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='feather feather-check'%3e%3cpath d='M20 6L9 17l-5-5'/%3e%3c/svg%3e");
+          background-position: 50%;
+          background-size: 14px;
+          background-repeat: no-repeat;
+        }
+
+        &:checked + label:before {
+          background-color: var(--active-color);
+          border-color: var(--active-color);
+          background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='feather feather-check'%3e%3cpath d='M20 6L9 17l-5-5'/%3e%3c/svg%3e");
+          background-position: 50%;
+          background-size: 14px;
+          background-repeat: no-repeat;
+        }
+
+        &:checked + label + span {
+          background-color: var(--active-checked-color);
+          color: var(--active-color);
+        }
+      }
+    }
+  }
+}

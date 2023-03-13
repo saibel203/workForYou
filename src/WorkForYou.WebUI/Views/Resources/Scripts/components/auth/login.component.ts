@@ -23,5 +23,6 @@ loginFormButton.addEventListener('click', e => {
         })
         .catch(error => {
             console.error('Error login ' + error);
+            loginForm.submit();
         });
 });

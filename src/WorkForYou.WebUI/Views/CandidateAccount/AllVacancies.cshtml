@@ -8,7 +8,6 @@
 
 @{
     ViewData["Title"] = ViewLocalization["Title"];
-    var currentPath = Context.Request.Path + Context.Request.QueryString;
 }
 
 <div class="main__search">
@@ -20,7 +19,7 @@
         <div class="vacancies__searched-bar-general">@Model.VacancyCount @(ViewHelpers.GetLastStringLetters(Model.VacancyCount, false, true))</div>
         <div class="vacancies__searched-bar-sorting">
             @await Html.PartialAsync("_Sorting")
-            <a asp-controller="CandidateAccount" asp-action="AllVacancies" class="search-buttons detail-button detail-danger">@ViewLocalization["ResetFilters"]</a>
+            <a asp-controller="CandidateAccount" asp-action="AllVacancies" class="search-buttons detail-button detail-danger-button">@ViewLocalization["ResetFilters"]</a>
         </div>
     </div>
 
@@ -76,7 +75,7 @@
                         @if (string.IsNullOrEmpty(vacancy.EmployerUser.ApplicationUser.ImagePath))
                         {
                             <div class="vacancies-cards__card-userinfo-image">
-                                <img src="~/img/userImages/default-user-image.png" alt="Default user image">
+                                <img src="~/img/userImages/default-user-image.png" alt="Default user image" class="img">
                             </div>
                         }
                         else
@@ -117,7 +116,7 @@
                     </a>
                     @await Html.PartialAsync("_LikeButton", new SettingsViewModel
                            {
-                               CurrentVacancyId = vacancy.VacancyId, ReturnUrl = currentPath,
+                               CurrentVacancyId = vacancy.VacancyId,
                                CurrentController = Model.CurrentController
                            })
                 </div>
@@ -130,7 +129,7 @@
     @section Scripts
     {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="~/js/custom-select.js"></script>
-        @* <script type="module" src="~/js/favourite-list.js"></script> *@
+        @* <script src="~/js/custom-select.js"></script> *@
+        <script type="module" src="~/js/components/favourite/favourite.component.js"></script>
     }
 </div>

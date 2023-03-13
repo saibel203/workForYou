@@ -1,7 +1,7 @@
 @import '../../utils/_colors';
 @import '../../utils/_fonts';
 
-.navbar {
+.home-navbar {
   background-color: rgba(255, 255, 255) !important;
   position: fixed;
   top: 0;
@@ -91,7 +91,7 @@
       }
     }
 
-    &.show .navbar__navigation-item {
+    &.show .home-navbar__navigation-item {
       &:first-child,
       &:nth-child(2),
       &:last-child {
@@ -204,11 +204,11 @@
       min-height: 65px;
     }
 
-    .navbar__logo {
+    .home-navbar__logo {
       color: $primary-color;
     }
 
-    .navbar__navigation-item a {
+    .home-navbar__navigation-item a {
       color: $text-affix-color !important;
       transition: color .2s ease;
 
@@ -217,7 +217,7 @@
       }
     }
 
-    .navbar__navigation-item button {
+    .home-navbar__navigation-item button {
       color: $text-affix-color;
       transition: color .2s ease;
 
@@ -236,7 +236,7 @@
   }
 }
 
-.header {
+.home-header {
   position: relative;
   height: 100vh;
   min-height: 600px;

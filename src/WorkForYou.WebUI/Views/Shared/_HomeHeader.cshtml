@@ -8,11 +8,11 @@
         : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
 }
 
-<nav class="navbar auth-navbar" data-spy="affix" data-offset-top="20">
+<nav class="home-navbar auth-navbar" data-spy="affix" data-offset-top="20">
     <div class="home-container">
-        <a class="navbar__logo auth-navbar__logo" asp-controller="Home" asp-action="Index">WorkForYou</a>
-        <ul class="navbar__navigation">
-            <li class="navbar__navigation-item auth-navbar__navigation-item">
+        <a class="home-navbar__logo auth-navbar__logo" asp-controller="Home" asp-action="Index">WorkForYou</a>
+        <ul class="home-navbar__navigation">
+            <li class="home-navbar__navigation-item auth-navbar__navigation-item">
                 <form method="post" asp-controller="Home" asp-action="SetCulture" asp-route-returnUrl="@returnUrl">
                     @if (CultureInfo.CurrentCulture.Equals(new CultureInfo("en")))
                     {
@@ -26,10 +26,10 @@
                     }
                 </form>
             </li>
-            <li class="navbar__navigation-item">
+            <li class="home-navbar__navigation-item">
                 <a asp-controller="Auth" asp-action="Login">@ViewLocalization["Authorization"]</a>
             </li>
-            <li class="navbar__navigation-item">
+            <li class="home-navbar__navigation-item">
                 <a asp-controller="Auth" asp-action="Register">@ViewLocalization["Registration"]</a>
             </li>
         </ul>

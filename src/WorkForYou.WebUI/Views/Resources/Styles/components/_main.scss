@@ -1,0 +1,14 @@
+.body {
+  background-color: var(--theme-bg-color);
+  font-family: var(--body-font);
+  font-size: 15px;
+  color: var(--body-color);
+}
+
+.input, .input::placeholder {
+  color: var(--placeholder-color);
+}
+
+.img {
+  max-width: 100%;
+}

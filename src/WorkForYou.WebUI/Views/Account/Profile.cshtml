@@ -13,14 +13,14 @@
 @if (Model.CandidateUser is not null)
 {
     <div class="card-details__main">
-        @if (Model.CandidateUser.CompanyPosition is not null)
+        @if (!string.IsNullOrEmpty(Model.CandidateUser.CompanyPosition))
         {
             <div class="card-details__header">
                 <h1>
-                    @Model.CandidateUser.CompanyPosition
+                    @Model.CandidateUser.CompanyPosition,
                     @if (!string.IsNullOrEmpty(Model.FirstName) && !string.IsNullOrEmpty(Model.LastName))
                     {
-                        @: (@Model.LastName @Model.FirstName)
+                        @: @Model.LastName @Model.FirstName
                     }
                 </h1>
             </div>
@@ -32,13 +32,13 @@
                 @if (string.IsNullOrEmpty(Model.ImagePath))
                 {
                     <div class="card-details__body-profile-image">
-                        <img src="~/img/userImages/default-user-image.png" alt="Default user image">
+                        <img src="~/img/userImages/default-user-image.png" alt="Default user image" class="img">
                     </div>
                 }
                 else
                 {
                     <div class="card-details__body-profile-image">
-                        <img src="@Model.ImagePath" alt="User image">
+                        <img src="@Model.ImagePath" alt="User image" class="img">
                     </div>
                 }
                 <p>@Model.CandidateUser.ExperienceWorkDescription</p>
@@ -69,7 +69,7 @@
             <div class="card-details__buttons">
                 <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
                 <form method="post" asp-controller="Account" asp-action="RemoveUser">
-                    <input type="submit" value="@ViewLocalization["Delete"]" class="search-buttons card-buttons detail-danger">
+                    <input type="submit" value="@ViewLocalization["Delete"]" class="search-buttons card-buttons detail-danger-button">
                 </form>
             </div>
         }
@@ -148,41 +148,7 @@
                 @ViewLocalization["Fill"]
             </p>
         }
-        <ul class="footer__social-links mb-0">
-            @if (Model.TelegramLink is not null)
-            {
-                <li>
-                    <a href="@Model.TelegramLink" target="_blank">
-                        <i class="fa-brands fa-telegram"></i>
-                    </a>
-                </li>
-            }
-            @if (Model.SkypeLink is not null)
-            {
-                <li>
-                    <a href="@Model.SkypeLink" target="_blank">
-                        <i class="fa-brands fa-skype"></i>
-                    </a>
-                </li>
-            }
-            @if (Model.LinkedInLink is not null)
-            {
-                <li>
-                    <a href="@Model.LinkedInLink"
-                       target="_blank">
-                        <i class="fa-brands fa-linkedin"></i>
-                    </a>
-                </li>
-            }
-            @if (Model.GithubLink is not null)
-            {
-                <li>
-                    <a href="@Model.GithubLink" target="_blank">
-                        <i class="fa-brands fa-github"></i>
-                    </a>
-                </li>
-            }
-        </ul>
+        @await Html.PartialAsync("Profile/_ProfileLinks")
     </div>
 }
 @if (Model.EmployerUser is not null)
@@ -191,8 +157,8 @@
         <div class="card-details__header employer-header">
             <h1>
                 @if (Model.EmployerUser.ApplicationUser is not null
-                     && Model.EmployerUser.ApplicationUser.FirstName is not null
-                     && Model.EmployerUser.ApplicationUser.LastName is not null)
+                     && !string.IsNullOrEmpty(Model.EmployerUser.ApplicationUser.FirstName)
+                     && !string.IsNullOrEmpty(Model.EmployerUser.ApplicationUser.LastName))
                 {
                     @Model.EmployerUser.ApplicationUser.LastName
                     @: 
@@ -200,7 +166,7 @@
                 }
             </h1><br>
             <h2>
-                @if (Model.EmployerUser.CompanyPosition is not null)
+                @if (!string.IsNullOrEmpty(Model.EmployerUser.CompanyPosition))
                 {
                     @Model.EmployerUser.CompanyPosition
                 }
@@ -218,13 +184,13 @@
                 @if (string.IsNullOrEmpty(Model.ImagePath))
                 {
                     <div class="card-details__body-profile-image">
-                        <img src="~/img/userImages/default-user-image.png" alt="Default user image">
+                        <img src="~/img/userImages/default-user-image.png" alt="Default user image" class="img">
                     </div>
                 }
                 else
                 {
                     <div class="card-details__body-profile-image">
-                        <img src="@Model.ImagePath" alt="User image">
+                        <img src="@Model.ImagePath" alt="User image" class="img">
                     </div>
                 }
                 <p>@Model.EmployerUser.AboutCompany</p>
@@ -276,47 +242,13 @@
             <div class="card-details__buttons">
                 <a class="search-buttons card-buttons" asp-controller="Account" asp-action="RefreshGeneralProfileInfo">@ViewLocalization["Refresh"]</a>
                 <form method="post" asp-controller="Account" asp-action="RemoveUser">
-                    <button type="submit" class="search-buttons card-buttons detail-danger">@ViewLocalization["Delete"]</button>
+                    <button type="submit" class="search-buttons card-buttons detail-danger-button">@ViewLocalization["Delete"]</button>
                 </form>
             </div>
         }
     </div>
     <div class="card-details__info">
-        <ul class="footer__social-links mb-0">
-            @if (Model.TelegramLink is not null)
-            {
-                <li>
-                    <a href="@Model.TelegramLink" target="_blank">
-                        <i class="fa-brands fa-telegram"></i>
-                    </a>
-                </li>
-            }
-            @if (Model.SkypeLink is not null)
-            {
-                <li>
-                    <a href="@Model.SkypeLink" target="_blank">
-                        <i class="fa-brands fa-skype"></i>
-                    </a>
-                </li>
-            }
-            @if (Model.LinkedInLink is not null)
-            {
-                <li>
-                    <a href="@Model.LinkedInLink"
-                       target="_blank">
-                        <i class="fa-brands fa-linkedin"></i>
-                    </a>
-                </li>
-            }
-            @if (Model.GithubLink is not null)
-            {
-                <li>
-                    <a href="@Model.GithubLink" target="_blank">
-                        <i class="fa-brands fa-github"></i>
-                    </a>
-                </li>
-            }
-        </ul>
+        @await Html.PartialAsync("Profile/_ProfileLinks")
     </div>
 }
 </div>

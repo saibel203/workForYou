@@ -1,0 +1,102 @@
+.all-employer-vacancies {
+  background-color: var(--header-bg-color);
+  padding: 20px 30px;
+  border-radius: 5px;
+  width: 100%;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .search {
+      width: 40%;
+      background-color: var(--theme-bg-color);
+
+      form {
+        width: 100%;
+      }
+    }
+
+    .ddl-input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 10px 20px;
+      outline: none;
+      background: var(--theme-bg-color);
+      border: 1px solid var(--theme-bg-color);
+    }
+
+    .vacancies__searched-bar-sort {
+      font-size: 14px;
+      color: var(--subtitle-color);
+      display: flex;
+      align-items: center;
+
+      &-name {
+        font-weight: 600;
+        color: var(--subtitle-color);
+      }
+    }
+
+    .vacancies__searched-bar-sort-select {
+      visibility: hidden;
+
+      input {
+        background-color: var(--theme-bg-color) !important;
+      }
+    }
+  }
+
+  &__buttons {
+    margin: 20px 0 50px 0;
+
+    a {
+      padding: 10px 20px;
+      transition: background-color .2s ease;
+
+      &:hover {
+        background-color: var(--theme-bg-color);
+      }
+    }
+  }
+
+  &__vacancy {
+    margin-bottom: 30px !important;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: var(--theme-bg-color);
+
+    a, button {
+      color: var(--active-color);
+      transition: all .2s ease;
+
+      &:hover {
+        color: rgba(105, 90, 166, 0.68);
+      }
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    &-main {
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+
+      span {
+        font-size: 20px;
+        padding: 0 10px;
+        color: var(--body-color);
+      }
+    }
+  }
+}

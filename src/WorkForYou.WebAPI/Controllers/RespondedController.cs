@@ -37,7 +37,10 @@ public class RespondedController : BaseController
             return BadRequest(error);
         }
 
-        return Ok();
+        return Ok(new
+        {
+            Message = "All oK!"
+        });
     }
     
     [HttpPost("removeResponded")] // /api/responded/removeResponded
@@ -60,13 +63,9 @@ public class RespondedController : BaseController
             return BadRequest(error);
         }
 
-        return Ok();
+        return Ok(new
+        {
+            Message = "All oK!"
+        });
     }
-
-    // [HttpGet]
-    // [JwtAuthorize(Roles = ApplicationRoles.CandidateRole)]
-    // public async Task<IActionResult> IsVacancyInRespondedList(int vacancyId)
-    // {
-    //     
-    // }
 }

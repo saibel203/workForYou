@@ -54,46 +54,27 @@
         </div>
         @if (User.IsInRole("candidate"))
         {
-            @* var removeRespondStyles = !Model.IsVacancyInRespondedList *@
-            @*     ? "display: none;" *@
-            @*     : "display: block;"; *@
-            @* *@
-            @* var respondStyles = !Model.IsVacancyInRespondedList *@
-            @*     ? "display: block;" *@
-            @*     : "display: none;"; *@
-            @* *@
-            @* *@
-            @* <div class="card-details__buttons"> *@
-            @*     <form id="respond-vacancy-form"> *@
-            @*         <input type="hidden" name="VacancyId" value="@Model.Vacancy.VacancyId" id="respond-vacancy-id"> *@
-            @*         <button style="@removeRespondStyles" type="button" class="search-buttons card-buttons" id="respond-vacancy-button"> *@
-            @*             @ViewLocalization["Respond"] *@
-            @*         </button> *@
-            @*         <button style="@respondStyles" type="button" class="search-buttons card-buttons detail-danger" *@
-            @*                 id="remove-respond-vacancy-button"> *@
-            @*             @ViewLocalization["CancelRespond"] *@
-            @*         </button> *@
-            @*     </form> *@
-            @* </div> *@
+            var removeRespondStyles = Model.IsVacancyInRespondedList
+                ? "display: none;"
+                : "display: block;";
+            
+            var respondStyles = Model.IsVacancyInRespondedList
+                ? "display: block;"
+                : "display: none;";
+            
+            
             <div class="card-details__buttons">
-                @if (!Model.IsVacancyInRespondedList)
-                {
-                    <form method="post" asp-controller="Responded" asp-action="RespondedVacancy" asp-antiforgery="true">
-                        <input type="hidden" name="VacancyId" value="@Model.Vacancy.VacancyId">
-                        <button type="submit" class="search-buttons card-buttons">
-                            @ViewLocalization["Respond"]
-                        </button>
-                    </form>
-                }
-                else
-                {
-                    <form method="post" asp-controller="Responded" asp-action="RemoveRespondVacancy" asp-antiforgery="true">
-                        <input type="hidden" name="VacancyId" value="@Model.Vacancy.VacancyId">
-                        <button type="submit" class="search-buttons card-buttons detail-danger">
-                            Cancel respond
-                        </button>
-                    </form>
-                }
+                <form id="respond-vacancy-form">
+                    <input type="hidden" name="VacancyId" value="@Model.Vacancy.VacancyId" id="respond-vacancy-id">
+                    <button style="@removeRespondStyles" type="button" class="search-buttons card-buttons" 
+                            id="respond-vacancy-button">
+                        @ViewLocalization["Respond"]
+                    </button>
+                    <button style="@respondStyles" type="button" class="search-buttons card-buttons detail-danger-button"
+                            id="remove-respond-vacancy-button">
+                        @ViewLocalization["CancelRespond"]
+                    </button>
+                </form>
             </div>
         }
     </div>
@@ -157,7 +138,7 @@
     </div>
 </div>
 
-@* @section Scripts *@
-@* { *@
-@*     <script type="module" src="~/js/respond-vacancy.js"></script> *@
-@* } *@
+@section Scripts
+{
+    <script type="module" src="~/js/components/respond/respond.component.js"></script>
+}

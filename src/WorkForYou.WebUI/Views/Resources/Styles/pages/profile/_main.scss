@@ -1,0 +1,22 @@
+.profile {
+  background-color: var(--header-bg-color);
+  padding: 20px 50px;
+  border-radius: 5px;
+  display: flex;
+
+  &-details {
+    width: 100%;
+    border: 1px solid rgb(189, 188, 188);
+    margin-left: 50px;
+    border-radius: 5px;
+
+    h2 {
+      padding: 15px 10px;
+      border-bottom: 1px solid rgb(189, 188, 188);
+    }
+
+    p {
+      padding: 5px 15px;
+    }
+  }
+}

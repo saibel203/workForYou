@@ -1,6 +1,6 @@
 // Hamburger menu settings
 const hamburgerMenu: HTMLElement = document.getElementById('hamburger-menu');
-const navbarItems = document.getElementsByClassName('navbar__navigation')[0];
+const navbarItems = document.getElementsByClassName('home-navbar__navigation')[0];
 
 hamburgerMenu.addEventListener('click', () => {
     hamburgerMenu.classList.toggle('is-active');

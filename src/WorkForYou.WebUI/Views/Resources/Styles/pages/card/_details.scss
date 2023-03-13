@@ -1,0 +1,228 @@
+.card-details {
+  background-color: var(--header-bg-color);
+  padding: 20px 50px;
+  border-radius: 5px;
+  min-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  overflow-x: hidden;
+
+  &__language {
+    p {
+      margin: 5px 0 !important;
+
+      a {
+        margin: 20px !important;
+      }
+    }
+  }
+
+  .profile-tags {
+    margin-bottom: 15px;
+
+    ul {
+      list-style: inside !important;
+    }
+  }
+
+  &__vacancies {
+    margin-bottom: 20px;
+
+    h3 {
+      margin-bottom: 10px;
+    }
+
+    div {
+      margin: 20px 0 0 110px;
+
+      a {
+        color: #fff !important;
+      }
+    }
+  }
+
+  &__info {
+    min-width: 25%;
+    margin-top: 50px;
+    min-height: 300px;
+    max-height: 100%;
+    border: 1px solid rgb(189, 188, 188);
+    border-radius: 5px;
+    background-color: var(--header-bg-color);
+    margin-left: 20px;
+
+    .profile-links {
+      padding: 10px 20px 20px 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      &__item {
+        padding-right: 0;
+        margin-top: 10px;
+
+        a {
+          background-color: var(--theme-bg-color);
+        }
+
+      }
+    }
+
+    h2 {
+      padding: 15px 20px;
+      border-bottom: 1px solid rgb(189, 188, 188);
+      color: var(--level-button);
+      font-weight: 700;
+    }
+
+    p {
+      opacity: .8;
+      padding: 5px 20px;
+    }
+
+    i {
+      padding-right: 3px;
+    }
+
+    .close {
+      color: #ff1c00ad;
+    }
+
+    .ok {
+      color: #11E164E4;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+
+    h1 {
+      font-size: 32px;
+    }
+
+    a {
+      font-size: 20px !important;
+    }
+
+    span {
+      margin-left: 20px;
+      font-size: 25px;
+      color: var(--level-button);
+    }
+  }
+
+  .employer-header {
+    display: block;
+
+    h1 {
+      margin-bottom: -25px;
+    }
+
+    h2 {
+
+    }
+  }
+
+  a {
+    color: var(--active-color);
+    font-size: 16px;
+  }
+
+  h3 {
+    opacity: .7;
+  }
+
+  &__body {
+    margin-top: 10px;
+    opacity: .9;
+
+    &-profile-image {
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      width: 105px;
+      height: 105px;
+      margin: 15px 20px 0 0;
+      float: left;
+      shape-outside: ellipse();
+
+      img {
+        width: auto;
+      }
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+    br {
+      content: "";
+      margin: 2em;
+      display: block;
+      font-size: 60%;
+      outline: red;
+    }
+  }
+
+  ul, ol {
+    list-style: none;
+  }
+
+  p {
+    margin: 10px 0;
+  }
+
+  &__main {
+    width: 100%;
+  }
+
+  &__company {
+    margin: 20px 0;
+  }
+
+  &__footer {
+    margin: 20px 0;
+    opacity: .7;
+
+    i {
+      padding-right: 7px;
+    }
+  }
+
+  &__buttons {
+    margin-top: 20px;
+    display: flex;
+    min-width: 50%;
+
+    form {
+      width: 100%;
+    }
+
+    button, a, input[type='submit'] {
+      width: 100%;
+      font-size: 14px;
+      transition: opacity .2s ease;
+      text-align: center;
+
+      &:hover {
+        opacity: .8;
+      }
+    }
+
+    button {
+      width: 100%;
+    }
+
+    button a {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    a {
+      color: #fff;
+    }
+  }
+}

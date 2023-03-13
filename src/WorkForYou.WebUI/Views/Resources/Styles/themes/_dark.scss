@@ -13,3 +13,23 @@
   --search-border-color: #26262f;
   --danger-btn-color: rgb(52, 25, 25);
 }
+
+.dark-mode {
+  .header__settings-switcher svg {
+    fill: #ffce45;
+    stroke: #ffce45;
+  }
+
+  .vacancies-cards__card svg {
+    box-shadow: none;
+  }
+
+  .detail-button {
+    background-color: var(--inactive-color);
+    color: var(--subtitle-color);
+  }
+
+  .input {
+    color: var(--placeholder-color);
+  }
+}

@@ -2,11 +2,11 @@
 <html>
 <head>
     <link rel="icon" type="image/x-icon" href="~/img/favicon.ico">
-    <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="~/css/style.css">
     @await RenderSectionAsync("Styles", required: false)
     <title>@ViewData["Title"]</title>
 </head>
-<body>
+<body class="body">
     @await Html.PartialAsync("_MainHeader")
 
     <div class="wrapper">
@@ -18,7 +18,9 @@
     <script src="https://kit.fontawesome.com/0172dea2c0.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-affix.min.js"></script>
-    <script src="~/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/components/main/header.component.js"></script>
+    <script src="~/js/components/auth/logout.component.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("Notyf")
 </body>

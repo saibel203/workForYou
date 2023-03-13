@@ -3,14 +3,26 @@
 
 @import 'utils/_colors';
 @import 'utils/_fonts';
+@import 'utils/_transition';
 
 @import 'themes/_normal';
 @import 'themes/_dark';
 
+@import 'components/_main';
 @import 'components/_notify';
 @import 'components/_buttons';
 @import 'components/_sections';
 @import 'components/_validation';
+@import 'components/_modal';
+
+@import 'layout/_top-arrow';
+@import 'layout/_footer';
+@import 'layout/_header';
+@import 'layout/_search-bar';
+@import 'layout/_sidebar';
+@import 'layout/_like';
+@import 'layout/_pagination';
+@import 'layout/_media';
 
 @import 'pages/home/_main';
 @import 'pages/home/_navbar';
@@ -28,5 +40,13 @@
 @import 'pages/auth/_forms';
 @import 'pages/auth/_navbar';
 
-@import 'layout/_top-arrow';
-@import 'layout/_footer';
+@import 'pages/profile/_main';
+
+@import 'pages/chat/_details';
+@import 'pages/chat/_list';
+
+@import 'pages/card/_main';
+@import 'pages/card/_all';
+@import 'pages/card/_details';
+@import 'pages/card/_all-employer';
+@import 'pages/card/_create';

@@ -1,0 +1,248 @@
+.vacancies {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-left: 40px;
+
+  &__searched-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &-sorting {
+      display: flex;
+      align-items: center;
+
+      a {
+        margin-top: 2px;
+        margin-left: 10px;
+      }
+    }
+
+    &-general {
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    &-sort {
+      font-size: 14px;
+      color: var(--subtitle-color);
+      display: flex;
+      align-items: center;
+
+      &-name {
+        font-weight: 600;
+        color: var(--subtitle-color);
+      }
+
+      &-text {
+        padding-right: 15px;
+      }
+
+      &-icon {
+        font-size: 9px;
+        color: var(--placeholder-color);
+        margin-left: 6px;
+      }
+
+      &-select {
+        visibility: hidden;
+
+        input {
+          background-color: var(--header-bg-color);
+        }
+      }
+
+      .ddl {
+        position: relative;
+        height: 36px;
+        width: 300px;
+        text-align: initial;
+      }
+
+      .ddl::after {
+        content: '';
+        position: absolute;
+        top: 18px;
+        right: 20px;
+        width: 12px;
+        height: 2px;
+        background: #555;
+        z-index: 1;
+        transform: rotate(-40deg);
+        transition: 0.5s;
+      }
+
+      .ddl::before {
+        content: '';
+        position: absolute;
+        top: 18px;
+        right: 28px;
+        width: 12px;
+        height: 2px;
+        background: #555;
+        z-index: 1;
+        transform: rotate(40deg);
+        transition: 0.5s;
+      }
+
+      .ddl.active::after {
+        right: 28px;
+      }
+
+      .ddl.active::before {
+        right: 20px;
+      }
+
+      .ddl-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        border-radius: 10px;
+        padding: 10px 20px;
+        outline: none;
+        background: var(--header-bg-color);
+        border: 1px solid var(--header-bg-color);
+      }
+
+      .ddl.active .ddl-options {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .ddl .ddl-options {
+        position: absolute;
+        width: 100%;
+        top: 45px;
+        background: var(--theme-bg-color);
+        border-radius: 10px;
+        overflow: hidden;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.25s;
+        z-index: 999;
+        border: 1px solid var(--header-bg-color);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.10);
+      }
+
+      .ddl .ddl-options > div {
+        padding: 10px 20px;
+        cursor: pointer;
+      }
+
+      .ddl .ddl-options > div:hover {
+        background: var(--bs-primary);
+        color: var(--body-color);
+      }
+    }
+  }
+}
+
+.vacancies-cards {
+  padding-top: 20px;
+  display: grid;
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
+
+  &__card {
+    padding: 20px 16px;
+    background-color: var(--header-bg-color);
+    border-radius: 8px;
+    transition: .2s;
+
+    &-userinfo {
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+
+      &-image {
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+        float: left;
+        margin-right: 6px;
+        shape-outside: ellipse();
+
+        img {
+          width: auto;
+        }
+      }
+
+      a:last-child {
+        margin-left: 8px;
+        opacity: .7;
+      }
+    }
+
+    &-header {
+      padding-top: 10px;
+      opacity: .5;
+    }
+
+    &-title {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        font-weight: 600;
+        font-size: 25px;
+
+        & > span {
+          color: var(--level-button);
+          font-size: 18px;
+        }
+      }
+
+      div {
+        span {
+          font-size: 15px;
+          font-weight: 400;
+        }
+
+        i {
+          margin-left: 10px;
+        }
+      }
+    }
+
+    &-subtitle {
+      opacity: .9;
+      font-size: 13px;
+      margin-top: 14px;
+      line-height: 1.6em;
+    }
+
+    &-buttons {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 4px;
+
+      &-header {
+        min-width: 50%;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+      }
+
+      button, a, input[type='submit'] {
+        font-size: 15px;
+      }
+    }
+
+    &-company-info {
+      opacity: .8;
+      color: var(--subtitle-color);
+      font-weight: 400;
+      font-size: 13px;
+      margin: 13px 0 0 10px;
+    }
+  }
+}
