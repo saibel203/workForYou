@@ -45,5 +45,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 app.MapHub<ChatHub>("/hubs/chatHub");
+app.MapHub<OnlineUsersHub>("/hubs/onlineUsersHub");
 
 app.Run();

@@ -55,9 +55,35 @@
       }
 
       &-main {
+        display: flex;
+        align-items: baseline;
+        flex: 1;
+        flex-direction: row;
+        position: relative;
+        
         img {
           display: flex;
           width: 50px;
+        }
+        
+        .user-online {
+          display: flex !important;
+        }
+
+        span {
+          display: none;
+          position: absolute;
+          top: -7px;
+          right: -5px;
+          
+          &::after {
+            content: '';
+            display: inline-flex;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: #0f0;
+          }
         }
       }
 
@@ -67,16 +93,10 @@
 
         h3 {
           font-weight: 700;
-
-          span {
-            &::after {
-              content: '';
-              display: inline-flex;
-              border-radius: 50%;
-              width: 10px;
-              height: 10px;
-              background-color: #0f0;
-            }
+          transition: all .2s ease;
+          
+          &:hover {
+            opacity: .8;
           }
         }
 

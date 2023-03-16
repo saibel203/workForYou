@@ -361,6 +361,7 @@ namespace WorkForYou.Infrastructure.DatabaseContext.Migrations
                     ToSalary = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "date", nullable: false),
                     ViewCount = table.Column<int>(type: "int", nullable: false),
+                    FavouriteCount = table.Column<int>(type: "int", nullable: false),
                     ReviewsCount = table.Column<int>(type: "int", nullable: false),
                     VacancyDomainId = table.Column<int>(type: "int", nullable: false),
                     WorkCategoryId = table.Column<int>(type: "int", nullable: false),

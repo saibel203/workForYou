@@ -39,8 +39,19 @@
 
       h3 {
         font-weight: 700;
+        display: flex;
+        position: relative;
+
+        .user-online {
+          display: flex !important;
+        }
 
         span {
+          display: none;
+          position: absolute;
+          top: 0;
+          right: -10px;
+          
           &::after {
             content: '';
             display: inline-flex;

@@ -21,40 +21,50 @@
 
             if (oppositeUser is not null)
             {
-                <a asp-controller="Chat" asp-action="ChatDetails" asp-route-id="@chat.ChatRoomId">
-                    <div class="chat-wrapper__chats-chat">
-                        <div class="char-wrapper__chats-chat-inner-wrapper">
-                            <div class="chat-wrapper__chats-chat-main">
-                                @if (string.IsNullOrEmpty(oppositeUser.ImagePath))
-                                {
-                                    <img src="~/img/userImages/default-user-image.png" alt="User image" class="img">
-                                }
-                                else
-                                {
-                                    <img src="@oppositeUser.ImagePath" alt="User image" class="img">
-                                }
-                            </div>
-                            <div class="chat-wrapper__chats-chat-info">
-                                <h3>
-                                    @oppositeUser.LastName @oppositeUser.FirstName (@oppositeUser.UserName) <span></span>
-                                </h3>
-                                @if (User.IsInRole("employer"))
-                                {
-                                    <p>@oppositeUser.CandidateUser?.CompanyPosition</p>
-                                }
-                                else
-                                {
-                                    <p>@oppositeUser.EmployerUser?.CompanyName (@oppositeUser.EmployerUser?.CompanyPosition)</p>
-                                }
-                            </div>
+                <div class="chat-wrapper__chats-chat">
+                    <div class="char-wrapper__chats-chat-inner-wrapper">
+                        <div class="chat-wrapper__chats-chat-main" id="chats">
+                            @if (string.IsNullOrEmpty(oppositeUser.ImagePath))
+                            {
+                                <img src="~/img/userImages/default-user-image.png" alt="User image" class="img">
+                                <span></span>
+                            }
+                            else
+                            {
+                                <img src="@oppositeUser.ImagePath" alt="User image" class="img">
+                                <span></span>
+                            }
                         </div>
-                        <form method="post" asp-controller="Chat" asp-action="RemoveChatRoom" asp-antiforgery="true">
-                            <input type="hidden" name="chatId" value="@chat.ChatRoomId">
-                            <button type="submit" class="chat-remove-btn"><i class="fa-sharp fa-solid fa-bucket"></i></button>
-                        </form>
+                        <div class="chat-wrapper__chats-chat-info">
+                            <a asp-controller="Chat" asp-action="ChatDetails" asp-route-id="@chat.ChatRoomId">
+                                <h3>
+                                    @oppositeUser.LastName @oppositeUser.FirstName (@oppositeUser.UserName)
+                                    <input type="hidden" value="@oppositeUser.UserName" class="opposite-username">
+                                </h3>
+                            </a>
+                            @if (User.IsInRole("employer"))
+                            {
+                                <p>@oppositeUser.CandidateUser?.CompanyPosition</p>
+                            }
+                            else
+                            {
+                                <p>@oppositeUser.EmployerUser?.CompanyName (@oppositeUser.EmployerUser?.CompanyPosition)</p>
+                            }
+                        </div>
                     </div>
-                </a>
+                    <button class="remove-chat-button chat-remove-btn">
+                        <i class="fa-sharp fa-solid fa-bucket"></i>
+                    </button>
+                    <input type="hidden" class="chat-room-id" value="@chat.ChatRoomId">
+                </div>
             }
         }
     </div>
 </div>
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" src="~/js/components/chat/chat.component.js"></script>
+    <script type="module" src="~/js/components/chat/online.component.js"></script>
+}

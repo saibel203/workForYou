@@ -303,6 +303,7 @@ public class FavouriteListService : IFavouriteListService
 
             if (isVacancyInListResult.IsVacancyInFavouriteList)
             {
+                vacancy.FavouriteCount--;
                 _context.FavouriteVacancies.Remove(favourite);
                 await _context.SaveChangesAsync();
 
@@ -313,6 +314,7 @@ public class FavouriteListService : IFavouriteListService
                 };
             }
 
+            vacancy.FavouriteCount++;
             await _context.FavouriteVacancies.AddAsync(favourite);
             await _context.SaveChangesAsync();
 

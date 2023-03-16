@@ -13,6 +13,7 @@ public class Vacancy
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public int ViewCount { get; set; }
     public int ReviewsCount { get; set; }
+    public int FavouriteCount { get; set; }
 
     public int WorkCategoryId { get; set; }
     public WorkCategory? WorkCategory { get; set; }
