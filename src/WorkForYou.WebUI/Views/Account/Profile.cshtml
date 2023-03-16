@@ -32,13 +32,35 @@
                 @if (string.IsNullOrEmpty(Model.ImagePath))
                 {
                     <div class="card-details__body-profile-image">
-                        <img src="~/img/userImages/default-user-image.png" alt="Default user image" class="img">
+                        <figure class="snip1566">
+                            <img src="~/img/userImages/default-user-image.png" alt="Default user image" class="img">
+                            <figcaption>
+                                <i class="fa-regular fa-image"></i>
+                            </figcaption>
+                            <form id="image-form" method="post" asp-controller="Account" asp-action="ProfileUploadImage"
+                                  asp-antiforgery="true"
+                                  enctype="multipart/form-data">
+                                <input type="file" name="UserFile" style="display: none;" id="image-form-file">
+                                <a id="image-form-send"></a>
+                            </form>
+                        </figure>
                     </div>
                 }
                 else
                 {
                     <div class="card-details__body-profile-image">
-                        <img src="@Model.ImagePath" alt="User image" class="img">
+                        <figure class="snip1566">
+                            <img src="@Model.ImagePath" alt="User image" class="img">
+                            <figcaption>
+                                <i class="fa-regular fa-image"></i>
+                            </figcaption>
+                            <form id="image-form" method="post" asp-controller="Account" asp-action="ProfileUploadImage"
+                                  asp-antiforgery="true"
+                                  enctype="multipart/form-data">
+                                <input type="file" name="UserFile" style="display: none;" id="image-form-file">
+                                <a id="image-form-send"></a>
+                            </form>
+                        </figure>
                     </div>
                 }
                 <p>@Model.CandidateUser.ExperienceWorkDescription</p>
@@ -252,3 +274,8 @@
     </div>
 }
 </div>
+
+@section Scripts
+{
+    <script src="~/js/components/profile/select-photo.component.js"></script>
+}

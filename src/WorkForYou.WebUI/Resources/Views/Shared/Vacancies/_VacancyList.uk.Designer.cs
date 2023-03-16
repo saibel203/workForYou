@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WorkForYou.WebUI.Resources.Views.Shared {
+namespace WorkForYou.WebUI.Resources.Views.Shared.Vacancies {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class _SearchBar_en {
+    internal class _VacancyList_uk {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal _SearchBar_en() {
+        internal _VacancyList_uk() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebUI.Resources.Views.Shared._SearchBar.en", typeof(_SearchBar_en).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebUI.Resources.Views.Shared._VacancyList.uk", typeof(_VacancyList_uk).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,11 +60,47 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter name.
+        ///   Looks up a localized string similar to досвіду.
         /// </summary>
-        internal static string Name {
+        internal static string Experience {
             get {
-                return ResourceManager.GetString("Name", resourceCulture);
+                return ResourceManager.GetString("Experience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Без досвіду.
+        /// </summary>
+        internal static string NoExperience {
+            get {
+                return ResourceManager.GetString("NoExperience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Читати все.
+        /// </summary>
+        internal static string ReadAll {
+            get {
+                return ResourceManager.GetString("ReadAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Релокейт.
+        /// </summary>
+        internal static string Relocate {
+            get {
+                return ResourceManager.GetString("Relocate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сьогодні.
+        /// </summary>
+        internal static string Today {
+            get {
+                return ResourceManager.GetString("Today", resourceCulture);
             }
         }
     }

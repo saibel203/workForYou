@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WorkForYou.WebUI.Resources.Views.Shared {
+namespace WorkForYou.WebUI.Resources.Views.Shared.Vacancies {
     using System;
     
     

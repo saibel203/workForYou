@@ -1,4 +1,5 @@
 import { addToFavouriteList } from "../../services/favourite.service.js";
+import { errorMessage, successMessage } from "../../services/notification.service.js";
 const likeForms = document.querySelectorAll('.form-like');
 const likeButtons = document.querySelectorAll('.form-like-button');
 const likePath = document.querySelectorAll('.like-heart');
@@ -22,9 +23,11 @@ for (let i = 0; i < likeForms.length; i++) {
             id: formIdValue
         };
         addToFavouriteList(path, data)
-            .then()
-            .catch(error => {
-            console.log(error);
+            .then((response) => {
+            successMessage(response.localMessage);
+        })
+            .catch((error) => {
+            errorMessage(`${error.errorCode} error: ${error.errorMessage}`);
         });
     });
 }

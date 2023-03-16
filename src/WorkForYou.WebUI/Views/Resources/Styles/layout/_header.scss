@@ -1,3 +1,5 @@
+@import '../utils/_colors';
+
 .header {
   position: relative;
   display: flex;
@@ -50,10 +52,22 @@
     display: flex;
     align-items: center;
     font-weight: 500;
+    
+    &-bell {
+      display: flex;
+      margin-right: 10px;
+      
+      svg {
+        width: 22px;
+        cursor: pointer;
+        color: $header-main-color;
+      }
+    }
 
     svg {
       width: 20px;
-      color: #94949f;
+      color: $header-main-color;
+      margin-right: 10px;
     }
 
     &-switcher {

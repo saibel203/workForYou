@@ -11,19 +11,18 @@
 
 @{
     ViewData["Title"] = ViewLocalization["Title"];
-    var currentPath = Context.Request.Path + Context.Request.QueryString;
 }
 
 <div class="main__search">
-    @await Html.PartialAsync("_SearchBar")
-    @await Html.PartialAsync("_Filtering")
+    @await Html.PartialAsync("Vacancies/_SearchBar")
+    @await Html.PartialAsync("Vacancies/_Filtering")
 </div>
 
 <div class="vacancies">
     <div class="vacancies__searched-bar">
         <div class="vacancies__searched-bar-general">@Model.VacancyCount @ViewLocalization["Candidate"]@(ViewHelpers.GetLastStringLetters(Model.VacancyCount))</div>
         <div class="vacancies__searched-bar-sort">
-            @await Html.PartialAsync("_Sorting")
+            @await Html.PartialAsync("Vacancies/_Sorting")
             <a asp-controller="Favourite" asp-action="FavouriteEmployerList" class="search-buttons detail-button detail-danger">@ViewLocalization["ResetFilters"]</a>
         </div>
     </div>
@@ -113,9 +112,9 @@
                                 </form>
                             }
                         </div>
-                        @await Html.PartialAsync("_LikeButton", new SettingsViewModel
+                        @await Html.PartialAsync("Vacancies/_LikeButton", new SettingsViewModel
                                {
-                                   CurrentVacancyId = user.CandidateUserId, ReturnUrl = currentPath,
+                                   CurrentVacancyId = user.CandidateUserId,
                                    CurrentController = Model.CurrentController, CurrentAction = Model.CurrentAction
                                })
                     </div>
@@ -124,12 +123,12 @@
         }
     </div>
 
-    @await Html.PartialAsync("_Pagination")
+    @await Html.PartialAsync("Vacancies/_Pagination")
 
     @section Scripts
     {
-        <script src="~/js/custom-select.js"></script>
-        <script type="module" src="~/js/favourite-list.js"></script>
+        @* <script src="~/js/custom-select.js"></script> *@
+        <script type="module" src="~/js/components/favourite/favourite.component.js"></script>
     }
 
 </div>

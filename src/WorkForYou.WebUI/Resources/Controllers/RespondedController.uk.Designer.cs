@@ -78,24 +78,6 @@ namespace WorkForYou.WebUI.Resources.Controllers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ви успішно відмінили відгук на вакансію.
-        /// </summary>
-        internal static string SuccessCancelRespondToVacancy {
-            get {
-                return ResourceManager.GetString("SuccessCancelRespondToVacancy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ви успішно відгукнулися на вакансію.
-        /// </summary>
-        internal static string SuccessRespondToVacancy {
-            get {
-                return ResourceManager.GetString("SuccessRespondToVacancy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Вакансій за вашим запитом не знайдено або з вакансіями не було проведено жодних дій.
         /// </summary>
         internal static string VacanciesNotFound {

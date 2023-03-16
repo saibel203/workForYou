@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WorkForYou.WebUI.Resources.Views.Shared {
+namespace WorkForYou.WebAPI.Resources.Controllers {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class _Filtering_uk {
+    internal class RespondedController_en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal _Filtering_uk() {
+        internal RespondedController_en() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebUI.Resources.Views.Shared._Filtering.uk", typeof(_Filtering_uk).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebAPI.Resources.Controllers.RespondedController.en", typeof(RespondedController_en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,65 +60,20 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Шукати.
+        ///   Looks up a localized string similar to You have successfully canceled your feedback on the vacancy.
         /// </summary>
-        internal static string Button {
+        internal static string SuccessCancelRespond {
             get {
-                return ResourceManager.GetString("Button", resourceCulture);
+                return ResourceManager.GetString("SuccessCancelRespond", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Категорії.
+        ///   Looks up a localized string similar to You have successfully responded to the vacancy.
         /// </summary>
-        internal static string Category {
+        internal static string SuccessRespond {
             get {
-                return ResourceManager.GetString("Category", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Мова спілкування.
-        /// </summary>
-        internal static string CommunicationLanguage {
-            get {
-                return ResourceManager.GetString("CommunicationLanguage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Тип компанії.
-        /// </summary>
-        internal static string CompanyType {
-            get {
-                return ResourceManager.GetString("CompanyType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Зайнятість.
-        /// </summary>
-        internal static string Employment {
-            get {
-                return ResourceManager.GetString("Employment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Рівень англійської.
-        /// </summary>
-        internal static string EnglishLevel {
-            get {
-                return ResourceManager.GetString("EnglishLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Регіон.
-        /// </summary>
-        internal static string Region {
-            get {
-                return ResourceManager.GetString("Region", resourceCulture);
+                return ResourceManager.GetString("SuccessRespond", resourceCulture);
             }
         }
     }

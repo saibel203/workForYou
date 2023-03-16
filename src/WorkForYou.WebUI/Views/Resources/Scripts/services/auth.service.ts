@@ -1,6 +1,7 @@
+import {ILoginResponse} from "../models/interfaces/ILoginResponse.interface.js";
 import {environments} from "../constants/environments.js";
 
-export async function login(path: string, data: object) {
+export async function login(path: string, data: object): Promise<ILoginResponse> {
     const fullPath: string = environments.webAPIProject + '/api/auth' + path;
     const body: BodyInit = JSON.stringify(data);
     const headers: HeadersInit = new Headers();

@@ -1,6 +1,9 @@
 import {environments} from "../constants/environments.js";
+import {IResponseError} from "../models/interfaces/IResponseError.interface.js";
+import {IResponseMessage} from "../models/interfaces/IResponseMessage.interface.js";
+import {ResponseError} from "../models/ResponseError.js";
 
-export async function respondToVacancy(path: string, data: object) {
+export async function respondToVacancy(path: string, data: object): Promise<IResponseMessage | IResponseError> {
     const fullPath: string = environments.webAPIProject + '/api/responded' + path;
     const token: string = localStorage.getItem('token');
     const method: string = 'POST';
@@ -19,5 +22,10 @@ export async function respondToVacancy(path: string, data: object) {
         body: body
     });
     
-    return response.json();
+    const responseResult = await response.json();
+    
+    if (response.ok)
+        return responseResult;
+    
+    throw new ResponseError(responseResult);
 }

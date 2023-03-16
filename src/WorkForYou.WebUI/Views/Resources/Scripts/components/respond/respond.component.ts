@@ -1,4 +1,7 @@
+import {IResponseMessage} from "../../models/interfaces/IResponseMessage.interface.js";
+import {errorMessage, successMessage} from "../../services/notification.service.js";
 import {respondToVacancy} from "../../services/respond.service.js";
+import {IResponseError} from "../../models/interfaces/IResponseError.interface.js";
 
 const respondVacancyButton = document.getElementById('respond-vacancy-button') as HTMLInputElement | null;
 const removeRespondVacancyButton = document.getElementById('remove-respond-vacancy-button') as HTMLInputElement | null;
@@ -17,16 +20,11 @@ function respond() {
     };
 
     respondToVacancy(path, data)
-        .then(result => {
-            // @ts-ignore
-            Swal.fire(
-                'Good job!',
-                result.message,
-                'success'
-            )
+        .then((response: IResponseMessage) => {
+            successMessage(response.message.value);
         })
-        .catch(error => {
-            console.log(error);
+        .catch((error: IResponseError) => {
+            errorMessage(`${error.errorCode} error: ${error.errorMessage}`);
         });
 
     if (path === '/newResponded') {

@@ -11,8 +11,8 @@
     <div class="all-employer-vacancies">
         <div class="all-employer-vacancies__header">
             <h1>@ViewLocalization["YourVacancies"] (@Model.VacancyCount)</h1>
-            @await Html.PartialAsync("_SearchBar")
-            @await Html.PartialAsync("_Sorting")
+            @await Html.PartialAsync("Vacancies/_SearchBar")
+            @await Html.PartialAsync("Vacancies/_Sorting")
         </div>
 
         <div class="all-employer-vacancies__buttons">
@@ -42,7 +42,7 @@
         }
     </div>
 
-    @await Html.PartialAsync("_Pagination")
+    @await Html.PartialAsync("Vacancies/_Pagination")
 
     @section Scripts
     {

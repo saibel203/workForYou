@@ -9,19 +9,18 @@
 @{
     ViewData["Title"] = ViewLocalization["Title"];
     const string employerController = "EmployerAccount";
-    var currentPath = Context.Request.Path + Context.Request.QueryString;
 }
 
 <div class="main__search">
-    @await Html.PartialAsync("_SearchBar")
-    @await Html.PartialAsync("_Filtering")
+    @await Html.PartialAsync("Vacancies/_SearchBar")
+    @await Html.PartialAsync("Vacancies/_Filtering")
 </div>
 
 <div class="vacancies">
     <div class="vacancies__searched-bar">
         <div class="vacancies__searched-bar-general">@Model.VacancyCount @ViewLocalization["View"]@(ViewHelpers.GetLastStringLetters(Model.VacancyCount))</div>
         <div class="vacancies__searched-bar-sort">
-            @await Html.PartialAsync("_Sorting")
+            @await Html.PartialAsync("Vacancies/_Sorting")
             <a asp-controller="Responded" asp-action="AllVacancyResponses" asp-route-vacancyId="@Model.CurrentVacancyId" class="search-buttons detail-button detail-danger">@ViewLocalization["Reset"]</a>
         </div>
     </div>
@@ -93,10 +92,10 @@
                             </a>
                             <a class="search-buttons card-buttons">@ViewLocalization["Write"]</a>
                         </div>
-                        @await Html.PartialAsync("_LikeButton", new SettingsViewModel
+                        @await Html.PartialAsync("Vacancies/_LikeButton", new SettingsViewModel
                                {
                                    CurrentVacancyId = user.CandidateUser.CandidateUserId,
-                                   CurrentController = employerController, ReturnUrl = currentPath
+                                   CurrentController = employerController
                                })
                     </div>
                 </div>
@@ -104,12 +103,12 @@
         }
     </div>
 
-    @await Html.PartialAsync("_Pagination")
+    @await Html.PartialAsync("Vacancies/_Pagination")
 
     @section Scripts
     {
-        <script src="~/js/custom-select.js"></script>
-        @* <script type="module" src="~/js/favourite-list.js"></script> *@
+        @* <script src="~/js/custom-select.js"></script> *@
+        <script type="module" src="~/js/components/favourite/favourite.component.js"></script>
     }
 
 </div>

@@ -8,9 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Views\Resources\Scripts\model" />
         <Folder Include="wwwroot\css" />
-        <Folder Include="wwwroot\js" />
         <Folder Include="wwwroot\libs" />
     </ItemGroup>
 
@@ -126,22 +124,6 @@
       <EmbeddedResource Update="Resources\Views\Shared\_MainHeader.uk.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>_MainHeader.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Shared\_SearchBar.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>_SearchBar.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Shared\_SearchBar.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>_SearchBar.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Shared\_Sorting.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>_Sorting.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Shared\_Sorting.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>_Sorting.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Resources\Views\Account\Profile.uk.resx">
         <Generator>ResXFileCodeGenerator</Generator>
@@ -383,14 +365,6 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>CheckModelSalaryAttribute.uk.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Shared\_Filtering.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>_Filtering.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Shared\_Filtering.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>_Filtering.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
       <EmbeddedResource Update="Resources\Views\Responded\AllVacancyResponses.uk.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AllVacancyResponses.uk.Designer.cs</LastGenOutput>
@@ -458,6 +432,46 @@
       <EmbeddedResource Update="Resources\IdentityErrors.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>IdentityErrors.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_Filtering.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_Filtering.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_Filtering.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_Filtering.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_SearchBar.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_SearchBar.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_SearchBar.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_SearchBar.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_Sorting.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_Sorting.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_Sorting.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_Sorting.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_VacancyList.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_VacancyList.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_VacancyList.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_VacancyList.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_SearchBlock.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_SearchBlock.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Shared\Vacancies\_SearchBlock.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>_SearchBlock.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -576,26 +590,6 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>_MainHeader.uk.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Views\Shared\_SearchBar.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>_SearchBar.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Views\Shared\_SearchBar.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>_SearchBar.uk.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Views\Shared\_Sorting.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>_Sorting.uk.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Views\Shared\_Sorting.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>_Sorting.en.resx</DependentUpon>
       </Compile>
       <Compile Update="Resources\Views\Account\Profile.uk.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -897,16 +891,6 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>CheckModelSalaryAttribute.uk.resx</DependentUpon>
       </Compile>
-      <Compile Update="Resources\Views\Shared\_Filtering.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>_Filtering.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Views\Shared\_Filtering.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>_Filtering.uk.resx</DependentUpon>
-      </Compile>
       <Compile Update="Resources\Views\Responded\AllVacancyResponses.uk.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -992,6 +976,56 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>IdentityErrors.resx</DependentUpon>
       </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_Filtering.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_Filtering.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_Filtering.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_Filtering.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_SearchBar.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_SearchBar.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_SearchBar.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_SearchBar.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_Sorting.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_Sorting.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_Sorting.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_Sorting.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_VacancyList.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_VacancyList.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_VacancyList.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_VacancyList.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_SearchBlock.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_SearchBlock.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Shared\Vacancies\_SearchBlock.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>_SearchBlock.en.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -1025,6 +1059,16 @@
       <_ContentIncludedByDefault Remove="wwwroot\js\tags.js" />
       <_ContentIncludedByDefault Remove="wwwroot\js\text-editor.js" />
       <_ContentIncludedByDefault Remove="wwwroot\libs\css\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\ILocalizationResponse.interface.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\ILocalizationResponse.interface.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\ILoginResponse.interface.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\ILoginResponse.interface.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\IResponseError.interface.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\IResponseError.interface.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\IResponseMessage.interface.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\IResponseMessage.interface.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\ResponseError.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\model\ResponseError.min.js" />
     </ItemGroup>
 
     <Target Name="PrepublishScriptsAndStyles" BeforeTargets="BeforeBuild">

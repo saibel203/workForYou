@@ -21,14 +21,8 @@
     <data name="ErrorWhenTryRespondToVacancy" xml:space="preserve">
         <value>При спробі відгукнутися на вакансію виникла помилка</value>
     </data>
-    <data name="SuccessRespondToVacancy" xml:space="preserve">
-        <value>Ви успішно відгукнулися на вакансію</value>
-    </data>
     <data name="ErrorWhenTryCancelRespondToVacancy" xml:space="preserve">
         <value>При спробі відмінити відгук на вакансію відбулася помилка</value>
-    </data>
-    <data name="SuccessCancelRespondToVacancy" xml:space="preserve">
-        <value>Ви успішно відмінили відгук на вакансію</value>
     </data>
     <data name="VacanciesNotFound" xml:space="preserve">
         <value>Вакансій за вашим запитом не знайдено або з вакансіями не було проведено жодних дій</value>

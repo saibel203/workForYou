@@ -7,6 +7,7 @@ using WorkForYou.Core.DTOModels.ChatDTOs;
 using WorkForYou.Core.RepositoryInterfaces;
 using WorkForYou.Core.Responses.Repositories;
 using WorkForYou.Core.ServiceInterfaces;
+using WorkForYou.Shared.InputModels;
 using WorkForYou.WebUI.Hubs;
 
 namespace WorkForYou.WebUI.Controllers;
@@ -115,18 +116,18 @@ public class ChatController : BaseController
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> SendMessage(string message, int roomId)
+    public async Task<IActionResult> SendMessage([FromBody] SendMessageInputModel sendMessageInputModel)
     {
         var currentUsername = GetUsername();
         var createMessageDto = new CreateMessageDto
         {
-            MessageContent = message,
-            RoomId = roomId
+            MessageContent = sendMessageInputModel.Message,
+            RoomId = sendMessageInputModel.RoomId
         };
         var createMessageResult = await _unitOfWork.ChatRepository
             .CreateChatMessageAsync(createMessageDto, currentUsername);
 
-        await _hubContext.Clients.Group(roomId.ToString()).SendAsync("ReceiveMessage", new
+        await _hubContext.Clients.Group(sendMessageInputModel.RoomId.ToString()).SendAsync("ReceiveMessage", new
         {
             createMessageResult.ChatMessage!.Content,
             createMessageResult.ChatMessage.Name,

@@ -112,12 +112,6 @@
             <input type="submit" class="search-buttons card-buttons" value="@ViewLocalization["Button"]">
         </div>
     </form>
-
-    <form method="post" asp-controller="Account" asp-action="ProfileUploadImage" asp-antiforgery="true"
-          enctype="multipart/form-data">
-        <input type="file" name="UserFile">
-        <input type="submit">
-    </form>
 </div>
 
 @section Scripts

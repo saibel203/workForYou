@@ -1,4 +1,7 @@
 import {addToFavouriteList} from "../../services/favourite.service.js";
+import {IResponseMessage} from "../../models/interfaces/IResponseMessage.interface.js";
+import {IResponseError} from "../../models/interfaces/IResponseError.interface.js";
+import {errorMessage, successMessage} from "../../services/notification.service.js";
 
 const likeForms: any = document.querySelectorAll('.form-like');
 const likeButtons = document.querySelectorAll('.form-like-button') as NodeListOf<Element> | null;
@@ -28,9 +31,11 @@ for (let i = 0; i < likeForms.length; i++) {
         };
 
         addToFavouriteList(path, data)
-            .then()
-            .catch(error => {
-                console.log(error);
+            .then((response: IResponseMessage) => {
+                successMessage(response.localMessage);
+            })
+            .catch((error: IResponseError) => {
+                errorMessage(`${error.errorCode} error: ${error.errorMessage}`);
             });
     });
 }

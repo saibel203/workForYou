@@ -1,3 +1,4 @@
+import { errorMessage, successMessage } from "../../services/notification.service.js";
 import { respondToVacancy } from "../../services/respond.service.js";
 const respondVacancyButton = document.getElementById('respond-vacancy-button');
 const removeRespondVacancyButton = document.getElementById('remove-respond-vacancy-button');
@@ -12,12 +13,11 @@ function respond() {
         id: +(respondVacancyId === null || respondVacancyId === void 0 ? void 0 : respondVacancyId.value)
     };
     respondToVacancy(path, data)
-        .then(result => {
-        // @ts-ignore
-        Swal.fire('Good job!', result.message, 'success');
+        .then((response) => {
+        successMessage(response.message.value);
     })
-        .catch(error => {
-        console.log(error);
+        .catch((error) => {
+        errorMessage(`${error.errorCode} error: ${error.errorMessage}`);
     });
     if (path === '/newResponded') {
         respondVacancyButton.style.display = 'none';

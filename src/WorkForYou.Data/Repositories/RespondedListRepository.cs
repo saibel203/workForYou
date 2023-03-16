@@ -13,7 +13,7 @@ namespace WorkForYou.Data.Repositories;
 public class RespondedListRepository : GenericRepository<RespondedList>, IRespondedListRepository
 {
     private const int PageSize = 7;
-    
+
     public RespondedListRepository(WorkForYouDbContext context, ILogger logger) : base(context, logger)
     {
     }
@@ -30,7 +30,8 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
                 };
 
             var user = await Context.Users.FirstOrDefaultAsync(userData => userData.UserName == usernameDto.Username);
-            var vacancy = await Context.Vacancies.FirstOrDefaultAsync(vacancyData => vacancyData.VacancyId == vacancyId);
+            var vacancy =
+                await Context.Vacancies.FirstOrDefaultAsync(vacancyData => vacancyData.VacancyId == vacancyId);
 
             if (vacancy is null)
                 return new()
@@ -38,7 +39,7 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
                     Message = "Vacancy not found",
                     IsSuccessfully = false
                 };
-            
+
             if (user is null)
                 return new()
                 {
@@ -47,7 +48,7 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
                 };
 
             const string candidateRole = "candidate";
-            
+
             if (usernameDto.UserRole != candidateRole)
                 return new()
                 {
@@ -63,7 +64,7 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
 
             await DbSet.AddAsync(response);
             vacancy.ReviewsCount++;
-            
+
             await Context.SaveChangesAsync();
 
             return new()
@@ -74,10 +75,10 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error getting user");
+            Logger.LogError(ex, "There was an error while trying to respond to the vacancy");
             return new()
             {
-                Message = "Error getting user",
+                Message = "There was an error while trying to respond to the vacancy",
                 IsSuccessfully = false
             };
         }
@@ -93,9 +94,10 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
                     Message = "Error getting user",
                     IsSuccessfully = false
                 };
-            
+
             var user = await Context.Users.FirstOrDefaultAsync(userData => userData.UserName == usernameDto.Username);
-            var vacancy = await Context.Vacancies.FirstOrDefaultAsync(vacancyData => vacancyData.VacancyId == vacancyId);
+            var vacancy =
+                await Context.Vacancies.FirstOrDefaultAsync(vacancyData => vacancyData.VacancyId == vacancyId);
 
             if (vacancy is null)
                 return new()
@@ -103,22 +105,13 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
                     Message = "Vacancy not found",
                     IsSuccessfully = false
                 };
-            
+
             if (user is null)
                 return new()
                 {
                     Message = "Error getting user",
                     IsSuccessfully = false
                 };
-
-            //var userRole = await _authService.IsUserCandidate(usernameDto);
-
-            // if (!userRole.IsSuccessfully || !userRole.IsUserCandidate)
-            //     return new()
-            //     {
-            //         Message = "The user may not be a candidate",
-            //         IsSuccessfully = false
-            //     };
 
             var response = new RespondedList
             {
@@ -128,7 +121,7 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
 
             DbSet.Remove(response);
             vacancy.ReviewsCount--;
-            
+
             await Context.SaveChangesAsync();
 
             return new()
@@ -139,16 +132,17 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error getting user");
+            Logger.LogError(ex, "An error occurred while trying to cancel a job review");
             return new()
             {
-                Message = "Error getting user",
+                Message = "An error occurred while trying to cancel a job review",
                 IsSuccessfully = false
             };
         }
     }
 
-    public async Task<VacancyResponse> AllCandidateRespondedAsync(UsernameDto? usernameDto, QueryParameters queryParameters)
+    public async Task<VacancyResponse> AllCandidateRespondedAsync(UsernameDto? usernameDto,
+        QueryParameters queryParameters)
     {
         try
         {
@@ -161,14 +155,14 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
 
             var userData = await Context.Users
                 .FirstOrDefaultAsync(userData => userData.UserName == usernameDto.Username);
-            
+
             if (userData is null || userData.CandidateUser is null)
                 return new()
                 {
                     Message = "Error getting user",
                     IsSuccessfully = false
                 };
-            
+
             int skipAmount = PageSize * (queryParameters.PageNumber - 1);
 
             var vacancies = DbSet
@@ -177,12 +171,12 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
                 .Select(respondData => respondData.Vacancy!).AsQueryable();
 
             if (!string.IsNullOrEmpty(queryParameters.SearchString))
-                vacancies = vacancies.Where(vacancyData => 
+                vacancies = vacancies.Where(vacancyData =>
                     EF.Functions.Like(vacancyData.VacancyTitle, $"%{queryParameters.SearchString}%"));
 
             vacancies = ListSortingHelper.FavouriteListVacancySort(queryParameters, vacancies);
             vacancies = FilteringHelper.RespondedListVacanciesFiltering(queryParameters, vacancies);
-            
+
             var vacanciesCount = vacancies.Count();
             var pageCount = (int) Math.Ceiling((double) vacanciesCount / PageSize);
 
@@ -216,7 +210,7 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
         try
         {
             var isVacancyInRespondedList = await DbSet
-                .AnyAsync(respondedData => 
+                .AnyAsync(respondedData =>
                     respondedData.ApplicationUserId == userId && respondedData.VacancyId == vacancyId);
 
             if (isVacancyInRespondedList)
@@ -226,7 +220,7 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
                     IsSuccessfully = true,
                     IsVacancyInFavouriteList = true
                 };
-            
+
             return new()
             {
                 Message = "The vacancy is not in the list of reviews",
@@ -249,7 +243,8 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
     {
         try
         {
-            var vacancyData = await Context.Vacancies.FirstOrDefaultAsync(vacancyData => vacancyData.VacancyId == vacancyId);
+            var vacancyData =
+                await Context.Vacancies.FirstOrDefaultAsync(vacancyData => vacancyData.VacancyId == vacancyId);
 
             if (vacancyData is null)
                 return new()
@@ -257,23 +252,24 @@ public class RespondedListRepository : GenericRepository<RespondedList>, IRespon
                     Message = "",
                     IsSuccessfully = false
                 };
-            
+
             int skipAmount = PageSize * (queryParameters.PageNumber - 1);
-            
+
             var users = DbSet
                 .Include(x => x.Vacancy)
                 .Include(x => x.ApplicationUser!.CandidateUser)
                 .Where(x => x.ApplicationUser!.CandidateUser!.IsProfileComplete)
                 .Where(x => x.VacancyId == vacancyId)
                 .Select(x => x.ApplicationUser!).AsQueryable();
-            
+
             if (!string.IsNullOrEmpty(queryParameters.SearchString))
                 users = users
-                    .Where(x => EF.Functions.Like(x.CandidateUser!.CompanyPosition!, $"%{queryParameters.SearchString}%"));
-            
+                    .Where(x => EF.Functions.Like(x.CandidateUser!.CompanyPosition!,
+                        $"%{queryParameters.SearchString}%"));
+
             users = ListSortingHelper.VacancyResponsesListSort(queryParameters, users);
             users = FilteringHelper.ResponsesListCandidateFiltering(queryParameters, users);
-            
+
             var vacanciesCount = users.Count();
             var pageCount = (int) Math.Ceiling((double) vacanciesCount / PageSize);
 

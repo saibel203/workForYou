@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WorkForYou.WebUI.Resources.Views.Shared {
+namespace WorkForYou.WebUI.Resources.Views.Shared.Vacancies {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class _Sorting_uk {
+    internal class _VacancyList_en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal _Sorting_uk() {
+        internal _VacancyList_en() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebUI.Resources.Views.Shared._Sorting.uk", typeof(_Sorting_uk).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebUI.Resources.Views.Shared._VacancyList.en", typeof(_VacancyList_en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,56 +60,47 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to За датою публікації.
+        ///   Looks up a localized string similar to experience.
         /// </summary>
-        internal static string ByDate {
+        internal static string Experience {
             get {
-                return ResourceManager.GetString("ByDate", resourceCulture);
+                return ResourceManager.GetString("Experience", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to За досвідом роботи.
+        ///   Looks up a localized string similar to No experience.
         /// </summary>
-        internal static string ByExperience {
+        internal static string NoExperience {
             get {
-                return ResourceManager.GetString("ByExperience", resourceCulture);
+                return ResourceManager.GetString("NoExperience", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to За кількістю відгуків.
+        ///   Looks up a localized string similar to Read all.
         /// </summary>
-        internal static string ByReviews {
+        internal static string ReadAll {
             get {
-                return ResourceManager.GetString("ByReviews", resourceCulture);
+                return ResourceManager.GetString("ReadAll", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to За зарплатою.
+        ///   Looks up a localized string similar to Relocate.
         /// </summary>
-        internal static string BySalary {
+        internal static string Relocate {
             get {
-                return ResourceManager.GetString("BySalary", resourceCulture);
+                return ResourceManager.GetString("Relocate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to За кількістю переглядів.
+        ///   Looks up a localized string similar to Today.
         /// </summary>
-        internal static string ByViews {
+        internal static string Today {
             get {
-                return ResourceManager.GetString("ByViews", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Сортувати за.
-        /// </summary>
-        internal static string SortTitle {
-            get {
-                return ResourceManager.GetString("SortTitle", resourceCulture);
+                return ResourceManager.GetString("Today", resourceCulture);
             }
         }
     }

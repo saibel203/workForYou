@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WorkForYou.WebUI.Resources.Views.Shared {
+namespace WorkForYou.WebUI.Resources.Views.Shared.Vacancies {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class _Filtering_en {
+    internal class _SearchBar_en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal _Filtering_en() {
+        internal _SearchBar_en() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebUI.Resources.Views.Shared._Filtering.en", typeof(_Filtering_en).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebUI.Resources.Views.Shared._SearchBar.en", typeof(_SearchBar_en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,65 +60,11 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search.
+        ///   Looks up a localized string similar to Enter name.
         /// </summary>
-        internal static string Button {
+        internal static string Name {
             get {
-                return ResourceManager.GetString("Button", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Categories.
-        /// </summary>
-        internal static string Category {
-            get {
-                return ResourceManager.GetString("Category", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Communication language.
-        /// </summary>
-        internal static string CommunicationLanguage {
-            get {
-                return ResourceManager.GetString("CommunicationLanguage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Company type.
-        /// </summary>
-        internal static string CompanyType {
-            get {
-                return ResourceManager.GetString("CompanyType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Employment.
-        /// </summary>
-        internal static string Employment {
-            get {
-                return ResourceManager.GetString("Employment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to English level.
-        /// </summary>
-        internal static string EnglishLevel {
-            get {
-                return ResourceManager.GetString("EnglishLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Region.
-        /// </summary>
-        internal static string Region {
-            get {
-                return ResourceManager.GetString("Region", resourceCulture);
+                return ResourceManager.GetString("Name", resourceCulture);
             }
         }
     }

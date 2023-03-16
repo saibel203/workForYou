@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using WorkForYou.Core.AdditionalModels;
 using WorkForYou.Core.DTOModels.UserDTOs;
 using WorkForYou.Core.DTOModels.VacancyDTOs;
@@ -10,11 +11,13 @@ namespace WorkForYou.WebAPI.Controllers;
 
 public class RespondedController : BaseController
 {
+    private readonly IStringLocalizer<RespondedController> _stringLocalization;
     private readonly IUnitOfWork _unitOfWork;
 
-    public RespondedController(IUnitOfWork unitOfWork)
+    public RespondedController(IUnitOfWork unitOfWork, IStringLocalizer<RespondedController> stringLocalization)
     {
         _unitOfWork = unitOfWork;
+        _stringLocalization = stringLocalization;
     }
 
     [HttpPost("newResponded")] // /api/responded/newResponded
@@ -30,16 +33,16 @@ public class RespondedController : BaseController
         RespondedListResponse respondedResult = await _unitOfWork.RespondedListRepository
             .RespondToVacancyAsync(usernameDto, vacancyOptionsDto.Id);
 
-        if (!respondedResult.IsSuccessfully)
+                if (!respondedResult.IsSuccessfully)
         {
             error.ErrorCode = BadRequest().StatusCode;
             error.ErrorMessage = respondedResult.Message;
             return BadRequest(error);
         }
-
-        return Ok(new
+        
+        return Ok(new 
         {
-            Message = "All oK!"
+            Message = _stringLocalization["SuccessRespond"]
         });
     }
     
@@ -65,7 +68,7 @@ public class RespondedController : BaseController
 
         return Ok(new
         {
-            Message = "All oK!"
+            Message = _stringLocalization["SuccessCancelRespond"]
         });
     }
 }

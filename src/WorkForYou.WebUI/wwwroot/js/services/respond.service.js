@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { environments } from "../constants/environments.js";
+import { ResponseError } from "../models/ResponseError.js";
 export function respondToVacancy(path, data) {
     return __awaiter(this, void 0, void 0, function* () {
         const fullPath = environments.webAPIProject + '/api/responded' + path;
@@ -24,6 +25,9 @@ export function respondToVacancy(path, data) {
             headers: headers,
             body: body
         });
-        return response.json();
+        const responseResult = yield response.json();
+        if (response.ok)
+            return responseResult;
+        throw new ResponseError(responseResult);
     });
 }

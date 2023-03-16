@@ -14,13 +14,7 @@
     <data name="ErrorWhenTryRespondToVacancy" xml:space="preserve">
         <value />
     </data>
-    <data name="SuccessRespondToVacancy" xml:space="preserve">
-        <value />
-    </data>
     <data name="ErrorWhenTryCancelRespondToVacancy" xml:space="preserve">
-        <value />
-    </data>
-    <data name="SuccessCancelRespondToVacancy" xml:space="preserve">
         <value />
     </data>
     <data name="VacanciesNotFound" xml:space="preserve">

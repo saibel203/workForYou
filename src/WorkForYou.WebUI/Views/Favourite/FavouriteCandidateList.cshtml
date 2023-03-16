@@ -1,136 +1,29 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using WorkForYou.WebUI.Helpers
-@using Microsoft.AspNetCore.Mvc.Localization
-@using WorkForYou.Shared.ViewModels.AdditionalViewModels
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@model VacanciesViewModel
 
 @inject IViewLocalizer ViewLocalization
 
 @{
     ViewData["Title"] = ViewLocalization["Title"];
-    var currentPath = Context.Request.Path + Context.Request.QueryString;
 }
 
 <div class="main__search">
-    @await Html.PartialAsync("_SearchBar")
-    @await Html.PartialAsync("_Filtering")
+    @await Html.PartialAsync("Vacancies/_SearchBar")
+    @await Html.PartialAsync("Vacancies/_Filtering")
 </div>
 
 <div class="vacancies">
-    <div class="vacancies__searched-bar">
-        <div class="vacancies__searched-bar-general">
-            @Model.VacancyCount @(ViewHelpers.GetLastStringLetters(Model.VacancyCount, false, true))
-        </div>
-        <div class="vacancies__searched-bar-sorting">
-            @await Html.PartialAsync("_Sorting")
-            <a asp-controller="Favourite" asp-action="FavouriteCandidateList" class="search-buttons detail-button detail-danger">@ViewLocalization["ResetFilters"]</a>
-        </div>
-    </div>
-
-    <div class="vacancies-cards">
-        @foreach (var vacancy in Model.Vacancies)
-        {
-            <div class="vacancies-cards__card">
-                <div class="vacancies-cards__card-title">
-                    <span>
-                        @vacancy.VacancyTitle <span>$@vacancy.FromSalary-@vacancy.ToSalary</span>
-                    </span>
-                    <div class="vacancies-cards__card-title-details">
-                        <span>@vacancy.CreatedDate.ToString("dd MMMM")</span>
-                        <i class="fa-regular fa-eye"></i>
-                        <span>@vacancy.ViewCount</span>
-                        <i class="fa-solid fa-users"></i>
-                        <span>@vacancy.ReviewsCount</span>
-                    </div>
-                </div>
-                <div class="vacancies-cards__card-subtitle">
-                    @vacancy.ShortDescription
-                </div>
-                <div class="vacancies-cards__card-tags">
-                    @if (vacancy.TypeOfCompany is not null)
-                    {
-                        <button class="search-buttons detail-button">@vacancy.TypeOfCompany.TypeOfCompanyName</button>
-                    }
-                    @if (vacancy.HowToWork is not null)
-                    {
-                        <button class="search-buttons detail-button">@vacancy.HowToWork.HowToWorkName</button>
-                    }
-                    <button class="search-buttons detail-button">@vacancy.ExperienceWork @ViewHelpers.GetLastStringLetters(vacancy.ExperienceWork, true) @ViewLocalization["Experience"]</button>
-                    @if (vacancy.EnglishLevel is not null)
-                    {
-                        <button class="search-buttons detail-button">@vacancy.EnglishLevel.NameLevel</button>
-                    }
-                    @if (vacancy.Relocate is not null)
-                    {
-                        <button class="search-buttons detail-button">@ViewLocalization["Relocate"]: @vacancy.Relocate.RelocateName</button>
-                    }
-                    @if (vacancy.WorkCategory is not null)
-                    {
-                        <button class="search-buttons detail-button">@vacancy.WorkCategory.CategoryName</button>
-                    }
-                    @if (vacancy.CandidateRegion is not null)
-                    {
-                        <button class="search-buttons detail-button">@vacancy.CandidateRegion.CandidateRegionName</button>
-                    }
-                </div>
-                @if (vacancy.EmployerUser is not null && vacancy.EmployerUser.ApplicationUser is not null)
-                {
-                    <div class="vacancies-cards__card-userinfo">
-                        @if (string.IsNullOrEmpty(vacancy.EmployerUser.ApplicationUser.ImagePath))
-                        {
-                            <div class="vacancies-cards__card-userinfo-image">
-                                <img src="~/img/userImages/default-user-image.png" alt="Default user image">
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="vacancies-cards__card-userinfo-image">
-                                <img src="@vacancy.EmployerUser.ApplicationUser.ImagePath" alt="User image">
-                            </div>
-                        }
-                        @if (vacancy.EmployerUser.CompanyName is not null)
-                        {
-                            <a asp-controller="Vacancy" asp-action="AllEmployerVacancies"
-                               asp-route-username="@vacancy.EmployerUser.ApplicationUser.UserName">
-                                @vacancy.EmployerUser.CompanyName
-                            </a>
-                        }
-                        @if (vacancy.EmployerUser.ApplicationUser.LastName is not null)
-                        {
-                            <a asp-controller="Account" asp-action="Profile"
-                               asp-route-username="@vacancy.EmployerUser.ApplicationUser.UserName">
-                                @vacancy.EmployerUser.ApplicationUser.LastName
-                                @if (vacancy.EmployerUser.ApplicationUser.FirstName is not null)
-                                {
-                                    @vacancy.EmployerUser.ApplicationUser.FirstName
-                                }
-                                @if (vacancy.EmployerUser.CompanyPosition is not null)
-                                {
-                                    @: 
-                                    @vacancy.EmployerUser.CompanyPosition
-                                }
-                            </a>
-                        }
-                    </div>
-                }
-                <div class="vacancies-cards__card-buttons">
-                    <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId" class="search-buttons card-buttons">@ViewLocalization["ReadAll"]</a>
-                    @await Html.PartialAsync("_LikeButton", new SettingsViewModel
-                           {
-                               CurrentVacancyId = vacancy.VacancyId, ReturnUrl = currentPath,
-                               CurrentController = Model.CurrentController, CurrentAction = Model.CurrentAction
-                           })
-                </div>
-            </div>
-        }
-    </div>
-
-    @await Html.PartialAsync("_Pagination")
+    
+    @await Html.PartialAsync("Vacancies/_SearchBlock")
+    @await Html.PartialAsync("Vacancies/_VacancyList")
+    @await Html.PartialAsync("Vacancies/_Pagination")
 
     @section Scripts
     {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.3/signalr.min.js" integrity="sha512-/rQxup+foY5qwZmEmvBhb0PHxx/Fd+ESH7Xw+pozdSKhygl+ZSQm1X6LWDQrxz+NoRAZwR03X78UinlY1C4RrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="~/js/custom-select.js"></script>
-        @* <script type="module" src="~/js/favourite-list.js"></script> *@
+        <script src="~/js/custom/select.js"></script>
+        <script type="module" src="~/js/components/favourite/favourite.component.js"></script>
     }
 
 </div>

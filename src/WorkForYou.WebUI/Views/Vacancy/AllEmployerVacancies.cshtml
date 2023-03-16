@@ -12,14 +12,14 @@
 }
 
 <div class="main__search">
-    @await Html.PartialAsync("_SearchBar")
-    @await Html.PartialAsync("_Filtering")
+    @await Html.PartialAsync("Vacancies/_SearchBar")
+    @await Html.PartialAsync("Vacancies/_Filtering")
 </div>
 <div class="vacancies">
     <div class="vacancies__searched-bar">
         <div class="vacancies__searched-bar-general">@Model.VacancyCount @(ViewHelpers.GetLastStringLetters(Model.VacancyCount, false, true))</div>
         <div class="vacancies__searched-bar-sorting">
-            @await Html.PartialAsync("_Sorting")
+            @await Html.PartialAsync("Vacancies/_Sorting")
             <a asp-controller="Vacancy" asp-action="AllEmployerVacancies" 
                asp-route-username="@Model.Username" class="search-buttons detail-button detail-danger">@ViewLocalization["ResetFilters"]</a>
         </div>
@@ -105,7 +105,7 @@
                 }
                 <div class="vacancies-cards__card-buttons">
                     <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId" class="search-buttons card-buttons">@ViewLocalization["ReadAll"]</a>
-                    @await Html.PartialAsync("_LikeButton", new SettingsViewModel
+                    @await Html.PartialAsync("Vacancies/_LikeButton", new SettingsViewModel
                            {
                                CurrentVacancyId = vacancy.VacancyId, ReturnUrl = currentPath,
                                CurrentAction = Model.CurrentAction
@@ -117,12 +117,11 @@
 
     @if (Model.PageCount > 1)
     {
-        @await Html.PartialAsync("_Pagination")
+        @await Html.PartialAsync("Vacancies/_Pagination")
     }
     
     @section Scripts
     {
-        <script src="~/js/custom-select.js"></script>
-        @* <script type="module" src="~/js/favourite-list.js"></script> *@
+        <script src="~/js/custom/select.js"></script>
     }
 </div>

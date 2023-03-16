@@ -33,10 +33,10 @@ public class ActionVacancyViewModel : ConnectMainVacancyDataViewModel
     [Display(Name = "Зарплата до")]
     public int? ToSalary { get; set; }
 
-    [Required(ErrorMessage = "KeyWords поле має бути заповненим (бажано > 100 символів)")]
+    // [Required(ErrorMessage = "KeyWords поле має бути заповненим (бажано > 100 символів)")]
     [Display(Name = "Ключові слова для пошуку")]
-    [StringLength(300, MinimumLength = 10,
-        ErrorMessage = "Довжина ключових слів має бути в діапазоні від 10 до 300 символів")]
+    // [StringLength(300, MinimumLength = 10,
+    //     ErrorMessage = "Довжина ключових слів має бути в діапазоні від 10 до 300 символів")]
     public string KeyWords { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Experience поле має бути заповненим")]

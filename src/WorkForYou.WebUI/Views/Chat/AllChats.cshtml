@@ -27,11 +27,11 @@
                             <div class="chat-wrapper__chats-chat-main">
                                 @if (string.IsNullOrEmpty(oppositeUser.ImagePath))
                                 {
-                                    <img src="~/img/userImages/default-user-image.png" alt="User image">
+                                    <img src="~/img/userImages/default-user-image.png" alt="User image" class="img">
                                 }
                                 else
                                 {
-                                    <img src="@oppositeUser.ImagePath" alt="User image">
+                                    <img src="@oppositeUser.ImagePath" alt="User image" class="img">
                                 }
                             </div>
                             <div class="chat-wrapper__chats-chat-info">

@@ -15,49 +15,12 @@ public class RespondedController : BaseController
     private readonly INotificationService _notificationService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public RespondedController(INotificationService notificationService, IUnitOfWork unitOfWork, IStringLocalizer<RespondedController> stringLocalization)
+    public RespondedController(INotificationService notificationService, IUnitOfWork unitOfWork,
+        IStringLocalizer<RespondedController> stringLocalization)
     {
         _notificationService = notificationService;
         _unitOfWork = unitOfWork;
         _stringLocalization = stringLocalization;
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    [Authorize(Roles = ApplicationRoles.CandidateRole)]
-    public async Task<IActionResult> RespondedVacancy(int vacancyId)
-    {
-        var username = GetUsername();
-
-        var respondedResult = await _unitOfWork.RespondedListRepository
-            .RespondToVacancyAsync(new() {Username = username, UserRole = ApplicationRoles.CandidateRole}, vacancyId);
-
-        if (!respondedResult.IsSuccessfully)
-        {
-            _notificationService.CustomErrorMessage(_stringLocalization["ErrorWhenTryRespondToVacancy"]);
-            return RedirectToAction("VacancyDetails", "Vacancy", new {id = vacancyId});
-        }
-
-        _notificationService.CustomSuccessMessage(_stringLocalization["SuccessRespondToVacancy"]);
-        return RedirectToAction("VacancyDetails", "Vacancy", new {id = vacancyId});
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    [Authorize(Roles = ApplicationRoles.CandidateRole)]
-    public async Task<IActionResult> RemoveRespondVacancy(int vacancyId)
-    {
-        var username = GetUsername();
-        var usernameDto = new UsernameDto {Username = username};
-
-        var removeRespondResult = await _unitOfWork.RespondedListRepository
-            .RemoveRespondToVacancyAsync(usernameDto, vacancyId);
-
-        if (!removeRespondResult.IsSuccessfully)
-            _notificationService.CustomErrorMessage(_stringLocalization["ErrorWhenTryCancelRespondToVacancy"]);
-
-        _notificationService.CustomSuccessMessage(_stringLocalization["SuccessCancelRespondToVacancy"]);
-        return RedirectToAction("VacancyDetails", "Vacancy", new {id = vacancyId});
     }
 
     [HttpGet]

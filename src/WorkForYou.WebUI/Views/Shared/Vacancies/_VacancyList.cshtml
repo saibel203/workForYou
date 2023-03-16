@@ -1,0 +1,124 @@
+﻿@using WorkForYou.WebUI.Helpers
+@using WorkForYou.Shared.ViewModels.AdditionalViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
+@model VacanciesViewModel
+
+@inject IViewLocalizer ViewLocalization
+
+<div class="vacancies-cards">
+    @foreach (var vacancy in Model.Vacancies)
+    {
+        <div class="vacancies-cards__card">
+            <div class="vacancies-cards__card-title">
+                <span>
+                    @vacancy.VacancyTitle <span>$@vacancy.FromSalary-@vacancy.ToSalary</span>
+                </span>
+                <div class="vacancies-cards__card-title-details">
+                    @if (vacancy.CreatedDate.Date == DateTime.Now.Date)
+                    {
+                        <span>@ViewLocalization["Today"]</span>
+                    }
+                    else
+                    {
+                        <span>@vacancy.CreatedDate.ToString("dd MMMM yyyy")</span>
+                    }
+                    <i class="fa-regular fa-eye"></i>
+                    <span>@vacancy.ViewCount</span>
+                    <i class="fa-solid fa-users"></i>
+                    <span>@vacancy.ReviewsCount</span>
+                    <i class="fa-solid fa-bookmark"></i>
+                    <span>0</span>
+                </div>
+            </div>
+            <div class="vacancies-cards__card-subtitle">
+                @vacancy.ShortDescription
+            </div>
+            <div class="vacancies-cards__card-tags">
+                @if (vacancy.TypeOfCompany is not null)
+                {
+                    <button class="search-buttons detail-button">@vacancy.TypeOfCompany.TypeOfCompanyName</button>
+                }
+                @if (vacancy.HowToWork is not null)
+                {
+                    <button class="search-buttons detail-button">@vacancy.HowToWork.HowToWorkName</button>
+                }
+                @if (vacancy.ExperienceWork != 0)
+                {
+                    <button class="search-buttons detail-button">@vacancy.ExperienceWork @ViewHelpers.GetLastStringLetters(vacancy.ExperienceWork, true) @ViewLocalization["Experience"]</button>
+                }
+                else
+                {
+                    <button class="search-buttons detail-button">@ViewLocalization["NoExperience"]</button>
+                }
+                @if (vacancy.EnglishLevel is not null)
+                {
+                    <button class="search-buttons detail-button">@vacancy.EnglishLevel.NameLevel</button>
+                }
+                @if (vacancy.Relocate is not null)
+                {
+                    <button class="search-buttons detail-button">@ViewLocalization["Relocate"]: @vacancy.Relocate.RelocateName</button>
+                }
+                @if (vacancy.WorkCategory is not null)
+                {
+                    <button class="search-buttons detail-button">@vacancy.WorkCategory.CategoryName</button>
+                }
+                @if (vacancy.CandidateRegion is not null)
+                {
+                    <button class="search-buttons detail-button">@vacancy.CandidateRegion.CandidateRegionName</button>
+                }
+            </div>
+            @if (vacancy.EmployerUser is not null && vacancy.EmployerUser.ApplicationUser is not null)
+            {
+                <div class="vacancies-cards__card-userinfo">
+                    @if (string.IsNullOrEmpty(vacancy.EmployerUser.ApplicationUser.ImagePath))
+                    {
+                        <div class="vacancies-cards__card-userinfo-image">
+                            <img src="~/img/userImages/default-user-image.png" alt="Default user image" class="img">
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="vacancies-cards__card-userinfo-image">
+                            <img src="@vacancy.EmployerUser.ApplicationUser.ImagePath" alt="User image">
+                        </div>
+                    }
+                    @if (vacancy.EmployerUser.CompanyName is not null)
+                    {
+                        <a asp-controller="Vacancy" asp-action="AllEmployerVacancies"
+                           asp-route-username="@vacancy.EmployerUser.ApplicationUser.UserName">
+                            @vacancy.EmployerUser.CompanyName
+                        </a>
+                    }
+                    @if (vacancy.EmployerUser.ApplicationUser.LastName is not null)
+                    {
+                        <a asp-controller="Account" asp-action="Profile"
+                           asp-route-username="@vacancy.EmployerUser.ApplicationUser.UserName">
+                            @vacancy.EmployerUser.ApplicationUser.LastName
+                            @if (vacancy.EmployerUser.ApplicationUser.FirstName is not null)
+                            {
+                                @vacancy.EmployerUser.ApplicationUser.FirstName
+                            }
+                            @if (vacancy.EmployerUser.CompanyPosition is not null)
+                            {
+                                @: 
+                                @vacancy.EmployerUser.CompanyPosition
+                            }
+                        </a>
+                    }
+                </div>
+            }
+            <div class="vacancies-cards__card-buttons">
+                <a asp-controller="Vacancy" asp-action="VacancyDetails" asp-route-id="@vacancy.VacancyId"
+                   class="search-buttons card-buttons">
+                    @ViewLocalization["ReadAll"]
+                </a>
+                @await Html.PartialAsync("Vacancies/_LikeButton", new SettingsViewModel
+                       {
+                           CurrentVacancyId = vacancy.VacancyId,
+                           CurrentController = Model.CurrentController
+                       })
+            </div>
+        </div>
+    }
+</div>

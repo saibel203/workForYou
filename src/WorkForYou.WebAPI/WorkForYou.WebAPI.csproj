@@ -17,4 +17,28 @@
     <ProjectReference Include="..\WorkForYou.Shared\WorkForYou.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Controllers\RespondedController.uk.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RespondedController.uk.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Controllers\RespondedController.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RespondedController.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Controllers\RespondedController.uk.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RespondedController.uk.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Controllers\RespondedController.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RespondedController.en.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

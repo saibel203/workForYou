@@ -60,42 +60,6 @@ namespace WorkForYou.WebUI.Resources.Views.CandidateAccount {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to experience.
-        /// </summary>
-        internal static string Experience {
-            get {
-                return ResourceManager.GetString("Experience", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Read all.
-        /// </summary>
-        internal static string ReadAll {
-            get {
-                return ResourceManager.GetString("ReadAll", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Relocate.
-        /// </summary>
-        internal static string Relocate {
-            get {
-                return ResourceManager.GetString("Relocate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reset filters.
-        /// </summary>
-        internal static string ResetFilters {
-            get {
-                return ResourceManager.GetString("ResetFilters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to All vacancies.
         /// </summary>
         internal static string Title {

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WorkForYou.WebUI.Resources.Views.Shared {
+namespace WorkForYou.WebUI.Resources.Views.Shared.Vacancies {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class _Sorting_en {
+    internal class _Sorting_uk {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal _Sorting_en() {
+        internal _Sorting_uk() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebUI.Resources.Views.Shared._Sorting.en", typeof(_Sorting_en).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WorkForYou.WebUI.Resources.Views.Shared._Sorting.uk", typeof(_Sorting_uk).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,7 +60,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By publication date.
+        ///   Looks up a localized string similar to За датою публікації.
         /// </summary>
         internal static string ByDate {
             get {
@@ -69,7 +69,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By work experience.
+        ///   Looks up a localized string similar to За досвідом роботи.
         /// </summary>
         internal static string ByExperience {
             get {
@@ -78,7 +78,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By the number of reviews.
+        ///   Looks up a localized string similar to За кількістю відгуків.
         /// </summary>
         internal static string ByReviews {
             get {
@@ -87,7 +87,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By salary.
+        ///   Looks up a localized string similar to За зарплатою.
         /// </summary>
         internal static string BySalary {
             get {
@@ -96,7 +96,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By the number of views.
+        ///   Looks up a localized string similar to За кількістю переглядів.
         /// </summary>
         internal static string ByViews {
             get {
@@ -105,7 +105,7 @@ namespace WorkForYou.WebUI.Resources.Views.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sort by.
+        ///   Looks up a localized string similar to Сортувати за.
         /// </summary>
         internal static string SortTitle {
             get {

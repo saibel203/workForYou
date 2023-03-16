@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { environments } from "../constants/environments.js";
+import { ResponseError } from "../models/ResponseError.js";
 export function addToFavouriteList(path, data) {
     return __awaiter(this, void 0, void 0, function* () {
         const fullPath = environments.webAPIProject + '/api/favourite' + path;
@@ -24,9 +25,9 @@ export function addToFavouriteList(path, data) {
             headers: headers,
             body: body
         });
+        const responseResult = yield response.json();
         if (response.ok)
-            return response.ok;
-        else
-            return response.json();
+            return responseResult;
+        throw new ResponseError(responseResult);
     });
 }

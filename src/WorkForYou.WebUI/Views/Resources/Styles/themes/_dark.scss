@@ -1,3 +1,5 @@
+@import '../utils/_colors';
+
 .dark-mode {
   --body-bg-color: #1d1d1d;
   --theme-bg-color: #13131a;
@@ -11,13 +13,17 @@
   --active-light-color: #45405a;
   --border-color: #26262f;
   --search-border-color: #26262f;
-  --danger-btn-color: rgb(52, 25, 25);
+  --danger-btn-color: rgb(122, 56, 56);
 }
 
 .dark-mode {
   .header__settings-switcher svg {
     fill: #ffce45;
     stroke: #ffce45;
+  }
+  
+  .header__settings-bell svg {
+    color: $white-color !important;
   }
 
   .vacancies-cards__card svg {

@@ -37,7 +37,10 @@ public class FavouriteController : BaseController
             return BadRequest(error);
         }
         
-        return Ok();
+        return Ok(new
+        {
+            LocalMessage = addToFavouriteListResponse.Message
+        });
     }
 
     [HttpPost("newCandidate")] // /api/favourite/newCandidate
@@ -60,6 +63,9 @@ public class FavouriteController : BaseController
             return BadRequest(error);
         }
 
-        return Ok();
+        return Ok(new
+        {
+            LocalMessage = addToFavouriteListResponse.Message
+        });
     }
 }

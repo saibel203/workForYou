@@ -60,42 +60,6 @@ namespace WorkForYou.WebUI.Resources.Views.Responded {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to досвіду.
-        /// </summary>
-        internal static string Experience {
-            get {
-                return ResourceManager.GetString("Experience", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Читати все.
-        /// </summary>
-        internal static string ReadAll {
-            get {
-                return ResourceManager.GetString("ReadAll", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Релокейт.
-        /// </summary>
-        internal static string Relocate {
-            get {
-                return ResourceManager.GetString("Relocate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Скинути фільтри.
-        /// </summary>
-        internal static string Reset {
-            get {
-                return ResourceManager.GetString("Reset", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Список відгуків.
         /// </summary>
         internal static string Title {

@@ -1,0 +1,15 @@
+﻿@using WorkForYou.WebUI.Helpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
+@model VacanciesViewModel
+
+@inject IViewLocalizer ViewLocalization
+
+<div class="vacancies__searched-bar">
+    <div class="vacancies__searched-bar-general">@Model.VacancyCount @(ViewHelpers.GetLastStringLetters(Model.VacancyCount, false, true))</div>
+    <div class="vacancies__searched-bar-sorting">
+        @await Html.PartialAsync("Vacancies/_Sorting")
+        <a asp-controller="@Model.CurrentController" asp-action="@Model.CurrentAction" 
+           class="search-buttons detail-button detail-danger-button">@ViewLocalization["ResetFilters"]</a>
+    </div>
+</div>

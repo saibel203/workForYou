@@ -162,48 +162,4 @@ public class FavouriteController : BaseController
 
         return View(vacanciesViewModel);
     }
-    
-    [HttpGet]
-    [Authorize(Roles = ApplicationRoles.EmployerRole)]
-    public async Task<IActionResult> AddCandidateToFavouriteList(int id, string? returnUrl)
-    {
-        var username = GetUsername();
-        var userRole = GetUserRole();
-        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
-
-        var addToFavouriteResult = await _favouriteListService
-            .AddCandidateToFavouriteListAsync(usernameDto, id);
-
-        if (!addToFavouriteResult.IsSuccessfully)
-            _notificationService.CustomErrorMessage(_stringLocalization["AddCandidateToFavouriteError"]);
-
-        _notificationService.CustomSuccessMessage(addToFavouriteResult.Message);
-
-        if (Url.IsLocalUrl(returnUrl))
-            return Redirect(returnUrl);
-
-        return RedirectToAction("AllCandidates", "EmployerAccount");
-    }
-    
-    [HttpGet]
-    [Authorize(Roles = ApplicationRoles.CandidateRole)]
-    public async Task<IActionResult> AddVacancyToFavouriteList(int id, string? returnUrl)
-    {
-        var username = GetUsername();
-        var userRole = GetUserRole();
-        var usernameDto = new UsernameDto {Username = username, UserRole = userRole};
-
-        var addToFavouriteResult = await _favouriteListService
-            .AddVacancyToFavouriteListAsync(usernameDto, id);
-
-        if (!addToFavouriteResult.IsSuccessfully)
-            _notificationService.CustomErrorMessage(_stringLocalization["AddVacancyToFavouriteError"]);
-
-        _notificationService.CustomSuccessMessage(addToFavouriteResult.Message);
-
-        if (Url.IsLocalUrl(returnUrl))
-            return Redirect(returnUrl);
-
-        return RedirectToAction("AllVacancies", "CandidateAccount");
-    }
 }
